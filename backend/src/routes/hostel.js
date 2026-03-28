@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/hostelController'),{requireMinRole,requireRole}=require('../middleware/auth'),s=requireMinRole('teacher'),a=requireRole('super_admin','school_admin','principal','deputy_principal');
+r.get('/',s,c.getHostels);r.post('/',a,c.createHostel);r.get('/allocations',s,c.getAllocations);r.get('/stats',s,c.getStats);r.post('/allocate',a,c.allocate);r.put('/:id/vacate',a,c.vacate);r.get('/:hostelId/rooms',s,c.getRooms);r.post('/:hostelId/rooms',a,c.createRoom);module.exports=r;

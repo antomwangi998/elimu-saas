@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/wellnessController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/',s,c.getCheckins);r.post('/',authMiddleware,c.checkin);r.get('/summary',s,c.getSchoolMoodSummary);r.put('/:id/notes',s,c.addCounselorNote);r.get('/trend/:studentId',s,c.getMoodTrend);module.exports=r;
