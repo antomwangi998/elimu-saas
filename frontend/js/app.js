@@ -42,7 +42,7 @@ window.CONFIG  = window.CONFIG  || {API_URL:'/api'};
 var CONFIG = {
   API_URL: window.location.hostname === 'localhost'
     ? 'http://localhost:5000/api'
-    : '/api',
+    : 'https://elimu-saas.onrender.com/api',
   APP_NAME: 'ElimuSaaS',
   VERSION: '1.0.0',
 };
