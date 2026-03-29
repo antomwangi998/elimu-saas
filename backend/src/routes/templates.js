@@ -1,0 +1,14 @@
+const router = require('express').Router();
+const c = require('../controllers/templatesController');
+const { requireMinRole, requireRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireRole('super_admin','school_admin','principal','secretary');
+router.get('/', staff, c.getTemplates);
+router.get('/instances', staff, c.getDocumentInstances);
+router.post('/generate', staff, c.generateDocument);
+router.post('/seed', admin, c.seedSchoolTemplates);
+router.get('/:id', staff, c.getTemplate);
+router.post('/', admin, c.createTemplate);
+router.put('/:id', admin, c.updateTemplate);
+router.delete('/:id', admin, c.deleteTemplate);
+module.exports = router;
