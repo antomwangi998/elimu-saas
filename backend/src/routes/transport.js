@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/transportController'),{requireMinRole,requireRole}=require('../middleware/auth'),s=requireMinRole('teacher'),a=requireRole('super_admin','school_admin','principal');
+r.get('/vehicles',s,c.getVehicles);r.post('/vehicles',a,c.createVehicle);r.put('/vehicles/:id',a,c.updateVehicle);r.get('/routes',s,c.getRoutes);r.post('/routes',a,c.createRoute);r.get('/subscriptions',s,c.getSubscriptions);r.post('/subscribe',s,c.subscribe);module.exports=r;

@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const c = require('../controllers/classRegisterController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/my-classes', staff, c.getMyClasses);
+router.get('/students', staff, c.getClassStudents);
+router.post('/mark', staff, c.markRegister);
+router.post('/finalize', staff, c.finalizeRegister);
+router.get('/history', staff, c.getRegisterHistory);
+router.get('/summary', staff, c.getDailySummary);
+router.get('/absentees', staff, c.getTodayAbsentees);
+module.exports = router;
