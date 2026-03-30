@@ -9,7 +9,7 @@ on:
       version_name:
         description: 'Version name (e.g. 1.0.1)'
         required: true
-        default: '1.1.0'
+        default: '1.0.0'
       release_notes:
         description: 'What changed in this release'
         required: false
@@ -40,193 +40,15 @@ jobs:
           gradle wrapper --gradle-version 8.4
           chmod +x gradlew
 
-      # ── FIX: Overwrite LoginActivity with clean version (no biometric) ──
-      - name: Patch LoginActivity
+      - name: Patch LoginActivity and Models
         run: |
           mkdir -p android/app/src/main/java/ke/elimusaas/ui
-          cat > android/app/src/main/java/ke/elimusaas/ui/LoginActivity.kt << 'ENDKOTLIN'
-package ke.elimusaas.ui
-
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import ke.elimusaas.R
-import ke.elimusaas.utils.ApiClient
-import ke.elimusaas.utils.SessionManager
-import kotlinx.coroutines.*
-
-class LoginActivity : AppCompatActivity() {
-
-    private lateinit var etEmail: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var etSchoolCode: EditText
-    private lateinit var btnLogin: Button
-    private lateinit var tvError: TextView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var tvForgotPassword: TextView
-
-    private val session by lazy { SessionManager(this) }
-    private val api by lazy { ApiClient(this) }
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (session.isLoggedIn) { startMain(); return }
-        setContentView(R.layout.activity_login)
-        etEmail          = findViewById(R.id.etEmail)
-        etPassword       = findViewById(R.id.etPassword)
-        etSchoolCode     = findViewById(R.id.etSchoolCode)
-        btnLogin         = findViewById(R.id.btnLogin)
-        tvError          = findViewById(R.id.tvError)
-        progressBar      = findViewById(R.id.progressBar)
-        tvForgotPassword = findViewById(R.id.tvForgotPassword)
-        btnLogin.setOnClickListener { doLogin() }
-        etPassword.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) { doLogin(); true } else false
-        }
-        tvForgotPassword.setOnClickListener { showForgotPasswordDialog() }
-    }
-
-    private fun doLogin() {
-        val email      = etEmail.text.toString().trim()
-        val password   = etPassword.text.toString()
-        val schoolCode = etSchoolCode.text.toString().trim().ifBlank { null }
-        if (email.isEmpty() || password.isEmpty()) {
-            showError("Please enter your email and password"); return
-        }
-        setLoading(true)
-        tvError.visibility = View.GONE
-        scope.launch {
-            val result = withContext(Dispatchers.IO) { api.login(email, password, schoolCode) }
-            setLoading(false)
-            if (result.error != null) { showError(result.error); return@launch }
-            if (result.accessToken != null && result.user != null) {
-                session.accessToken  = result.accessToken
-                session.refreshToken = result.refreshToken
-                session.user         = result.user
-                startMain()
-            } else {
-                showError("Login failed. Please check your credentials.")
-            }
-        }
-    }
-
-    private fun showForgotPasswordDialog() {
-        val input = EditText(this).apply {
-            hint = "admin@school.ac.ke"
-            inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            setPadding(48, 24, 48, 8)
-        }
-        android.app.AlertDialog.Builder(this)
-            .setTitle("Reset Password")
-            .setMessage("Enter your email to receive a reset link")
-            .setView(input)
-            .setPositiveButton("Send") { _, _ ->
-                val email = input.text.toString().trim()
-                if (email.isNotEmpty()) {
-                    scope.launch {
-                        withContext(Dispatchers.IO) { api.forgotPassword(email) }
-                        Toast.makeText(this@LoginActivity, "Reset link sent to $email", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-            .setNegativeButton("Cancel", null).show()
-    }
-
-    private fun showError(msg: String) { tvError.text = msg; tvError.visibility = View.VISIBLE }
-    private fun setLoading(on: Boolean) {
-        btnLogin.isEnabled = !on
-        btnLogin.text = if (on) "" else "Sign In"
-        progressBar.visibility = if (on) View.VISIBLE else View.GONE
-    }
-    private fun startMain() { startActivity(Intent(this, MainActivity::class.java)); finish() }
-    override fun onDestroy() { super.onDestroy(); scope.cancel() }
-}
-ENDKOTLIN
-          echo "✅ LoginActivity patched - checking for btnBiometric..."
-          grep -n "btnBiometric" android/app/src/main/java/ke/elimusaas/ui/LoginActivity.kt \
-            && echo "❌ ERROR: still present" || echo "✅ Clean - no btnBiometric"
-
-      # ── FIX: Add missing year field to SubjectResult ────────────
-      - name: Patch Models
-        run: |
           mkdir -p android/app/src/main/java/ke/elimusaas/data
-          cat > android/app/src/main/java/ke/elimusaas/data/Models.kt << 'ENDKOTLIN'
-package ke.elimusaas.data
-
-data class LoginResponse(
-    val accessToken: String?,
-    val refreshToken: String?,
-    val user: User?,
-    val error: String?
-)
-
-data class User(
-    val id: Int,
-    val firstName: String,
-    val lastName: String,
-    val email: String,
-    val role: String,
-    val schoolName: String?,
-    val schoolCode: String?,
-    val schoolId: Int?,
-    val profilePhoto: String?
-) {
-    val fullName get() = "$firstName $lastName"
-    val initials get() = "${firstName.firstOrNull() ?: ""}${lastName.firstOrNull() ?: ""}".uppercase()
-    val displayRole get() = role.replace("_", " ").split(" ").joinToString(" ") {
-        it.replaceFirstChar { c -> c.uppercase() }
-    }
-}
-
-data class DashboardStats(
-    val totalStudents: Int = 0,
-    val totalTeachers: Int = 0,
-    val totalStaff: Int = 0,
-    val totalStreams: Int = 0,
-    val feeCollectionRate: Double = 0.0,
-    val attendanceRate: Double = 0.0
-)
-
-data class SchoolEvent(val id: Int, val title: String, val date: String, val description: String?)
-
-data class SubjectResult(
-    val subject: String,
-    val className: String,
-    val stream: String,
-    val examName: String,
-    val term: String,
-    val year: String = "",
-    val meanPoints: Double,
-    val meanMarks: Double,
-    val meanGrade: String,
-    val totalStudents: Int,
-    val trend: Double = 0.0
-)
-
-data class StudentResult(
-    val id: Int,
-    val name: String,
-    val admNo: String,
-    val stream: String,
-    val meanMarks: Double,
-    val totalPoints: Int,
-    val outOf: Int,
-    val meanGrade: String,
-    val position: Int,
-    val totalStudents: Int,
-    val streamPosition: Int,
-    val streamTotal: Int,
-    val kcpe: Int?,
-    val trend: Double = 0.0
-)
-
-data class ApiError(val message: String)
-ENDKOTLIN
-          echo "✅ Models patched"
+          echo "cGFja2FnZSBrZS5lbGltdXNhYXMudWkKCmltcG9ydCBhbmRyb2lkLmNvbnRlbnQuSW50ZW50CmltcG9ydCBhbmRyb2lkLm9zLkJ1bmRsZQppbXBvcnQgYW5kcm9pZC52aWV3LlZpZXcKaW1wb3J0IGFuZHJvaWQudmlldy5pbnB1dG1ldGhvZC5FZGl0b3JJbmZvCmltcG9ydCBhbmRyb2lkLndpZGdldC4qCmltcG9ydCBhbmRyb2lkeC5hcHBjb21wYXQuYXBwLkFwcENvbXBhdEFjdGl2aXR5CmltcG9ydCBrZS5lbGltdXNhYXMuUgppbXBvcnQga2UuZWxpbXVzYWFzLnV0aWxzLkFwaUNsaWVudAppbXBvcnQga2UuZWxpbXVzYWFzLnV0aWxzLlNlc3Npb25NYW5hZ2VyCmltcG9ydCBrb3RsaW54LmNvcm91dGluZXMuKgoKY2xhc3MgTG9naW5BY3Rpdml0eSA6IEFwcENvbXBhdEFjdGl2aXR5KCkgewoKICAgIHByaXZhdGUgbGF0ZWluaXQgdmFyIGV0RW1haWw6IEVkaXRUZXh0CiAgICBwcml2YXRlIGxhdGVpbml0IHZhciBldFBhc3N3b3JkOiBFZGl0VGV4dAogICAgcHJpdmF0ZSBsYXRlaW5pdCB2YXIgZXRTY2hvb2xDb2RlOiBFZGl0VGV4dAogICAgcHJpdmF0ZSBsYXRlaW5pdCB2YXIgYnRuTG9naW46IEJ1dHRvbgogICAgcHJpdmF0ZSBsYXRlaW5pdCB2YXIgdHZFcnJvcjogVGV4dFZpZXcKICAgIHByaXZhdGUgbGF0ZWluaXQgdmFyIHByb2dyZXNzQmFyOiBQcm9ncmVzc0JhcgogICAgcHJpdmF0ZSBsYXRlaW5pdCB2YXIgdHZGb3Jnb3RQYXNzd29yZDogVGV4dFZpZXcKCiAgICBwcml2YXRlIHZhbCBzZXNzaW9uIGJ5IGxhenkgeyBTZXNzaW9uTWFuYWdlcih0aGlzKSB9CiAgICBwcml2YXRlIHZhbCBhcGkgYnkgbGF6eSB7IEFwaUNsaWVudCh0aGlzKSB9CiAgICBwcml2YXRlIHZhbCBzY29wZSA9IENvcm91dGluZVNjb3BlKERpc3BhdGNoZXJzLk1haW4gKyBTdXBlcnZpc29ySm9iKCkpCgogICAgb3ZlcnJpZGUgZnVuIG9uQ3JlYXRlKHNhdmVkSW5zdGFuY2VTdGF0ZTogQnVuZGxlPykgewogICAgICAgIHN1cGVyLm9uQ3JlYXRlKHNhdmVkSW5zdGFuY2VTdGF0ZSkKCiAgICAgICAgaWYgKHNlc3Npb24uaXNMb2dnZWRJbikgewogICAgICAgICAgICBzdGFydE1haW4oKTsgcmV0dXJuCiAgICAgICAgfQoKICAgICAgICBzZXRDb250ZW50VmlldyhSLmxheW91dC5hY3Rpdml0eV9sb2dpbikKCiAgICAgICAgZXRFbWFpbCAgICAgICAgICA9IGZpbmRWaWV3QnlJZChSLmlkLmV0RW1haWwpCiAgICAgICAgZXRQYXNzd29yZCAgICAgICA9IGZpbmRWaWV3QnlJZChSLmlkLmV0UGFzc3dvcmQpCiAgICAgICAgZXRTY2hvb2xDb2RlICAgICA9IGZpbmRWaWV3QnlJZChSLmlkLmV0U2Nob29sQ29kZSkKICAgICAgICBidG5Mb2dpbiAgICAgICAgID0gZmluZFZpZXdCeUlkKFIuaWQuYnRuTG9naW4pCiAgICAgICAgdHZFcnJvciAgICAgICAgICA9IGZpbmRWaWV3QnlJZChSLmlkLnR2RXJyb3IpCiAgICAgICAgcHJvZ3Jlc3NCYXIgICAgICA9IGZpbmRWaWV3QnlJZChSLmlkLnByb2dyZXNzQmFyKQogICAgICAgIHR2Rm9yZ290UGFzc3dvcmQgPSBmaW5kVmlld0J5SWQoUi5pZC50dkZvcmdvdFBhc3N3b3JkKQoKICAgICAgICBidG5Mb2dpbi5zZXRPbkNsaWNrTGlzdGVuZXIgeyBkb0xvZ2luKCkgfQoKICAgICAgICBldFBhc3N3b3JkLnNldE9uRWRpdG9yQWN0aW9uTGlzdGVuZXIgeyBfLCBhY3Rpb25JZCwgXyAtPgogICAgICAgICAgICBpZiAoYWN0aW9uSWQgPT0gRWRpdG9ySW5mby5JTUVfQUNUSU9OX0RPTkUpIHsgZG9Mb2dpbigpOyB0cnVlIH0gZWxzZSBmYWxzZQogICAgICAgIH0KCiAgICAgICAgdHZGb3Jnb3RQYXNzd29yZC5zZXRPbkNsaWNrTGlzdGVuZXIgeyBzaG93Rm9yZ290UGFzc3dvcmREaWFsb2coKSB9CiAgICB9CgogICAgcHJpdmF0ZSBmdW4gZG9Mb2dpbigpIHsKICAgICAgICB2YWwgZW1haWwgICAgICA9IGV0RW1haWwudGV4dC50b1N0cmluZygpLnRyaW0oKQogICAgICAgIHZhbCBwYXNzd29yZCAgID0gZXRQYXNzd29yZC50ZXh0LnRvU3RyaW5nKCkKICAgICAgICB2YWwgc2Nob29sQ29kZSA9IGV0U2Nob29sQ29kZS50ZXh0LnRvU3RyaW5nKCkudHJpbSgpLmlmQmxhbmsgeyBudWxsIH0KCiAgICAgICAgaWYgKGVtYWlsLmlzRW1wdHkoKSB8fCBwYXNzd29yZC5pc0VtcHR5KCkpIHsKICAgICAgICAgICAgc2hvd0Vycm9yKCJQbGVhc2UgZW50ZXIgeW91ciBlbWFpbCBhbmQgcGFzc3dvcmQiKQogICAgICAgICAgICByZXR1cm4KICAgICAgICB9CgogICAgICAgIHNldExvYWRpbmcodHJ1ZSkKICAgICAgICB0dkVycm9yLnZpc2liaWxpdHkgPSBWaWV3LkdPTkUKCiAgICAgICAgc2NvcGUubGF1bmNoIHsKICAgICAgICAgICAgdmFsIHJlc3VsdCA9IHdpdGhDb250ZXh0KERpc3BhdGNoZXJzLklPKSB7CiAgICAgICAgICAgICAgICBhcGkubG9naW4oZW1haWwsIHBhc3N3b3JkLCBzY2hvb2xDb2RlKQogICAgICAgICAgICB9CiAgICAgICAgICAgIHNldExvYWRpbmcoZmFsc2UpCgogICAgICAgICAgICBpZiAocmVzdWx0LmVycm9yICE9IG51bGwpIHsKICAgICAgICAgICAgICAgIHNob3dFcnJvcihyZXN1bHQuZXJyb3IpCiAgICAgICAgICAgICAgICByZXR1cm5AbGF1bmNoCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGlmIChyZXN1bHQuYWNjZXNzVG9rZW4gIT0gbnVsbCAmJiByZXN1bHQudXNlciAhPSBudWxsKSB7CiAgICAgICAgICAgICAgICBzZXNzaW9uLmFjY2Vzc1Rva2VuICA9IHJlc3VsdC5hY2Nlc3NUb2tlbgogICAgICAgICAgICAgICAgc2Vzc2lvbi5yZWZyZXNoVG9rZW4gPSByZXN1bHQucmVmcmVzaFRva2VuCiAgICAgICAgICAgICAgICBzZXNzaW9uLnVzZXIgICAgICAgICA9IHJlc3VsdC51c2VyCiAgICAgICAgICAgICAgICBzdGFydE1haW4oKQogICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgc2hvd0Vycm9yKCJMb2dpbiBmYWlsZWQuIFBsZWFzZSBjaGVjayB5b3VyIGNyZWRlbnRpYWxzLiIpCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9CgogICAgcHJpdmF0ZSBmdW4gc2hvd0ZvcmdvdFBhc3N3b3JkRGlhbG9nKCkgewogICAgICAgIHZhbCBpbnB1dCA9IEVkaXRUZXh0KHRoaXMpLmFwcGx5IHsKICAgICAgICAgICAgaGludCAgICAgID0gImFkbWluQHNjaG9vbC5hYy5rZSIKICAgICAgICAgICAgaW5wdXRUeXBlID0gYW5kcm9pZC50ZXh0LklucHV0VHlwZS5UWVBFX1RFWFRfVkFSSUFUSU9OX0VNQUlMX0FERFJFU1MKICAgICAgICAgICAgc2V0UGFkZGluZyg0OCwgMjQsIDQ4LCA4KQogICAgICAgIH0KICAgICAgICBhbmRyb2lkLmFwcC5BbGVydERpYWxvZy5CdWlsZGVyKHRoaXMpCiAgICAgICAgICAgIC5zZXRUaXRsZSgiUmVzZXQgUGFzc3dvcmQiKQogICAgICAgICAgICAuc2V0TWVzc2FnZSgiRW50ZXIgeW91ciBlbWFpbCB0byByZWNlaXZlIGEgcmVzZXQgbGluayIpCiAgICAgICAgICAgIC5zZXRWaWV3KGlucHV0KQogICAgICAgICAgICAuc2V0UG9zaXRpdmVCdXR0b24oIlNlbmQiKSB7IF8sIF8gLT4KICAgICAgICAgICAgICAgIHZhbCBlbWFpbCA9IGlucHV0LnRleHQudG9TdHJpbmcoKS50cmltKCkKICAgICAgICAgICAgICAgIGlmIChlbWFpbC5pc05vdEVtcHR5KCkpIHsKICAgICAgICAgICAgICAgICAgICBzY29wZS5sYXVuY2ggewogICAgICAgICAgICAgICAgICAgICAgICB3aXRoQ29udGV4dChEaXNwYXRjaGVycy5JTykgeyBhcGkuZm9yZ290UGFzc3dvcmQoZW1haWwpIH0KICAgICAgICAgICAgICAgICAgICAgICAgVG9hc3QubWFrZVRleHQodGhpc0BMb2dpbkFjdGl2aXR5LAogICAgICAgICAgICAgICAgICAgICAgICAgICAgIlJlc2V0IGxpbmsgc2VudCB0byAkZW1haWwiLCBUb2FzdC5MRU5HVEhfTE9ORykuc2hvdygpCiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIC5zZXROZWdhdGl2ZUJ1dHRvbigiQ2FuY2VsIiwgbnVsbCkKICAgICAgICAgICAgLnNob3coKQogICAgfQoKICAgIHByaXZhdGUgZnVuIHNob3dFcnJvcihtc2c6IFN0cmluZykgewogICAgICAgIHR2RXJyb3IudGV4dCAgICAgICA9IG1zZwogICAgICAgIHR2RXJyb3IudmlzaWJpbGl0eSA9IFZpZXcuVklTSUJMRQogICAgfQoKICAgIHByaXZhdGUgZnVuIHNldExvYWRpbmcob246IEJvb2xlYW4pIHsKICAgICAgICBidG5Mb2dpbi5pc0VuYWJsZWQgICAgID0gIW9uCiAgICAgICAgYnRuTG9naW4udGV4dCAgICAgICAgICA9IGlmIChvbikgIiIgZWxzZSAiU2lnbiBJbiIKICAgICAgICBwcm9ncmVzc0Jhci52aXNpYmlsaXR5ID0gaWYgKG9uKSBWaWV3LlZJU0lCTEUgZWxzZSBWaWV3LkdPTkUKICAgIH0KCiAgICBwcml2YXRlIGZ1biBzdGFydE1haW4oKSB7CiAgICAgICAgc3RhcnRBY3Rpdml0eShJbnRlbnQodGhpcywgTWFpbkFjdGl2aXR5OjpjbGFzcy5qYXZhKSkKICAgICAgICBmaW5pc2goKQogICAgfQoKICAgIG92ZXJyaWRlIGZ1biBvbkRlc3Ryb3koKSB7CiAgICAgICAgc3VwZXIub25EZXN0cm95KCkKICAgICAgICBzY29wZS5jYW5jZWwoKQogICAgfQp9Cg==" | base64 --decode > android/app/src/main/java/ke/elimusaas/ui/LoginActivity.kt
+          echo "cGFja2FnZSBrZS5lbGltdXNhYXMuZGF0YQoKZGF0YSBjbGFzcyBMb2dpblJlcXVlc3QodmFsIGVtYWlsOiBTdHJpbmcsIHZhbCBwYXNzd29yZDogU3RyaW5nLCB2YWwgc2Nob29sQ29kZTogU3RyaW5nPyA9IG51bGwpCgpkYXRhIGNsYXNzIExvZ2luUmVzcG9uc2UoCiAgICB2YWwgYWNjZXNzVG9rZW46IFN0cmluZz8sCiAgICB2YWwgcmVmcmVzaFRva2VuOiBTdHJpbmc/LAogICAgdmFsIHVzZXI6IFVzZXI/LAogICAgdmFsIGVycm9yOiBTdHJpbmc/CikKCmRhdGEgY2xhc3MgVXNlcigKICAgIHZhbCBpZDogSW50LAogICAgdmFsIGZpcnN0TmFtZTogU3RyaW5nLAogICAgdmFsIGxhc3ROYW1lOiBTdHJpbmcsCiAgICB2YWwgZW1haWw6IFN0cmluZywKICAgIHZhbCByb2xlOiBTdHJpbmcsCiAgICB2YWwgc2Nob29sTmFtZTogU3RyaW5nPywKICAgIHZhbCBzY2hvb2xDb2RlOiBTdHJpbmc/LAogICAgdmFsIHNjaG9vbElkOiBJbnQ/LAogICAgdmFsIHByb2ZpbGVQaG90bzogU3RyaW5nPwopIHsKICAgIHZhbCBmdWxsTmFtZSBnZXQoKSA9ICIkZmlyc3ROYW1lICRsYXN0TmFtZSIKICAgIHZhbCBpbml0aWFscyBnZXQoKSA9ICIke2ZpcnN0TmFtZS5maXJzdE9yTnVsbCgpID86ICIifSR7bGFzdE5hbWUuZmlyc3RPck51bGwoKSA/OiAiIn0iLnVwcGVyY2FzZSgpCiAgICB2YWwgZGlzcGxheVJvbGUgZ2V0KCkgPSByb2xlLnJlcGxhY2UoIl8iLCAiICIpLnNwbGl0KCIgIikuam9pblRvU3RyaW5nKCIgIikgeyBpdC5yZXBsYWNlRmlyc3RDaGFyIHsgYyAtPiBjLnVwcGVyY2FzZSgpIH0gfQp9CgpkYXRhIGNsYXNzIERhc2hib2FyZFN0YXRzKAogICAgdmFsIHRvdGFsU3R1ZGVudHM6IEludCA9IDAsCiAgICB2YWwgdG90YWxUZWFjaGVyczogSW50ID0gMCwKICAgIHZhbCB0b3RhbFN0YWZmOiBJbnQgPSAwLAogICAgdmFsIHRvdGFsU3RyZWFtczogSW50ID0gMCwKICAgIHZhbCBmZWVDb2xsZWN0aW9uUmF0ZTogRG91YmxlID0gMC4wLAogICAgdmFsIGF0dGVuZGFuY2VSYXRlOiBEb3VibGUgPSAwLjAsCiAgICB2YWwgdXBjb21pbmdFdmVudHM6IExpc3Q8U2Nob29sRXZlbnQ+ID0gZW1wdHlMaXN0KCkKKQoKZGF0YSBjbGFzcyBTY2hvb2xFdmVudCgKICAgIHZhbCBpZDogSW50LAogICAgdmFsIHRpdGxlOiBTdHJpbmcsCiAgICB2YWwgZGF0ZTogU3RyaW5nLAogICAgdmFsIGRlc2NyaXB0aW9uOiBTdHJpbmc/CikKCmRhdGEgY2xhc3MgRXhhbVJlc3VsdCgKICAgIHZhbCBpZDogSW50LAogICAgdmFsIGV4YW1OYW1lOiBTdHJpbmcsCiAgICB2YWwgdGVybTogU3RyaW5nLAogICAgdmFsIHllYXI6IFN0cmluZywKICAgIHZhbCBtZWFuTWFya3M6IERvdWJsZSwKICAgIHZhbCBtZWFuR3JhZGU6IFN0cmluZywKICAgIHZhbCBtZWFuUG9pbnRzOiBEb3VibGUsCiAgICB2YWwgdG90YWxTdHVkZW50czogSW50LAogICAgdmFsIHBvc2l0aW9uOiBJbnQ/ID0gbnVsbCwKICAgIHZhbCBzdHJlYW1Qb3NpdGlvbjogSW50PyA9IG51bGwKKQoKZGF0YSBjbGFzcyBTdWJqZWN0UmVzdWx0KAogICAgdmFsIHN1YmplY3Q6IFN0cmluZywKICAgIHZhbCBjbGFzc05hbWU6IFN0cmluZywKICAgIHZhbCBzdHJlYW06IFN0cmluZywKICAgIHZhbCBleGFtTmFtZTogU3RyaW5nLAogICAgdmFsIHRlcm06IFN0cmluZywKICAgIHZhbCB5ZWFyOiBTdHJpbmcgPSAiIiwKICAgIHZhbCBtZWFuUG9pbnRzOiBEb3VibGUsCiAgICB2YWwgbWVhbk1hcmtzOiBEb3VibGUsCiAgICB2YWwgbWVhbkdyYWRlOiBTdHJpbmcsCiAgICB2YWwgdG90YWxTdHVkZW50czogSW50LAogICAgdmFsIHRyZW5kOiBEb3VibGUgPSAwLjAKKQoKZGF0YSBjbGFzcyBTdHVkZW50UmVzdWx0KAogICAgdmFsIGlkOiBJbnQsCiAgICB2YWwgbmFtZTogU3RyaW5nLAogICAgdmFsIGFkbU5vOiBTdHJpbmcsCiAgICB2YWwgc3RyZWFtOiBTdHJpbmcsCiAgICB2YWwgbWVhbk1hcmtzOiBEb3VibGUsCiAgICB2YWwgdG90YWxQb2ludHM6IEludCwKICAgIHZhbCBvdXRPZjogSW50LAogICAgdmFsIG1lYW5HcmFkZTogU3RyaW5nLAogICAgdmFsIHBvc2l0aW9uOiBJbnQsCiAgICB2YWwgdG90YWxTdHVkZW50czogSW50LAogICAgdmFsIHN0cmVhbVBvc2l0aW9uOiBJbnQsCiAgICB2YWwgc3RyZWFtVG90YWw6IEludCwKICAgIHZhbCBrY3BlOiBJbnQ/LAogICAgdmFsIHRyZW5kOiBEb3VibGUgPSAwLjAKKQoKZGF0YSBjbGFzcyBBcGlFcnJvcih2YWwgbWVzc2FnZTogU3RyaW5nKQo=" | base64 --decode > android/app/src/main/java/ke/elimusaas/data/Models.kt
+          echo "Patch done"
+          grep -c "btnBiometric" android/app/src/main/java/ke/elimusaas/ui/LoginActivity.kt && echo "FAIL: btnBiometric found" || echo "OK: no btnBiometric"
+          grep -c "val year" android/app/src/main/java/ke/elimusaas/data/Models.kt && echo "OK: year field present" || echo "FAIL: year missing"
 
       - name: Set version variables
         id: version
@@ -254,7 +76,7 @@ ENDKOTLIN
         run: |
           KS_FILE="android/app/keystore.jks"
           if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "Using saved keystore from secret"
+            echo "Using saved keystore"
             echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > "$KS_FILE"
             echo "KS_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_OUTPUT
             echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"           >> $GITHUB_OUTPUT
@@ -263,10 +85,7 @@ ENDKOTLIN
             echo "Auto-generating keystore"
             KS_PASS="ElimuSaaS$(date +%Y)Secure"
             KS_ALIAS="elimusaas"
-            keytool -genkeypair -v \
-              -keystore "$KS_FILE" -keyalg RSA -keysize 2048 -validity 10000 \
-              -alias "$KS_ALIAS" -storepass "$KS_PASS" -keypass "$KS_PASS" \
-              -dname "CN=ElimuSaaS, O=ElimuSaaS Ltd, C=KE" -noprompt
+            keytool -genkeypair -v               -keystore "$KS_FILE" -keyalg RSA -keysize 2048 -validity 10000               -alias "$KS_ALIAS" -storepass "$KS_PASS" -keypass "$KS_PASS"               -dname "CN=ElimuSaaS, O=ElimuSaaS Ltd, C=KE" -noprompt
             echo "=== SAVE THESE AS GITHUB SECRETS ==="
             echo "KEYSTORE_BASE64:"
             base64 -w 0 "$KS_FILE"
@@ -291,8 +110,7 @@ ENDKOTLIN
       - name: Rename APK
         run: |
           mkdir -p release-artifacts
-          cp android/app/build/outputs/apk/release/app-release.apk \
-             "release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk"
+          cp android/app/build/outputs/apk/release/app-release.apk              "release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -312,9 +130,9 @@ ENDKOTLIN
             ${{ steps.version.outputs.RELEASE_NOTES }}
 
             ### How to Install
-            1. Tap ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk below
-            2. Open the downloaded file and tap Install
-            3. If blocked: Settings → Security → Install unknown apps → Allow
+            1. Tap the APK file below to download
+            2. Open it and tap Install
+            3. If blocked: Settings -> Security -> Install unknown apps -> Allow
             4. Sign in with your school credentials
 
             Backend: https://elimu-saas.onrender.com
