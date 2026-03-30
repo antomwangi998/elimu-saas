@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/healthController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/',s,c.getRecords);r.post('/',s,c.createRecord);r.get('/sick-bay',s,c.getSickBay);r.get('/stats',s,c.getStats);r.put('/:id/discharge',s,c.discharge);r.get('/medical/:studentId',s,c.getMedicalInfo);r.post('/medical/:studentId',s,c.saveMedicalInfo);module.exports=r;

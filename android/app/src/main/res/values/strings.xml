@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ElimuSaaS</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_exams">Exams</string>
+    <string name="nav_students">Students</string>
+    <string name="nav_more">More</string>
+</resources>

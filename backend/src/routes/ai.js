@@ -1,0 +1,11 @@
+const router = require('express').Router();
+const c = require('../controllers/analyticsController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/insights', staff, c.getInsights);
+router.post('/insights/generate', staff, c.generateInsights);
+router.put('/insights/:id/dismiss', staff, c.dismissInsight);
+router.get('/at-risk', staff, c.getAtRiskStudents);
+router.get('/fee-defaults', staff, c.getFeeDefaultPredictions);
+router.get('/performance-trends/:classId', staff, c.getPerformanceTrends);
+module.exports = router;
