@@ -2,15 +2,12 @@ package ke.elimusaas.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View 
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import ke.elimusaas.R
 import ke.elimusaas.utils.ApiClient
-import ke.elimusaas.utils.BiometricHelper
-import ke.elimusaas.utils.NotificationHelper
 import ke.elimusaas.utils.SessionManager
 import kotlinx.coroutines.*
 
@@ -23,8 +20,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var tvError: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var tvForgotPassword: TextView
-    // btnBiometric is optional — only shown if fingerprint is enrolled
-    private var btnBiometric: LinearLayout? = null
 
     private val session by lazy { SessionManager(this) }
     private val api by lazy { ApiClient(this) }
@@ -32,54 +27,28 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        NotificationHelper.createChannel(this)
 
-        // If already logged in, try biometric then go straight to main
         if (session.isLoggedIn) {
-            if (BiometricHelper.isAvailable(this)) {
-                setContentView(R.layout.activity_login)
-                bindViews()
-                showBiometricPrompt()
-            } else {
-                startMain()
-            }
-            return
+            startMain(); return
         }
 
         setContentView(R.layout.activity_login)
-        bindViews()
-    }
 
-    private fun bindViews() {
-        etEmail       = findViewById(R.id.etEmail)
-        etPassword    = findViewById(R.id.etPassword)
-        etSchoolCode  = findViewById(R.id.etSchoolCode)
-        btnLogin      = findViewById(R.id.btnLogin)
-        tvError       = findViewById(R.id.tvError)
-        progressBar   = findViewById(R.id.progressBar)
+        etEmail          = findViewById(R.id.etEmail)
+        etPassword       = findViewById(R.id.etPassword)
+        etSchoolCode     = findViewById(R.id.etSchoolCode)
+        btnLogin         = findViewById(R.id.btnLogin)
+        tvError          = findViewById(R.id.tvError)
+        progressBar      = findViewById(R.id.progressBar)
         tvForgotPassword = findViewById(R.id.tvForgotPassword)
 
-        // Biometric button is optional — only wire it if it exists in the layout
-        btnBiometric = findViewById(R.id.btnBiometric)
-        if (BiometricHelper.isAvailable(this) && session.isLoggedIn) {
-            btnBiometric?.visibility = View.VISIBLE
-            btnBiometric?.setOnClickListener { showBiometricPrompt() }
-        }
-
         btnLogin.setOnClickListener { doLogin() }
+
         etPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) { doLogin(); true } else false
         }
-        tvForgotPassword.setOnClickListener { showForgotPasswordDialog() }
-    }
 
-    private fun showBiometricPrompt() {
-        BiometricHelper.authenticate(
-            activity = this,
-            onSuccess = { startMain() },
-            onFailed = { /* user can use password instead */ }
-        )
+        tvForgotPassword.setOnClickListener { showForgotPasswordDialog() }
     }
 
     private fun doLogin() {
@@ -96,7 +65,9 @@ class LoginActivity : AppCompatActivity() {
         tvError.visibility = View.GONE
 
         scope.launch {
-            val result = withContext(Dispatchers.IO) { api.login(email, password, schoolCode) }
+            val result = withContext(Dispatchers.IO) {
+                api.login(email, password, schoolCode)
+            }
             setLoading(false)
 
             if (result.error != null) {
@@ -116,35 +87,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showForgotPasswordDialog() {
-        val emailInput = EditText(this).apply {
+        val input = EditText(this).apply {
             hint      = "admin@school.ac.ke"
             inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             setPadding(48, 24, 48, 8)
         }
-        val dialog = android.app.AlertDialog.Builder(this)
+        android.app.AlertDialog.Builder(this)
             .setTitle("Reset Password")
             .setMessage("Enter your email to receive a reset link")
-            .setView(emailInput)
-            .setPositiveButton("Send Reset Link") { _, _ ->
-                val email = emailInput.text.toString().trim()
+            .setView(input)
+            .setPositiveButton("Send") { _, _ ->
+                val email = input.text.toString().trim()
                 if (email.isNotEmpty()) {
                     scope.launch {
                         withContext(Dispatchers.IO) { api.forgotPassword(email) }
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Reset link sent to $email",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(this@LoginActivity,
+                            "Reset link sent to $email", Toast.LENGTH_LONG).show()
                     }
                 }
             }
             .setNegativeButton("Cancel", null)
-            .create()
-        dialog.show()
-        dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)
-            ?.setTextColor(getColor(R.color.elimu_green))
-        dialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE)
-            ?.setTextColor(getColor(R.color.text_secondary))
+            .show()
     }
 
     private fun showError(msg: String) {
@@ -152,10 +115,10 @@ class LoginActivity : AppCompatActivity() {
         tvError.visibility = View.VISIBLE
     }
 
-    private fun setLoading(loading: Boolean) {
-        btnLogin.isEnabled = !loading
-        btnLogin.text      = if (loading) "" else "Sign In"
-        progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+    private fun setLoading(on: Boolean) {
+        btnLogin.isEnabled     = !on
+        btnLogin.text          = if (on) "" else "Sign In"
+        progressBar.visibility = if (on) View.VISIBLE else View.GONE
     }
 
     private fun startMain() {
