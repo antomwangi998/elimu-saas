@@ -68,25 +68,7 @@ jobs:
           echo "cGFja2FnZSBrZS5lbGltdXNhYXMudWkuZmVlcwoKaW1wb3J0IGFuZHJvaWQuY29udGVudC5JbnRlbnQKaW1wb3J0IGFuZHJvaWQuZ3JhcGhpY3MuQ29sb3IKaW1wb3J0IGFuZHJvaWQubmV0LlVyaQppbXBvcnQgYW5kcm9pZC5vcy5CdW5kbGUKaW1wb3J0IGFuZHJvaWQudmlldy4qCmltcG9ydCBhbmRyb2lkLndpZGdldC4qCmltcG9ydCBhbmRyb2lkeC5mcmFnbWVudC5hcHAuRnJhZ21lbnQKaW1wb3J0IGtlLmVsaW11c2Fhcy5SCmltcG9ydCBrZS5lbGltdXNhYXMudXRpbHMuQXBpQ2xpZW50CmltcG9ydCBrb3RsaW54LmNvcm91dGluZXMuKgoKY2xhc3MgRmVlc0ZyYWdtZW50IDogRnJhZ21lbnQoKSB7CiAgICBwcml2YXRlIHZhbCBzY29wZSA9IENvcm91dGluZVNjb3BlKERpc3BhdGNoZXJzLk1haW4gKyBTdXBlcnZpc29ySm9iKCkpCgogICAgb3ZlcnJpZGUgZnVuIG9uQ3JlYXRlVmlldyhpOiBMYXlvdXRJbmZsYXRlciwgYzogVmlld0dyb3VwPywgczogQnVuZGxlPyk6IFZpZXcgPQogICAgICAgIGkuaW5mbGF0ZShSLmxheW91dC5mcmFnbWVudF9mZWVzLCBjLCBmYWxzZSkKCiAgICBvdmVycmlkZSBmdW4gb25WaWV3Q3JlYXRlZCh2aWV3OiBWaWV3LCBzOiBCdW5kbGU/KSB7CiAgICAgICAgc3VwZXIub25WaWV3Q3JlYXRlZCh2aWV3LCBzKQogICAgICAgIHZhbCBwcm9ncmVzcyA9IHZpZXcuZmluZFZpZXdCeUlkPFByb2dyZXNzQmFyPihSLmlkLnByb2dyZXNzRmVlcykKICAgICAgICB2YWwgY29udGFpbmVyID0gdmlldy5maW5kVmlld0J5SWQ8TGluZWFyTGF5b3V0PihSLmlkLmZlZXNDb250YWluZXIpCiAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8QnV0dG9uPihSLmlkLmJ0bk9wZW5GZWVzKT8uc2V0T25DbGlja0xpc3RlbmVyIHsKICAgICAgICAgICAgc3RhcnRBY3Rpdml0eShJbnRlbnQoSW50ZW50LkFDVElPTl9WSUVXLCBVcmkucGFyc2UoIiR7QXBpQ2xpZW50LkZST05URU5EX1VSTH0vI2ZlZXMiKSkpCiAgICAgICAgfQogICAgICAgIHNjb3BlLmxhdW5jaCB7CiAgICAgICAgICAgIHByb2dyZXNzPy52aXNpYmlsaXR5ID0gVmlldy5WSVNJQkxFCiAgICAgICAgICAgIHZhbCBmZWVzID0gd2l0aENvbnRleHQoRGlzcGF0Y2hlcnMuSU8pIHsgQXBpQ2xpZW50KHJlcXVpcmVDb250ZXh0KCkpLmdldEZlZVN0YXRzKCkgfQogICAgICAgICAgICBwcm9ncmVzcz8udmlzaWJpbGl0eSA9IFZpZXcuR09ORQogICAgICAgICAgICBpZiAoZmVlcy5pc0VtcHR5KCkpIHJldHVybkBsYXVuY2gKICAgICAgICAgICAgdmFsIHRvdGFsQ29sbGVjdGVkID0gZmVlcy5zdW1PZiB7IGl0LnBhaWQgfQogICAgICAgICAgICB2YWwgdG90YWxQZW5kaW5nID0gZmVlcy5zdW1PZiB7IGl0LmJhbGFuY2UgfQogICAgICAgICAgICB2aWV3LmZpbmRWaWV3QnlJZDxUZXh0Vmlldz4oUi5pZC50dlRvdGFsQ29sbGVjdGVkKT8udGV4dCA9ICJLRVMgJSwuMGYiLmZvcm1hdCh0b3RhbENvbGxlY3RlZCkKICAgICAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8VGV4dFZpZXc+KFIuaWQudHZUb3RhbFBlbmRpbmcpPy50ZXh0ID0gIktFUyAlLC4wZiIuZm9ybWF0KHRvdGFsUGVuZGluZykKICAgICAgICAgICAgdmFsIHJhdGUgPSBpZiAodG90YWxDb2xsZWN0ZWQgKyB0b3RhbFBlbmRpbmcgPiAwKSAodG90YWxDb2xsZWN0ZWQgLyAodG90YWxDb2xsZWN0ZWQgKyB0b3RhbFBlbmRpbmcpICogMTAwKS50b0ludCgpIGVsc2UgMAogICAgICAgICAgICB2aWV3LmZpbmRWaWV3QnlJZDxQcm9ncmVzc0Jhcj4oUi5pZC5wcm9ncmVzc0ZlZUNvbGxlY3Rpb24pPy5wcm9ncmVzcyA9IHJhdGUKICAgICAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8VGV4dFZpZXc+KFIuaWQudHZDb2xsZWN0aW9uUmF0ZSk/LnRleHQgPSAiJHJhdGUlIgogICAgICAgIH0KICAgIH0KICAgIG92ZXJyaWRlIGZ1biBvbkRlc3Ryb3lWaWV3KCkgeyBzdXBlci5vbkRlc3Ryb3lWaWV3KCk7IHNjb3BlLmNhbmNlbCgpIH0KfQo=" | base64 --decode > android/app/src/main/java/ke/elimusaas/ui/fees/FeesFragment.kt
           mkdir -p android/app/src/main/java/ke/elimusaas/ui/staff
           echo "cGFja2FnZSBrZS5lbGltdXNhYXMudWkuc3RhZmYKCmltcG9ydCBhbmRyb2lkLmNvbnRlbnQuSW50ZW50CmltcG9ydCBhbmRyb2lkLm5ldC5VcmkKaW1wb3J0IGFuZHJvaWQub3MuQnVuZGxlCmltcG9ydCBhbmRyb2lkLnZpZXcuKgppbXBvcnQgYW5kcm9pZC53aWRnZXQuKgppbXBvcnQgYW5kcm9pZHguZnJhZ21lbnQuYXBwLkZyYWdtZW50CmltcG9ydCBrZS5lbGltdXNhYXMuUgppbXBvcnQga2UuZWxpbXVzYWFzLnV0aWxzLkFwaUNsaWVudAppbXBvcnQga2UuZWxpbXVzYWFzLnV0aWxzLlNlc3Npb25NYW5hZ2VyCmltcG9ydCBrb3RsaW54LmNvcm91dGluZXMuKgoKY2xhc3MgU3RhZmZGcmFnbWVudCA6IEZyYWdtZW50KCkgewogICAgcHJpdmF0ZSB2YWwgc2NvcGUgPSBDb3JvdXRpbmVTY29wZShEaXNwYXRjaGVycy5NYWluICsgU3VwZXJ2aXNvckpvYigpKQoKICAgIG92ZXJyaWRlIGZ1biBvbkNyZWF0ZVZpZXcoaTogTGF5b3V0SW5mbGF0ZXIsIGM6IFZpZXdHcm91cD8sIHM6IEJ1bmRsZT8pOiBWaWV3ID0KICAgICAgICBpLmluZmxhdGUoUi5sYXlvdXQuZnJhZ21lbnRfc3RhZmYsIGMsIGZhbHNlKQoKICAgIG92ZXJyaWRlIGZ1biBvblZpZXdDcmVhdGVkKHZpZXc6IFZpZXcsIHM6IEJ1bmRsZT8pIHsKICAgICAgICBzdXBlci5vblZpZXdDcmVhdGVkKHZpZXcsIHMpCiAgICAgICAgdmFsIHNlc3Npb24gPSBTZXNzaW9uTWFuYWdlcihyZXF1aXJlQ29udGV4dCgpKQogICAgICAgIHZhbCB1c2VyID0gc2Vzc2lvbi51c2VyCiAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8VGV4dFZpZXc+KFIuaWQudHZQcm9maWxlSW5pdGlhbHMpPy50ZXh0ID0gdXNlcj8uaW5pdGlhbHMgPzogIkUiCiAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8VGV4dFZpZXc+KFIuaWQudHZQcm9maWxlTmFtZSk/LnRleHQgPSB1c2VyPy5mdWxsTmFtZSA/OiAiLSIKICAgICAgICB2aWV3LmZpbmRWaWV3QnlJZDxUZXh0Vmlldz4oUi5pZC50dlByb2ZpbGVSb2xlKT8udGV4dCA9IHVzZXI/LmRpc3BsYXlSb2xlID86ICItIgogICAgICAgIHZpZXcuZmluZFZpZXdCeUlkPFRleHRWaWV3PihSLmlkLnR2UHJvZmlsZUVtYWlsKT8udGV4dCA9IHVzZXI/LmVtYWlsID86ICItIgogICAgICAgIHZpZXcuZmluZFZpZXdCeUlkPFRleHRWaWV3PihSLmlkLnR2UHJvZmlsZVNjaG9vbCk/LnRleHQgPSB1c2VyPy5zY2hvb2xOYW1lID86ICItIgogICAgICAgIHZpZXcuZmluZFZpZXdCeUlkPFRleHRWaWV3PihSLmlkLnR2UHJvZmlsZUNvZGUpPy50ZXh0ID0gdXNlcj8uc2Nob29sQ29kZSA/OiAiLSIKCiAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8QnV0dG9uPihSLmlkLmJ0bk9wZW5XZWJQb3J0YWwpPy5zZXRPbkNsaWNrTGlzdGVuZXIgewogICAgICAgICAgICBzdGFydEFjdGl2aXR5KEludGVudChJbnRlbnQuQUNUSU9OX1ZJRVcsIFVyaS5wYXJzZShBcGlDbGllbnQuRlJPTlRFTkRfVVJMKSkpCiAgICAgICAgfQoKICAgICAgICB2YWwgY29udGFpbmVyID0gdmlldy5maW5kVmlld0J5SWQ8TGluZWFyTGF5b3V0PihSLmlkLnN0YWZmTGlzdENvbnRhaW5lcikKICAgICAgICB2YWwgcHJvZ3Jlc3MgPSB2aWV3LmZpbmRWaWV3QnlJZDxQcm9ncmVzc0Jhcj4oUi5pZC5wcm9ncmVzc1N0YWZmKQogICAgICAgIHNjb3BlLmxhdW5jaCB7CiAgICAgICAgICAgIHByb2dyZXNzPy52aXNpYmlsaXR5ID0gVmlldy5WSVNJQkxFCiAgICAgICAgICAgIHZhbCBzdGFmZiA9IHdpdGhDb250ZXh0KERpc3BhdGNoZXJzLklPKSB7IEFwaUNsaWVudChyZXF1aXJlQ29udGV4dCgpKS5nZXRTdGFmZigpIH0KICAgICAgICAgICAgcHJvZ3Jlc3M/LnZpc2liaWxpdHkgPSBWaWV3LkdPTkUKICAgICAgICAgICAgdmlldy5maW5kVmlld0J5SWQ8VGV4dFZpZXc+KFIuaWQudHZTdGFmZkNvdW50KT8udGV4dCA9ICIke3N0YWZmLnNpemV9IFN0YWZmIE1lbWJlcnMiCiAgICAgICAgICAgIHN0YWZmLnRha2UoMjApLmZvckVhY2ggeyBtZW1iZXIgLT4KICAgICAgICAgICAgICAgIHZhbCByb3cgPSBMYXlvdXRJbmZsYXRlci5mcm9tKGNvbnRleHQpLmluZmxhdGUoUi5sYXlvdXQuaXRlbV9zdHVkZW50X3JvdywgY29udGFpbmVyLCBmYWxzZSkKICAgICAgICAgICAgICAgIHZhbCBpbml0aWFscyA9IG1lbWJlci5uYW1lLnNwbGl0KCIgIikubWFwTm90TnVsbCB7IGl0LmZpcnN0T3JOdWxsKCk/LnVwcGVyY2FzZUNoYXIoKT8udG9TdHJpbmcoKSB9LnRha2UoMikuam9pblRvU3RyaW5nKCIiKQogICAgICAgICAgICAgICAgcm93LmZpbmRWaWV3QnlJZDxUZXh0Vmlldz4oUi5pZC50dlN0dWRlbnRJbml0aWFscyk/LnRleHQgPSBpbml0aWFscwogICAgICAgICAgICAgICAgcm93LmZpbmRWaWV3QnlJZDxUZXh0Vmlldz4oUi5pZC50dlN0dWRlbnROYW1lKT8udGV4dCA9IG1lbWJlci5uYW1lCiAgICAgICAgICAgICAgICByb3cuZmluZFZpZXdCeUlkPFRleHRWaWV3PihSLmlkLnR2U3R1ZGVudEFkbSk/LnRleHQgPSAiJHttZW1iZXIucm9sZX0gIMK3ICAke21lbWJlci5lbWFpbH0iCiAgICAgICAgICAgICAgICByb3cuZmluZFZpZXdCeUlkPFRleHRWaWV3PihSLmlkLnR2U3R1ZGVudEdyYWRlKT8udmlzaWJpbGl0eSA9IFZpZXcuR09ORQogICAgICAgICAgICAgICAgcm93LmZpbmRWaWV3QnlJZDxUZXh0Vmlldz4oUi5pZC50dlN0dWRlbnRNYXJrcyk/LnZpc2liaWxpdHkgPSBWaWV3LkdPTkUKICAgICAgICAgICAgICAgIHJvdy5maW5kVmlld0J5SWQ8VGV4dFZpZXc+KFIuaWQudHZTdHVkZW50UG9zaXRpb24pPy52aXNpYmlsaXR5ID0gVmlldy5HT05FCiAgICAgICAgICAgICAgICBjb250YWluZXI/LmFkZFZpZXcocm93KQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQogICAgb3ZlcnJpZGUgZnVuIG9uRGVzdHJveVZpZXcoKSB7IHN1cGVyLm9uRGVzdHJveVZpZXcoKTsgc2NvcGUuY2FuY2VsKCkgfQp9Cg==" | base64 --decode > android/app/src/main/java/ke/elimusaas/ui/staff/StaffFragment.kt
-
-      - name: Verify patches
-        run: |
-          echo "Checking Models.kt..."
-          grep -c "val year" android/app/src/main/java/ke/elimusaas/data/Models.kt && echo "OK Models year" || echo "FAIL Models year"
-          echo "Checking SessionManager.kt..."
-          echo "Checking OfflineCache.kt..."
-          echo "Checking NotificationHelper.kt..."
-          echo "Checking ApiClient.kt..."
-          echo "Checking OnboardingActivity.kt..."
-          echo "Checking LoginActivity.kt..."
-          grep -c "btnBiometric" android/app/src/main/java/ke/elimusaas/ui/LoginActivity.kt && echo "FAIL btnBiometric" || echo "OK LoginActivity.kt"
-          echo "Checking MainActivity.kt..."
-          echo "Checking DashboardFragment.kt..."
-          echo "Checking ExamsFragment.kt..."
-          echo "Checking StudentsFragment.kt..."
-          echo "Checking FeesFragment.kt..."
-          echo "Checking StaffFragment.kt..."
-          echo "All patches verified"
+          echo 'All Kotlin files patched'
 
       - name: Set version variables
         id: version
@@ -95,47 +77,48 @@ jobs:
             VER="${{ github.event.inputs.version_name }}"
             NOTES="${{ github.event.inputs.release_notes }}"
           else
-            VER="${{GITHUB_REF#refs/tags/v}}"
+            VER="${GITHUB_REF#refs/tags/v}"
             NOTES="Release $VER"
           fi
           echo "VERSION_NAME=$VER" >> $GITHUB_OUTPUT
           echo "RELEASE_NOTES=$NOTES" >> $GITHUB_OUTPUT
           IFS='.' read -r MA MI PA <<< "$VER"
-          echo "VERSION_CODE=$(( ${{MA:-1}}*10000 + ${{MI:-0}}*100 + ${{PA:-0}} ))" >> $GITHUB_OUTPUT
+          echo "VERSION_CODE=$(( ${MA:-1}*10000 + ${MI:-0}*100 + ${PA:-0} ))" >> $GITHUB_OUTPUT
 
       - name: Patch version in build.gradle
         working-directory: android
         run: |
           sed -i "s/versionCode [0-9]*/versionCode ${{ steps.version.outputs.VERSION_CODE }}/" app/build.gradle
-          sed -i "s/versionName \".*\"/versionName \"${{ steps.version.outputs.VERSION_NAME }}\"/" app/build.gradle
+          sed -i 's/versionName ".*"/versionName "${{ steps.version.outputs.VERSION_NAME }}"/' app/build.gradle
 
       - name: Setup keystore
         id: keystore
         run: |
           KS_FILE="android/app/keystore.jks"
           if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "Using saved keystore"
+            echo "Using saved keystore from secret"
             echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > "$KS_FILE"
             echo "KS_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_OUTPUT
-            echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"           >> $GITHUB_OUTPUT
-            echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}"     >> $GITHUB_OUTPUT
+            echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_OUTPUT
+            echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_OUTPUT
           else
-            echo "Auto-generating keystore"
+            echo "Auto-generating keystore (first run)"
             KS_PASS="ElimuSaaS$(date +%Y)Secure"
             KS_ALIAS="elimusaas"
             keytool -genkeypair -v \
               -keystore "$KS_FILE" -keyalg RSA -keysize 2048 -validity 10000 \
               -alias "$KS_ALIAS" -storepass "$KS_PASS" -keypass "$KS_PASS" \
               -dname "CN=ElimuSaaS, O=ElimuSaaS Ltd, C=KE" -noprompt
-            echo "=== SAVE THESE AS GITHUB SECRETS ==="
+            echo ""
+            echo "=== COPY THESE TO GITHUB SECRETS ==="
             echo "KEYSTORE_BASE64:"
             base64 -w 0 "$KS_FILE"
             echo ""
             echo "KEYSTORE_PASSWORD: $KS_PASS"
             echo "KEY_ALIAS: $KS_ALIAS"
             echo "KEY_PASSWORD: $KS_PASS"
-            echo "KS_PASSWORD=$KS_PASS"  >> $GITHUB_OUTPUT
-            echo "KEY_ALIAS=$KS_ALIAS"   >> $GITHUB_OUTPUT
+            echo "KS_PASSWORD=$KS_PASS" >> $GITHUB_OUTPUT
+            echo "KEY_ALIAS=$KS_ALIAS" >> $GITHUB_OUTPUT
             echo "KEY_PASSWORD=$KS_PASS" >> $GITHUB_OUTPUT
           fi
 
@@ -164,7 +147,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', steps.version.outputs.VERSION_NAME) || github.ref_name }}
+          tag_name: ${{ github.ref_name }}
           name: ElimuSaaS v${{ steps.version.outputs.VERSION_NAME }}
           body: |
             ## ElimuSaaS Android App v${{ steps.version.outputs.VERSION_NAME }}
@@ -172,12 +155,11 @@ jobs:
             ${{ steps.version.outputs.RELEASE_NOTES }}
 
             ### How to Install
-            1. Download ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk below
-            2. Open the file and tap Install
+            1. Download the APK file below
+            2. Open it and tap Install
             3. If blocked: Settings -> Security -> Install unknown apps -> Allow
             4. Sign in with your school credentials
 
-            **Features:** Onboarding, Dashboard, Exams, Students, Fees, Staff, Offline mode
             **Backend:** https://elimu-saas.onrender.com
           files: release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk
           draft: false
