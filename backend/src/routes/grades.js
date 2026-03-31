@@ -1,0 +1,11 @@
+const router = require('express').Router();
+const c = require('../controllers/gradesController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireMinRole('principal');
+router.get('/scales', staff, c.getGradingScales);
+router.post('/scales', admin, c.upsertGradingScales);
+router.get('/student/:id', staff, c.getStudentGrades);
+router.get('/report-card/:id', staff, c.getReportCard);
+router.get('/class-report', staff, c.getClassReport);
+module.exports = router;

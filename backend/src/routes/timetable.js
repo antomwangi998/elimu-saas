@@ -1,0 +1,17 @@
+const router = require('express').Router();
+const c = require('../controllers/timetableController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireMinRole('principal');
+router.get('/', staff, c.getTimetables);
+router.get('/grid', staff, c.getTimetableGrid);
+router.get('/periods', staff, c.getPeriods);
+router.post('/periods/seed', admin, c.seedDefaultPeriods);
+router.post('/periods', admin, c.upsertPeriod);
+router.post('/generate', admin, c.generateTimetable);
+router.put('/slots', admin, c.updateSlot);
+router.post('/publish', admin, c.publishTimetable);
+router.delete('/:id', admin, c.deleteTimetable);
+router.post('/lesson-attendance', staff, c.markLessonAttendance);
+router.get('/lesson-attendance', staff, c.getLessonAttendance);
+module.exports = router;
