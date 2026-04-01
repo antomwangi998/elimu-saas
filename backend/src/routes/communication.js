@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const c = require('../controllers/communicationController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/messages', staff, c.getMessages);
+router.post('/messages', staff, c.sendMessage);
+router.get('/notifications', staff, c.getNotifications);
+router.put('/notifications/:id/read', staff, c.markNotificationRead);
+router.post('/announcements', staff, c.sendAnnouncement);
+module.exports = router;
