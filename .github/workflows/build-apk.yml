@@ -14,7 +14,8 @@ on:
         description: 'What changed in this release'
         required: false
         default: 'Bug fixes and improvements'
-
+permissions:
+  contents: write
 jobs:
   build-and-release:
     name: Build Signed APK & Publish Release
