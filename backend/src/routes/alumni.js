@@ -1,0 +1,15 @@
+const router = require('express').Router();
+const c = require('../controllers/alumniController');
+const { requireMinRole, requireRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireRole('super_admin','school_admin','principal','secretary');
+router.get('/', staff, c.getAlumni);
+router.get('/stats', staff, c.getStats);
+router.get('/events', staff, c.getEvents);
+router.post('/events', admin, c.createEvent);
+router.post('/bulk-import', admin, c.bulkImport);
+router.get('/:id', staff, c.getAlumnus);
+router.post('/', admin, c.createAlumnus);
+router.put('/:id', admin, c.updateAlumnus);
+router.delete('/:id', admin, c.deleteAlumnus);
+module.exports = router;
