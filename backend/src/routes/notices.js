@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/noticeController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/',authMiddleware,c.getNotices);r.post('/',s,c.createNotice);r.put('/:id/read',authMiddleware,c.markRead);r.put('/:id/pin',s,c.pinNotice);r.delete('/:id',s,c.deleteNotice);module.exports=r;

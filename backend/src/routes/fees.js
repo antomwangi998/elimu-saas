@@ -1,0 +1,18 @@
+const router = require('express').Router();
+const c = require('../controllers/feesController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const bursar = requireMinRole('bursar');
+router.get('/structures', bursar, c.getFeeStructures);
+router.get('/structures/:id', bursar, c.getFeeStructure);
+router.post('/structures', bursar, c.createFeeStructure);
+router.post('/structures/assign', bursar, c.assignFeesToStudents);
+router.get('/payments', bursar, c.getPayments);
+router.post('/payments', bursar, c.recordPayment);
+router.post('/mpesa/stk', staff, c.initiateMpesaSTK);
+router.get('/summary', bursar, c.getFeeSummary);
+router.get('/reports/summary', bursar, c.getFeeSummary);
+router.post('/payments/mpesa/initiate', staff, c.initiateMpesaSTK);
+router.get('/statement/:studentId', staff, c.getStudentStatement);
+router.post('/reminders', bursar, c.sendDefaulterSMS);
+module.exports = router;

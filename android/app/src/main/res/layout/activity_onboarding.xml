@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#0D47A1">
+
+  <!-- PAGE 1: WELCOME -->
+  <LinearLayout android:id="@+id/pageWelcome"
+      android:layout_width="match_parent" android:layout_height="match_parent"
+      android:orientation="vertical" android:gravity="center" android:padding="40dp">
+    <TextView android:layout_width="90dp" android:layout_height="90dp"
+        android:text="🏫" android:textSize="48sp" android:gravity="center"
+        android:background="@drawable/logo_ring_bg" android:layout_marginBottom="28dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="ElimuSaaS" android:textSize="38sp" android:textStyle="bold"
+        android:textColor="#FFFFFF" android:letterSpacing="0.02"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Enterprise School Management Platform"
+        android:textSize="14sp" android:textColor="#90CAF9"
+        android:layout_marginTop="4dp" android:layout_marginBottom="32dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Kenya&#8217;s most complete school management suite. Trusted by 500+ schools and 2 million+ students nationwide."
+        android:textSize="15sp" android:textColor="#E3F2FD"
+        android:gravity="center" android:lineSpacingExtra="5dp"/>
+  </LinearLayout>
+
+  <!-- PAGE 2: FEATURES -->
+  <ScrollView android:id="@+id/pageFeatures"
+      android:layout_width="match_parent" android:layout_height="match_parent"
+      android:visibility="gone" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="24dp">
+      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="Everything Your School Needs"
+          android:textSize="24sp" android:textStyle="bold"
+          android:textColor="#FFFFFF" android:layout_marginTop="20dp" android:layout_marginBottom="6dp"/>
+      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="All tools. One app. Your pocket."
+          android:textSize="14sp" android:textColor="#90CAF9" android:layout_marginBottom="24dp"/>
+      <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:columnCount="2" android:layout_marginBottom="16dp">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            android:background="#1565C0" android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="📊" android:textSize="28sp" android:layout_marginBottom="8dp"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Exams &amp; Grades" android:textSize="13sp"
+              android:textStyle="bold" android:textColor="#FFFFFF"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="CBC, 8-4-4, report cards" android:textSize="11sp" android:textColor="#90CAF9"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            android:background="#1565C0" android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="💰" android:textSize="28sp" android:layout_marginBottom="8dp"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Fee Management" android:textSize="13sp"
+              android:textStyle="bold" android:textColor="#FFFFFF"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="M-Pesa, invoicing" android:textSize="11sp" android:textColor="#90CAF9"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            android:background="#1565C0" android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="📋" android:textSize="28sp" android:layout_marginBottom="8dp"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Attendance" android:textSize="13sp"
+              android:textStyle="bold" android:textColor="#FFFFFF"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Daily tracking, reports" android:textSize="11sp" android:textColor="#90CAF9"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            android:background="#1565C0" android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="💬" android:textSize="28sp" android:layout_marginBottom="8dp"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Communication" android:textSize="13sp"
+              android:textStyle="bold" android:textColor="#FFFFFF"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="WhatsApp, SMS parents" android:textSize="11sp" android:textColor="#90CAF9"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            android:background="#1565C0" android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="📴" android:textSize="28sp" android:layout_marginBottom="8dp"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Works Offline" android:textSize="13sp"
+              android:textStyle="bold" android:textColor="#FFFFFF"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Syncs when online" android:textSize="11sp" android:textColor="#90CAF9"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            android:background="#1565C0" android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="🤖" android:textSize="28sp" android:layout_marginBottom="8dp"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="AI Insights" android:textSize="13sp"
+              android:textStyle="bold" android:textColor="#FFFFFF"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Smart analytics" android:textSize="11sp" android:textColor="#90CAF9"/>
+        </LinearLayout>
+      </GridLayout>
+      <View android:layout_width="0dp" android:layout_height="140dp"/>
+    </LinearLayout>
+  </ScrollView>
+
+  <!-- PAGE 3: PERMISSIONS -->
+  <ScrollView android:id="@+id/pagePermissions"
+      android:layout_width="match_parent" android:layout_height="match_parent"
+      android:visibility="gone" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="32dp" android:gravity="center_horizontal">
+      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="🔒" android:textSize="52sp" android:gravity="center"
+          android:layout_marginTop="20dp" android:layout_marginBottom="16dp"/>
+      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="App Permissions" android:textSize="26sp" android:textStyle="bold"
+          android:textColor="#FFFFFF" android:layout_marginBottom="6dp"/>
+      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="Grant these permissions for the best experience"
+          android:textSize="14sp" android:textColor="#90CAF9" android:gravity="center"
+          android:layout_marginBottom="28dp"/>
+      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:orientation="vertical" android:background="#1565C0" android:padding="20dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+          <TextView android:layout_width="40dp" android:layout_height="wrap_content"
+              android:text="📷" android:textSize="22sp"/>
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Camera" android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Student photos, document scanning" android:textSize="12sp" android:textColor="#90CAF9"/>
+          </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+          <TextView android:layout_width="40dp" android:layout_height="wrap_content"
+              android:text="👆" android:textSize="22sp"/>
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Biometrics" android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Fingerprint login" android:textSize="12sp" android:textColor="#90CAF9"/>
+          </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+          <TextView android:layout_width="40dp" android:layout_height="wrap_content"
+              android:text="📁" android:textSize="22sp"/>
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Storage" android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Offline data, sync when connected" android:textSize="12sp" android:textColor="#90CAF9"/>
+          </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+          <TextView android:layout_width="40dp" android:layout_height="wrap_content"
+              android:text="🔔" android:textSize="22sp"/>
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Notifications" android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Fee alerts, exam results, events" android:textSize="12sp" android:textColor="#90CAF9"/>
+          </LinearLayout>
+        </LinearLayout>
+      </LinearLayout>
+      <Button android:id="@+id/btnGrantPermissions"
+          android:layout_width="match_parent" android:layout_height="52dp"
+          android:text="Grant Permissions" android:textColor="#0D47A1"
+          android:textStyle="bold" android:background="#FFFFFF" android:layout_marginTop="24dp"/>
+      <View android:layout_width="0dp" android:layout_height="140dp"/>
+    </LinearLayout>
+  </ScrollView>
+
+  <!-- PAGE 4: GET STARTED -->
+  <LinearLayout android:id="@+id/pageGetStarted"
+      android:layout_width="match_parent" android:layout_height="match_parent"
+      android:orientation="vertical" android:gravity="center" android:padding="40dp"
+      android:visibility="gone">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="🎉" android:textSize="60sp" android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="You&#8217;re All Set!" android:textSize="32sp" android:textStyle="bold"
+        android:textColor="#FFFFFF" android:gravity="center" android:layout_marginBottom="12dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Sign in with your school credentials. Your data is safe, encrypted, and always in sync."
+        android:textSize="15sp" android:textColor="#E3F2FD" android:gravity="center"
+        android:lineSpacingExtra="4dp"/>
+  </LinearLayout>
+
+  <!-- BOTTOM CONTROLS (always on top) -->
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:layout_gravity="bottom" android:orientation="vertical"
+      android:padding="24dp" android:paddingBottom="36dp">
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+      <View android:id="@+id/dot0" android:layout_width="24dp" android:layout_height="8dp"
+          android:layout_marginEnd="6dp" android:background="@drawable/dot_active"/>
+      <View android:id="@+id/dot1" android:layout_width="8dp" android:layout_height="8dp"
+          android:layout_marginEnd="6dp" android:background="@drawable/dot_inactive"/>
+      <View android:id="@+id/dot2" android:layout_width="8dp" android:layout_height="8dp"
+          android:layout_marginEnd="6dp" android:background="@drawable/dot_inactive"/>
+      <View android:id="@+id/dot3" android:layout_width="8dp" android:layout_height="8dp"
+          android:background="@drawable/dot_inactive"/>
+    </LinearLayout>
+    <Button android:id="@+id/btnNext"
+        android:layout_width="match_parent" android:layout_height="54dp"
+        android:text="Next  →" android:textColor="#0D47A1"
+        android:textSize="16sp" android:textStyle="bold"
+        android:background="#FFFFFF" android:layout_marginBottom="10dp"/>
+    <TextView android:id="@+id/tvSkip"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Skip" android:textColor="#90CAF9"
+        android:textSize="14sp" android:padding="10dp"/>
+  </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/aiPredictionController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/',s,c.getPredictions);r.post('/predict-grades',s,c.predictGrades);r.get('/dropouts',s,c.predictDropouts);r.get('/fee-defaults',s,c.predictFeeDefaults);r.get('/compare',s,c.compareWithCounty);r.get('/usage',s,c.getUsageAnalytics);r.post('/track',authMiddleware,c.trackEvent);r.post('/generate-questions',s,c.generateAIExamQuestions);module.exports=r;

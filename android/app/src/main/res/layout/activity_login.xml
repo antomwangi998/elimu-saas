@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#F0F4FF" android:fillViewport="true">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:gravity="center_horizontal">
+
+        <!-- Blue header band -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="220dp"
+            android:orientation="vertical" android:gravity="center"
+            android:background="#0D47A1" android:paddingBottom="32dp">
+
+            <!-- Logo with gradient ring effect -->
+            <FrameLayout android:layout_width="80dp" android:layout_height="80dp"
+                android:layout_marginBottom="16dp">
+                <View android:layout_width="80dp" android:layout_height="80dp"
+                    android:background="@drawable/logo_ring_bg"/>
+                <TextView android:layout_width="64dp" android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:text="E" android:textSize="30sp" android:textStyle="bold"
+                    android:textColor="#0D47A1" android:gravity="center"
+                    android:background="@drawable/logo_white_circle"/>
+            </FrameLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="ElimuSaaS" android:textSize="28sp" android:textStyle="bold"
+                android:textColor="#FFFFFF" android:letterSpacing="0.02"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Enterprise School Management" android:textSize="13sp"
+                android:textColor="#90CAF9" android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- White card that overlaps the header -->
+        <androidx.cardview.widget.CardView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginStart="20dp" android:layout_marginEnd="20dp"
+            android:layout_marginTop="-28dp" android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp" app:cardElevation="12dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="28dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Welcome back 👋" android:textSize="22sp" android:textStyle="bold"
+                    android:textColor="#0D1117" android:layout_marginBottom="4dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Sign in to your school portal" android:textSize="14sp"
+                    android:textColor="#6B7280" android:layout_marginBottom="24dp"/>
+
+                <!-- Error -->
+                <TextView android:id="@+id/tvError"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:background="@drawable/error_bg" android:padding="12dp"
+                    android:textColor="#C62828" android:textSize="13sp"
+                    android:visibility="gone" android:layout_marginBottom="16dp"/>
+
+                <!-- Email label + field -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="EMAIL ADDRESS" android:textSize="10sp" android:textStyle="bold"
+                    android:letterSpacing="0.12" android:textColor="#6B7280"
+                    android:layout_marginBottom="6dp"/>
+                <EditText android:id="@+id/etEmail"
+                    android:layout_width="match_parent" android:layout_height="50dp"
+                    android:background="@drawable/input_bg" android:paddingStart="16dp"
+                    android:paddingEnd="16dp" android:hint="admin@school.ac.ke"
+                    android:inputType="textEmailAddress" android:textSize="14sp"
+                    android:textColor="#0D1117" android:textColorHint="#9CA3AF"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Password -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="PASSWORD" android:textSize="10sp" android:textStyle="bold"
+                    android:letterSpacing="0.12" android:textColor="#6B7280"
+                    android:layout_marginBottom="6dp"/>
+                <EditText android:id="@+id/etPassword"
+                    android:layout_width="match_parent" android:layout_height="50dp"
+                    android:background="@drawable/input_bg" android:paddingStart="16dp"
+                    android:paddingEnd="16dp" android:hint="Enter your password"
+                    android:inputType="textPassword" android:textSize="14sp"
+                    android:textColor="#0D1117" android:textColorHint="#9CA3AF"
+                    android:imeOptions="actionDone" android:layout_marginBottom="16dp"/>
+
+                <!-- School Code -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="SCHOOL CODE (OPTIONAL)" android:textSize="10sp"
+                    android:textStyle="bold" android:letterSpacing="0.12"
+                    android:textColor="#6B7280" android:layout_marginBottom="6dp"/>
+                <EditText android:id="@+id/etSchoolCode"
+                    android:layout_width="match_parent" android:layout_height="50dp"
+                    android:background="@drawable/input_bg" android:paddingStart="16dp"
+                    android:paddingEnd="16dp" android:hint="e.g. ELITE001"
+                    android:inputType="textCapCharacters" android:textSize="14sp"
+                    android:textColor="#0D1117" android:textColorHint="#9CA3AF"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Forgot password -->
+                <TextView android:id="@+id/tvForgotPassword"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="end" android:text="Forgot password?"
+                    android:textColor="#1565C0" android:textSize="13sp"
+                    android:textStyle="bold" android:layout_marginBottom="20dp"/>
+
+                <!-- Sign In Button -->
+                <FrameLayout android:layout_width="match_parent" android:layout_height="52dp"
+                    android:layout_marginBottom="16dp">
+                    <Button android:id="@+id/btnLogin"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:background="@drawable/btn_primary"
+                        android:text="SIGN IN" android:textColor="#FFFFFF"
+                        android:textSize="15sp" android:textStyle="bold"
+                        android:letterSpacing="0.06"/>
+                    <ProgressBar android:id="@+id/progressBar"
+                        android:layout_width="28dp" android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="#FFFFFF" android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- Divider -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+                    <View android:layout_width="0dp" android:layout_height="1dp"
+                        android:layout_weight="1" android:background="#E5E7EB"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="  Secure Login  " android:textSize="11sp"
+                        android:textColor="#9CA3AF"/>
+                    <View android:layout_width="0dp" android:layout_height="1dp"
+                        android:layout_weight="1" android:background="#E5E7EB"/>
+                </LinearLayout>
+
+                <!-- Trust badges -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🔒 SSL" android:textSize="11sp" android:textColor="#6B7280"
+                        android:layout_marginEnd="12dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🛡 Encrypted" android:textSize="11sp" android:textColor="#6B7280"
+                        android:layout_marginEnd="12dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="✅ KNEC" android:textSize="11sp" android:textColor="#6B7280"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="© 2025 ElimuSaaS · Enterprise School Management"
+            android:textSize="11sp" android:textColor="#9CA3AF"
+            android:layout_marginBottom="32dp"/>
+    </LinearLayout>
+</ScrollView>
