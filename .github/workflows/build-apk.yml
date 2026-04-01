@@ -31,9 +31,28 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Make gradlew executable
+      - name: Setup Gradle Wrapper
         working-directory: android
-        run: chmod +x gradlew
+        run: |
+          # Download gradle-wrapper.jar (often missing from repos)
+          mkdir -p gradle/wrapper
+          curl -fsSL "https://raw.githubusercontent.com/gradle/gradle/v8.4.0/gradle/wrapper/gradle-wrapper.jar" \
+            -o gradle/wrapper/gradle-wrapper.jar 2>/dev/null || \
+          wget -q "https://raw.githubusercontent.com/gradle/gradle/v8.4.0/gradle/wrapper/gradle-wrapper.jar" \
+            -O gradle/wrapper/gradle-wrapper.jar 2>/dev/null || \
+          (echo "Downloading via gradle setup..." && \
+           gradle wrapper --gradle-version 8.4 --distribution-type bin 2>/dev/null || true)
+
+          # Verify jar exists
+          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
+            echo "Fetching jar from services.gradle.org..."
+            curl -fsSL "https://services.gradle.org/distributions/gradle-8.4-bin.zip" -o /tmp/gradle.zip
+            unzip -jo /tmp/gradle.zip "*/lib/gradle-wrapper-*.jar" -d gradle/wrapper/ 2>/dev/null || \
+            unzip -jo /tmp/gradle.zip "*/gradle-wrapper.jar" -d gradle/wrapper/ 2>/dev/null || true
+          fi
+
+          ls -la gradle/wrapper/
+          chmod +x gradlew
 
       - name: Set version variables
         id: version
@@ -75,17 +94,15 @@ jobs:
               -keyalg RSA -keysize 2048 -validity 10000 \
               -alias "$KS_ALIAS" \
               -storepass "$KS_PASS" -keypass "$KS_PASS" \
-              -dname "CN=ElimuSaaS, OU=Mobile, O=ElimuSaaS Ltd, L=Nairobi, ST=Nairobi, C=KE" \
+              -dname "CN=ElimuSaaS, OU=Mobile, O=ElimuSaaS, L=Nairobi, ST=Nairobi, C=KE" \
               -noprompt
             echo ""
-            echo "=== SAVE THESE AS GITHUB SECRETS ==="
-            echo "KEYSTORE_BASE64 value:"
-            base64 -w 0 "$KS_FILE"
-            echo ""
+            echo "====== SAVE THESE AS GITHUB SECRETS ======"
+            echo "KEYSTORE_BASE64:"; base64 -w 0 "$KS_FILE"; echo ""
             echo "KEYSTORE_PASSWORD: $KS_PASS"
             echo "KEY_ALIAS: $KS_ALIAS"
             echo "KEY_PASSWORD: $KS_PASS"
-            echo "====================================="
+            echo "=========================================="
             echo "KS_PASSWORD=$KS_PASS"  >> $GITHUB_OUTPUT
             echo "KEY_ALIAS=$KS_ALIAS"   >> $GITHUB_OUTPUT
             echo "KEY_PASSWORD=$KS_PASS" >> $GITHUB_OUTPUT
@@ -105,6 +122,7 @@ jobs:
           mkdir -p release-artifacts
           APK=$(find android/app/build/outputs/apk/release -name "*.apk" | head -1)
           cp "$APK" "release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk"
+          echo "APK ready: $(ls -lh release-artifacts/)"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -125,13 +143,11 @@ jobs:
 
             ---
 
-            ### 📥 How to Install on Android
+            ### 📥 Install on Android
             1. Tap **ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk** below
             2. Open the downloaded file
-            3. Tap **Install** — if blocked: Settings → Security → enable *Install unknown apps*
-            4. Open **ElimuSaaS** and sign in with your school credentials
-
-            > 🔗 Same backend as the web portal · Works offline · Fingerprint login
+            3. Tap **Install** (enable *Install unknown apps* if prompted)
+            4. Open ElimuSaaS and sign in
 
             **Web Portal:** https://elimu-saas-frontend.onrender.com
           files: release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk
