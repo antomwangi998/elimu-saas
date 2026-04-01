@@ -9,7 +9,7 @@ on:
       version_name:
         description: 'Version name (e.g. 1.0.1)'
         required: true
-        default: '5.5.16'
+        default: '5.5.17'
       release_notes:
         description: 'What changed in this release'
         required: false
