@@ -9,7 +9,7 @@ on:
       version_name:
         description: 'Version name (e.g. 1.0.1)'
         required: true
-        default: '5.5.3'
+        default: '5.5.4'
       release_notes:
         description: 'What changed in this release'
         required: false
@@ -107,7 +107,7 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p release-artifacts
-          APK=$(find android/app/build/outputs/apk/release -name "*.apk" | head -1)
+          APK=$(find android/app/build/outputs/apk/debug -name "*.apk" | head -1)
           cp "$APK" "release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk"
           echo "APK: $(ls -lh release-artifacts/)"
 
