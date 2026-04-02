@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_home"     android:title="Home"     android:icon="@drawable/ic_home"/>
+    <item android:id="@+id/nav_exams"    android:title="Exams"    android:icon="@drawable/ic_exams"/>
+    <item android:id="@+id/nav_students" android:title="Students" android:icon="@drawable/ic_students"/>
+    <item android:id="@+id/nav_fees"     android:title="Fees"     android:icon="@drawable/ic_fees"/>
+    <item android:id="@+id/nav_more"     android:title="More"     android:icon="@drawable/ic_more"/>
+</menu>

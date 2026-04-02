@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/tutoringController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/offers',authMiddleware,c.getOffers);r.post('/offers',authMiddleware,c.createOffer);r.get('/sessions',authMiddleware,c.getSessions);r.post('/sessions',authMiddleware,c.requestSession);r.put('/sessions/:id',authMiddleware,c.updateSession);module.exports=r;

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="elimu_blue">#0D47A1</color>
+    <color name="elimu_blue_mid">#1565C0</color>
+    <color name="elimu_blue_light">#1976D2</color>
+    <color name="elimu_blue_subtle">#E3F2FD</color>
+    <color name="elimu_green">#2E7D32</color>
+    <color name="elimu_green_dark">#1B5E20</color>
+    <color name="elimu_green_light">#C8E6C9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="bg_page">#F0F4FF</color>
+    <color name="text_primary">#0D1117</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_hint">#9CA3AF</color>
+    <color name="trend_up">#2E7D32</color>
+    <color name="trend_down">#B71C1C</color>
+    <color name="error_red">#C62828</color>
+    <color name="stat_blue">#E3F2FD</color>
+    <color name="stat_green">#E8F5E9</color>
+    <color name="stat_orange">#FFF3E0</color>
+    <color name="stat_purple">#F3E5F5</color>
+    <color name="bottom_nav_selected">#0D47A1</color>
+    <color name="bottom_nav_unselected">#9CA3AF</color>
+</resources>

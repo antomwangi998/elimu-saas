@@ -1,0 +1,18 @@
+const router = require('express').Router();
+const c = require('../controllers/labController');
+const { requireMinRole, requireRole } = require('../middleware/auth');
+const lab = requireMinRole('teacher');
+const admin = requireRole('super_admin','school_admin','principal','lab_technician');
+router.get('/categories', lab, c.getCategories);
+router.post('/categories', admin, c.createCategory);
+router.get('/items/alerts', lab, c.getAlerts);
+router.get('/items/report', admin, c.getReport);
+router.get('/items', lab, c.getItems);
+router.get('/items/:id', lab, c.getItem);
+router.post('/items', admin, c.createItem);
+router.put('/items/:id', admin, c.updateItem);
+router.post('/transactions/issue', lab, c.issueItem);
+router.post('/transactions/return', lab, c.returnItem);
+router.get('/experiments', lab, c.getExperiments);
+router.post('/experiments', lab, c.createExperiment);
+module.exports = router;
