@@ -1,0 +1,147 @@
+name: Build & Release ElimuSaaS APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name (e.g. 1.0.1)'
+        required: true
+        default: '5.5.6'
+      release_notes:
+        description: 'What changed in this release'
+        required: false
+        default: 'Bug fixes and improvements'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build Signed APK & Publish Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Gradle Wrapper JAR
+        working-directory: android
+        run: |
+          mkdir -p gradle/wrapper
+          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ] || [ ! -s "gradle/wrapper/gradle-wrapper.jar" ]; then
+            echo "Downloading gradle-wrapper.jar..."
+            curl -fsSL \
+              "https://raw.githubusercontent.com/gradle/gradle/v8.4.0/gradle/wrapper/gradle-wrapper.jar" \
+              -o gradle/wrapper/gradle-wrapper.jar
+          fi
+          chmod +x gradlew
+          echo "Gradle wrapper JAR size: $(du -sh gradle/wrapper/gradle-wrapper.jar)"
+
+      - name: Set version variables
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VER="${{ github.event.inputs.version_name }}"
+            NOTES="${{ github.event.inputs.release_notes }}"
+          else
+            VER="${GITHUB_REF#refs/tags/v}"
+            NOTES="Release $VER"
+          fi
+          echo "VERSION_NAME=$VER" >> $GITHUB_OUTPUT
+          echo "RELEASE_NOTES=$NOTES" >> $GITHUB_OUTPUT
+          IFS='.' read -r MA MI PA <<< "$VER"
+          echo "VERSION_CODE=$(( ${MA:-1}*10000 + ${MI:-0}*100 + ${PA:-0} ))" >> $GITHUB_OUTPUT
+
+      - name: Patch version
+        working-directory: android
+        run: |
+          sed -i "s/versionCode [0-9]*/versionCode ${{ steps.version.outputs.VERSION_CODE }}/" app/build.gradle
+          sed -i "s/versionName \".*\"/versionName \"${{ steps.version.outputs.VERSION_NAME }}\"/" app/build.gradle
+
+      - name: Setup keystore
+        id: keystore
+        run: |
+          KS_FILE="android/app/keystore.jks"
+          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > "$KS_FILE"
+            echo "KS_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_OUTPUT
+            echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"           >> $GITHUB_OUTPUT
+            echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}"     >> $GITHUB_OUTPUT
+          else
+            KS_PASS="ElimuSaaS$(date +%Y)Secure"
+            KS_ALIAS="elimusaas"
+            keytool -genkeypair -keystore "$KS_FILE" -keyalg RSA -keysize 2048 -validity 10000 \
+              -alias "$KS_ALIAS" -storepass "$KS_PASS" -keypass "$KS_PASS" \
+              -dname "CN=ElimuSaaS,O=ElimuSaaS,C=KE" -noprompt
+            echo "====== SAVE THESE AS GITHUB SECRETS ======"
+            echo "KEYSTORE_BASE64:"; base64 -w 0 "$KS_FILE"; echo ""
+            echo "KEYSTORE_PASSWORD: $KS_PASS | KEY_ALIAS: $KS_ALIAS | KEY_PASSWORD: $KS_PASS"
+            echo "KS_PASSWORD=$KS_PASS"  >> $GITHUB_OUTPUT
+            echo "KEY_ALIAS=$KS_ALIAS"   >> $GITHUB_OUTPUT
+            echo "KEY_PASSWORD=$KS_PASS" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build Release APK
+        working-directory: android
+        env:
+          KEYSTORE_FILE: keystore.jks
+          KEYSTORE_PASSWORD: ${{ steps.keystore.outputs.KS_PASSWORD }}
+          KEY_ALIAS: ${{ steps.keystore.outputs.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ steps.keystore.outputs.KEY_PASSWORD }}
+        run: |
+          ./gradlew assembleRelease \
+            --no-daemon \
+            --stacktrace \
+            -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=512m"
+
+      - name: Rename APK
+        run: |
+          mkdir -p release-artifacts
+          APK=$(find android/app/build/outputs/apk/release -name "*.apk" | head -1)
+          cp "$APK" "release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk"
+          echo "APK: $(ls -lh release-artifacts/)"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ElimuSaaS-APK-v${{ steps.version.outputs.VERSION_NAME }}
+          path: release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk
+          retention-days: 90
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', steps.version.outputs.VERSION_NAME) || github.ref_name }}
+          name: ElimuSaaS v${{ steps.version.outputs.VERSION_NAME }}
+          body: |
+            ## 📱 ElimuSaaS Android App — v${{ steps.version.outputs.VERSION_NAME }}
+
+            ${{ steps.version.outputs.RELEASE_NOTES }}
+
+            ---
+            ### 📥 Install on Android
+            1. Tap **ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk** below
+            2. Open the file → tap **Install**
+            3. If blocked: Settings → Security → enable *Install unknown apps*
+            4. Sign in with your school credentials
+
+            **Web Portal:** https://elimu-saas-frontend.onrender.com
+          files: release-artifacts/ElimuSaaS-v${{ steps.version.outputs.VERSION_NAME }}.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: rm -f android/app/keystore.jks
