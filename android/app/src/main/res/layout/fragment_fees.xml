@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#F0F4FF">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical" android:padding="16dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Fee Management" android:textSize="20sp" android:textStyle="bold"
+        android:textColor="#0D1117" android:layout_marginTop="8dp" android:layout_marginBottom="4dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Collection, invoicing and M-Pesa tracking"
+        android:textSize="13sp" android:textColor="#6B7280" android:layout_marginBottom="16dp"/>
+    <ProgressBar android:id="@+id/progressFees"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" android:indeterminateTint="#0D47A1"
+        android:visibility="gone" android:layout_marginBottom="12dp"/>
+    <androidx.cardview.widget.CardView android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+        app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:orientation="vertical" android:padding="20dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="12dp">
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Collected" android:textSize="12sp" android:textColor="#6B7280"/>
+            <TextView android:id="@+id/tvTotalCollected" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="—"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+          </LinearLayout>
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical" android:gravity="end">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Pending" android:textSize="12sp" android:textColor="#6B7280"/>
+            <TextView android:id="@+id/tvTotalPending" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="—"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="#B71C1C"/>
+          </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="8dp">
+          <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:text="Collection Rate"
+              android:textSize="13sp" android:textColor="#6B7280"/>
+          <TextView android:id="@+id/tvCollectionRate" android:layout_width="wrap_content"
+              android:layout_height="wrap_content" android:text="—"
+              android:textSize="13sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+        </LinearLayout>
+        <ProgressBar android:id="@+id/progressFeeCollection"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent" android:layout_height="10dp"
+            android:progress="0" android:max="100"
+            android:progressTint="#0D47A1" android:progressBackgroundTint="#E3F2FD"/>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <LinearLayout android:id="@+id/feesContainer"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+    <Button android:id="@+id/btnOpenFees"
+        android:layout_width="match_parent" android:layout_height="50dp"
+        android:layout_marginTop="8dp" android:background="@drawable/btn_primary"
+        android:text="Open Full Fee Portal" android:textColor="#FFFFFF" android:textStyle="bold"/>
+  </LinearLayout>
+</ScrollView>

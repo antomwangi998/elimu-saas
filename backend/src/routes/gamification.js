@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const c = require('../controllers/gamificationController');
+const { requireMinRole, authMiddleware } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/leaderboard', authMiddleware, c.getLeaderboard);
+router.get('/badges', authMiddleware, c.getBadges);
+router.get('/student/:id', authMiddleware, c.getStudentPoints);
+router.post('/award', staff, c.awardPoints);
+router.post('/badges', staff, c.createBadge);
+module.exports = router;

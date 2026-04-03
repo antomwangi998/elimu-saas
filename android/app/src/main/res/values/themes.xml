@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ElimuSaaS" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/elimu_blue</item>
+        <item name="colorPrimaryDark">@color/elimu_blue</item>
+        <item name="colorAccent">@color/elimu_blue_light</item>
+        <item name="android:windowBackground">@color/bg_page</item>
+        <item name="android:statusBarColor">@color/elimu_blue</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
