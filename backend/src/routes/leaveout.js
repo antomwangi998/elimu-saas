@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const c = require('../controllers/leaveoutController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/', staff, c.getLeaveRequests);
+router.get('/stats', staff, c.getStats);
+router.post('/', staff, c.createLeaveRequest);
+router.put('/:id/approve', staff, c.approveLeaveRequest);
+router.put('/:id/gate', staff, c.gateCleared);
+router.put('/:id/return', staff, c.recordReturn);
+router.get('/:id/print', staff, c.printLeaveSheet);
+module.exports = router;

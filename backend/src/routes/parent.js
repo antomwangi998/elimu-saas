@@ -1,0 +1,16 @@
+const router = require('express').Router();
+const c = require('../controllers/parentController');
+const { requireRole, requireMinRole, authMiddleware } = require('../middleware/auth');
+const parent = requireRole('parent','super_admin','school_admin','principal');
+const staff = requireMinRole('teacher');
+router.get('/dashboard', authMiddleware, c.getParentDashboard);
+router.get('/children', parent, c.getMyChildren);
+router.post('/children/link', parent, c.linkChild);
+router.get('/children/:studentId/grades', parent, c.getChildGrades);
+router.get('/children/:studentId/attendance', parent, c.getChildAttendance);
+router.get('/children/:studentId/fees', parent, c.getChildFees);
+router.get('/children/:studentId/discipline', parent, c.getChildDiscipline);
+router.get('/children/:studentId/timetable', parent, c.getChildTimetable);
+router.post('/meeting-requests', parent, c.requestMeeting);
+router.get('/meeting-requests', staff, c.getMeetingRequests);
+module.exports = router;
