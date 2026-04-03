@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const c = require('../controllers/certificatesController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireMinRole('principal');
+router.get('/', staff, c.getCertificates);
+router.get('/stats', staff, c.getStats);
+router.get('/:id', staff, c.getCertificate);
+router.post('/', admin, c.issueCertificate);
+router.post('/batch', admin, c.batchIssueCertificates);
+router.put('/:id/revoke', admin, c.revokeCertificate);
+module.exports = router;
