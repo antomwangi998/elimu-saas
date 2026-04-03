@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/bursaryController'),{requireMinRole,requireRole}=require('../middleware/auth'),s=requireMinRole('teacher'),a=requireRole('super_admin','school_admin','principal','bursar');
+r.get('/schemes',s,c.getSchemes);r.post('/schemes',a,c.createScheme);r.get('/applications',s,c.getApplications);r.post('/applications',s,c.apply);r.put('/applications/:id',a,c.reviewApplication);module.exports=r;

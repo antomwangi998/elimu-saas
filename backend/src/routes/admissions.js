@@ -1,0 +1,18 @@
+const router = require('express').Router();
+const c = require('../controllers/admissionsController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireMinRole('principal');
+router.get('/classes', staff, c.getClasses);
+router.post('/classes', admin, c.createClass);
+router.put('/classes/:id', admin, c.updateClass);
+router.post('/classes/:id/teacher', admin, c.assignClassTeacher);
+router.post('/id-cards/generate', admin, c.generateIdCards);
+router.get('/id-cards', staff, c.getIdCards);
+router.get('/knec', staff, c.getKnecCandidates);
+router.post('/knec/register', admin, c.registerForKnec);
+router.post('/knec/bulk-register', admin, c.bulkRegisterKnec);
+router.post('/knec/submit', admin, c.submitKnecRegistration);
+router.post('/knec/bulk-submit', admin, c.bulkSubmitKnec);
+router.get('/knec/report', staff, c.getKnecReport);
+module.exports = router;
