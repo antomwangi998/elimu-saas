@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F0F4FF">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical" android:paddingBottom="24dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#0D47A1" android:orientation="vertical" android:padding="20dp">
+      <TextView android:id="@+id/tvStudentName" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="Hi 📚" android:textSize="20sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+      <TextView android:id="@+id/tvStudentSchool" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="" android:textSize="13sp" android:textColor="#90CAF9" android:layout_marginTop="2dp"/>
+    </LinearLayout>
+    <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:columnCount="3" android:layout_margin="16dp">
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp" app:cardCornerRadius="10dp" app:cardElevation="2dp" app:cardBackgroundColor="#E3F2FD">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="12dp" android:gravity="center">
+          <TextView android:id="@+id/tvStudentGradeVal" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="26sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Grade" android:textSize="11sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp" app:cardCornerRadius="10dp" app:cardElevation="2dp" app:cardBackgroundColor="#E8F5E9">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="12dp" android:gravity="center">
+          <TextView android:id="@+id/tvStudentMarksVal" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="22sp" android:textStyle="bold" android:textColor="#2E7D32"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Mean Marks" android:textSize="11sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp" app:cardCornerRadius="10dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFF3E0">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="12dp" android:gravity="center">
+          <TextView android:id="@+id/tvStudentPositionVal" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="18sp" android:textStyle="bold" android:textColor="#E65100"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Position" android:textSize="11sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </GridLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="8dp">
+      <Button android:id="@+id/btnStudentGrades" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="📝 My Grades" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#FFFFFF" android:background="#0D47A1" android:layout_marginEnd="6dp"/>
+      <Button android:id="@+id/btnStudentFees" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="💰 Fee Balance" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline" android:layout_marginEnd="6dp"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginStart="16dp" android:layout_marginEnd="16dp">
+      <Button android:id="@+id/btnStudentTimetable" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="🗓️ Timetable" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline" android:layout_marginEnd="6dp"/>
+      <Button android:id="@+id/btnStudentAttendance" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="✅ Attendance" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline"/>
+    </LinearLayout>
+  </LinearLayout>
+</ScrollView>

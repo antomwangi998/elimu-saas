@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/visitorController'),{requireMinRole}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/',s,c.getVisitors);r.post('/',s,c.checkIn);r.put('/:id/checkout',s,c.checkOut);r.get('/stats',s,c.getStats);module.exports=r;

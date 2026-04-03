@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/canteenController'),{requireMinRole,requireRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher'),a=requireRole('super_admin','school_admin','principal','bursar','accounts_clerk');
+r.get('/items',s,c.getItems);r.post('/items',a,c.saveItem);r.get('/wallet/:studentId',s,c.getWallet);r.post('/topup',s,c.topUp);r.post('/purchase',s,c.purchase);r.get('/transactions',s,c.getTransactions);r.get('/sales',a,c.getSales);module.exports=r;
