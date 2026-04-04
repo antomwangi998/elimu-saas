@@ -1,0 +1,15 @@
+const router = require('express').Router();
+const c = require('../controllers/schoolProfileController');
+const { requireMinRole, authMiddleware } = require('../middleware/auth');
+const admin = requireMinRole('principal');
+const staff = requireMinRole('teacher');
+router.get('/', authMiddleware, c.getProfile);
+router.put('/', admin, c.updateProfile);
+router.get('/gallery', authMiddleware, c.getGallery);
+router.post('/gallery', admin, c.addGalleryImage);
+router.put('/gallery/:id', admin, c.updateGalleryImage);
+router.delete('/gallery/:id', admin, c.deleteGalleryImage);
+router.get('/public', c.getPublicProfile);
+router.get('/alumni-showcase', authMiddleware, c.getAlumniShowcase);
+router.put('/alumni-showcase', admin, c.updateAlumniShowcase);
+module.exports = router;
