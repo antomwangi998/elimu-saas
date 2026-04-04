@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/assetController'),{requireMinRole,requireRole}=require('../middleware/auth'),s=requireMinRole('teacher'),a=requireRole('super_admin','school_admin','principal');
+r.get('/',s,c.getAssets);r.post('/',a,c.createAsset);r.put('/:id',a,c.updateAsset);r.get('/report',a,c.getReport);module.exports=r;

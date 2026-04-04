@@ -1,0 +1,25 @@
+// ============================================================
+// ElimuSaaS -- Certificate Issuance and Printing
+// Page Module: page-certificates
+// ============================================================
+'use strict';
+
+/**
+ * Certificate Issuance and Printing
+ * Loaded as part of the ElimuSaaS SPA modular page system.
+ * Main implementation in: all-pages-v2.js / advanced-pages.js / complete-pages.js
+ */
+
+// Page registration stub -- actual implementation in main page files
+if (typeof window !== 'undefined' && typeof Pages !== 'undefined') {
+  if (!Pages.Certificates) {
+    Pages.Certificates = {
+      _initialized: false,
+      async load() {
+        this._initialized = true;
+        const c = document.getElementById('page-certificates');
+        if (c) c.innerHTML = '<div class="loading-spinner"></div>';
+      },
+    };
+  }
+}

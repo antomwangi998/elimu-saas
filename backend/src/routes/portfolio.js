@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/portfolioController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/',authMiddleware,c.getItems);r.post('/',authMiddleware,c.addItem);r.post('/:id/feedback',s,c.addFeedback);r.put('/:id/toggle-public',authMiddleware,c.togglePublic);r.delete('/:id',authMiddleware,c.deleteItem);module.exports=r;
