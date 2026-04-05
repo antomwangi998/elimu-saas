@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Only allow HTTPS to our backend -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">elimu-saas.onrender.com</domain>
+        <domain includeSubdomains="true">elimu-saas-frontend.onrender.com</domain>
+        <pin-set expiration="2027-01-01">
+            <!-- Render.com Let's Encrypt R3 pin -->
+            <pin digest="SHA-256">jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=</pin>
+            <!-- Backup pin -->
+            <pin digest="SHA-256">YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=</pin>
+        </pin-set>
+    </domain-config>
+    <!-- Block all cleartext -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const c = require('../controllers/billingController');
+const { requireMinRole } = require('../middleware/auth');
+const bursar = requireMinRole('bursar');
+router.get('/', bursar, c.getInvoices);
+router.post('/generate', bursar, c.generateInvoices);
+router.get('/summary', bursar, c.getBillingSummary);
+router.post('/send-reminders', bursar, c.sendInvoiceReminders);
+router.get('/:id/download', bursar, c.downloadInvoicePdf);
+module.exports = router;

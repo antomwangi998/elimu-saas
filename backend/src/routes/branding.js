@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/brandingController'),{requireMinRole,requireRole,authMiddleware}=require('../middleware/auth'),a=requireRole('super_admin','school_admin','principal');
+r.get('/',authMiddleware,c.getBranding);r.post('/',a,c.saveBranding);r.get('/public/:schoolId',c.getPublicBranding);module.exports=r;
