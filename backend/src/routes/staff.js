@@ -1,0 +1,15 @@
+const router = require('express').Router();
+const c = require('../controllers/staffController');
+const { requireMinRole } = require('../middleware/auth');
+const admin = requireMinRole('principal');
+const staff = requireMinRole('teacher');
+router.get('/', staff, c.getStaff);
+router.get('/stats', admin, c.getStaffStats);
+router.get('/:id', staff, c.getStaffMember);
+router.post('/', admin, c.createStaff);
+router.put('/:id', admin, c.updateStaff);
+router.delete('/:id', admin, c.deleteStaff);
+router.post('/:id/subjects', admin, c.assignSubjects);
+router.get('/pending', admin, c.getPendingStaff);
+router.post('/:id/approve', admin, c.approveStaff);
+module.exports = router;
