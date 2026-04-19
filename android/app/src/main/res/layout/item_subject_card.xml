@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvSubjectTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Form 1 Alpha - C.R.E."
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/tvExamLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OPENER - (2024 TERM 1)"
+            android:textSize="11sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Stats grid -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:layout_marginBottom="12dp">
+
+            <!-- Mean Points -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:background="@drawable/stat_cell_bg"
+                android:layout_margin="4dp"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvTrendPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2.48"
+                        android:textSize="11sp"
+                        android:textColor="@color/trend_up"/>
+
+                    <ImageView
+                        android:id="@+id/ivTrendArrowPoints"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/ic_trend_up"
+                        android:layout_marginStart="2dp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvMeanPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7.1622"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/elimu_green"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mean Points"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"/>
+            </LinearLayout>
+
+            <!-- Mean Marks -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:background="@drawable/stat_cell_bg"
+                android:layout_margin="4dp"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvTrendMarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3.24"
+                        android:textSize="11sp"
+                        android:textColor="@color/trend_up"/>
+
+                    <ImageView
+                        android:id="@+id/ivTrendArrowMarks"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/ic_trend_up"
+                        android:layout_marginStart="2dp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvMeanMarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="47.7%"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/elimu_green"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mean Marks"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"/>
+            </LinearLayout>
+
+            <!-- Mean Grade -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:background="@drawable/stat_cell_bg"
+                android:layout_margin="4dp"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/tvMeanGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="C+"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/elimu_green"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mean Grade"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"/>
+            </LinearLayout>
+
+            <!-- Students -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:background="@drawable/stat_cell_bg"
+                android:layout_margin="4dp"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/tvStudentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="37"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/elimu_green"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Students"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"/>
+            </LinearLayout>
+        </GridLayout>
+
+        <!-- Analyze button - exactly like Zeraki -->
+        <Button
+            android:id="@+id/btnAnalyze"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/btn_primary"
+            android:text="Analyze"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

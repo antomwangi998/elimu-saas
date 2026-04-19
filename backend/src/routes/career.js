@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/careerController'),{requireMinRole,authMiddleware}=require('../middleware/auth'),s=requireMinRole('teacher');
+r.get('/resources',authMiddleware,c.getResources);r.post('/resources',s,c.addResource);r.get('/ai-advice/:studentId',authMiddleware,c.getAICareerAdvice);r.get('/:studentId',s,c.getProfile);r.post('/:studentId',authMiddleware,c.saveProfile);module.exports=r;

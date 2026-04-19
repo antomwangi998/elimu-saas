@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Trust system CAs for our backend — NO certificate pinning -->
+    <!-- Pinning was causing failures when Render.com rotates its Let's Encrypt cert -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">elimu-saas.onrender.com</domain>
+        <domain includeSubdomains="true">elimu-saas-frontend.onrender.com</domain>
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </domain-config>
+    <!-- Block all cleartext HTTP -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

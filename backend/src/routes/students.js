@@ -1,0 +1,18 @@
+const router = require('express').Router();
+const c = require('../controllers/studentsController');
+const { requireMinRole, authMiddleware } = require('../middleware/auth');
+const { tenantMiddleware } = require('../middleware/tenant');
+const staff = requireMinRole('teacher');
+const admin = requireMinRole('deputy_principal');
+router.get('/', authMiddleware, tenantMiddleware, c.getStudents);
+router.get('/search', authMiddleware, tenantMiddleware, c.getStudents); // alias
+router.get('/:id', authMiddleware, c.getStudent);
+router.post('/', staff, c.createStudent);
+router.put('/:id', staff, c.updateStudent);
+router.delete('/:id', admin, c.deactivateStudent);
+router.post('/bulk-import', admin, c.bulkImport);
+router.post('/promote', admin, c.promoteStudents);
+router.put('/:id/parent', staff, c.updateParent);
+router.get('/:id/fees', authMiddleware, c.getStudentFeeHistory);
+router.get('/:id/academics', authMiddleware, c.getStudentAcademicHistory);
+module.exports = router;

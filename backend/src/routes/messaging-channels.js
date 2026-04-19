@@ -1,0 +1,18 @@
+const router = require('express').Router();
+const c = require('../controllers/whatsappFcmController');
+const { requireRole, requireMinRole, authMiddleware } = require('../middleware/auth');
+const admin = requireRole('super_admin','school_admin','principal');
+const staff = requireMinRole('teacher');
+router.post('/fcm/register', authMiddleware, c.registerToken);
+router.post('/fcm/send', admin, c.sendPushNotification);
+router.get('/fcm/history', admin, c.getNotificationHistory);
+router.post('/fcm/config', admin, c.saveFcmConfig);
+router.get('/whatsapp/config', admin, c.getWhatsappConfig);
+router.post('/whatsapp/config', admin, c.saveWhatsappConfig);
+router.post('/whatsapp/send', staff, c.sendWhatsapp);
+router.post('/whatsapp/bulk', admin, c.sendBulkWhatsapp);
+router.get('/whatsapp/messages', admin, c.getWhatsappMessages);
+router.get('/whatsapp/templates', staff, c.getWhatsappTemplates);
+router.post('/whatsapp/templates', admin, c.saveWhatsappTemplate);
+router.post('/whatsapp/webhook', c.webhookIncoming);
+module.exports = router;

@@ -1,0 +1,11 @@
+const router = require('express').Router();
+const c = require('../controllers/onlineExamController');
+const { requireMinRole, authMiddleware } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/', authMiddleware, c.getOnlineExams);
+router.post('/', staff, c.createOnlineExam);
+router.post('/:id/start', authMiddleware, c.startExam);
+router.post('/:id/progress', authMiddleware, c.saveProgress);
+router.post('/:id/submit', authMiddleware, c.submitExam);
+router.get('/:id/results', authMiddleware, c.getExamResults);
+module.exports = router;

@@ -1,0 +1,13 @@
+const router = require('express').Router();
+const c = require('../controllers/messagingThreadsController');
+const { authMiddleware } = require('../middleware/auth');
+router.get('/', authMiddleware, c.getMyThreads);
+router.post('/', authMiddleware, c.createThread);
+router.get('/:id/messages', authMiddleware, c.getMessages);
+router.post('/:id/messages', authMiddleware, c.sendMessage);
+router.put('/:id/messages/:msgId', authMiddleware, c.editMessage);
+router.delete('/:id/messages/:msgId', authMiddleware, c.deleteMessage);
+router.put('/:id/archive', authMiddleware, c.archiveThread);
+router.get('/:id/participants', authMiddleware, c.getParticipants);
+router.post('/:id/participants', authMiddleware, c.addParticipant);
+module.exports = router;

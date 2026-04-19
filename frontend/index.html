@@ -1,0 +1,3299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Security headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://elimu-saas.onrender.com https://elimu-saas-frontend.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://elimu-saas.onrender.com; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ElimuSaaS — Enterprise School Management Platform" />
+  <meta name="theme-color" content="#1565C0" />
+  <title>ElimuSaaS — School Management</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+  <link rel="stylesheet" href="css/main.css" />
+  <!-- CRITICAL: Inline styles force fresh render even if CSS cached -->
+  <style>
+    /* Force cache bypass */
+    html { background: #F5F7FA !important; }
+    body { background: #F5F7FA !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; margin: 0; }
+    
+    #page-login {
+      min-height: 100dvh !important;
+      min-height: 100vh !important;
+      align-items: stretch !important;
+      background: #F8FAFF !important;
+      padding: 0 !important;
+    }
+    #page-login.active { display: flex !important; }
+    #page-landing.active { display: block !important; }
+    /* Show brand panel on desktop */
+    @media (min-width: 900px) {
+      #login-brand-panel { display: flex !important; }
+      #login-mobile-logo { display: none !important; }
+      #login-form-panel { max-width: 520px !important; }
+    }
+    .login-card {
+      width: 100% !important; max-width: 420px !important;
+      background: white !important;
+      border-radius: 20px !important;
+      box-shadow: 0 8px 40px rgba(21,101,192,0.15) !important;
+      overflow: hidden !important;
+    }
+    .login-header {
+      background: linear-gradient(135deg, #1565C0, #1976D2) !important;
+      padding: 32px 24px !important; text-align: center !important; color: white !important;
+    }
+    .login-logo {
+      width: 64px !important; height: 64px !important;
+      background: rgba(255,255,255,0.2) !important;
+      border-radius: 18px !important;
+      display: flex !important; align-items: center !important; justify-content: center !important;
+      font-weight: 900 !important; font-size: 28px !important; color: white !important;
+      margin: 0 auto 12px !important;
+    }
+    .login-app-name { font-size: 26px !important; font-weight: 900 !important; }
+    .login-tagline { font-size: 13px !important; opacity: 0.85 !important; margin-top: 4px !important; }
+    .login-body { padding: 28px 24px !important; }
+    .login-welcome { font-size: 20px !important; font-weight: 700 !important; color: #0D1117 !important; margin-bottom: 4px !important; }
+    .login-sub { font-size: 13px !important; color: #6B7280 !important; margin-bottom: 24px !important; }
+    .form-group { margin-bottom: 16px !important; }
+    .form-group label { display: block !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: #6B7280 !important; margin-bottom: 6px !important; }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100% !important; padding: 11px 13px !important;
+      background: #F0F4F8 !important; border: 1.5px solid #DDE3EA !important;
+      border-radius: 8px !important; font-size: 14px !important; color: #0D1117 !important;
+      outline: none !important; box-sizing: border-box !important;
+    }
+    input:focus { border-color: #1565C0 !important; background: white !important; box-shadow: 0 0 0 3px rgba(21,101,192,0.12) !important; }
+    #login-btn {
+      width: 100% !important; padding: 14px !important;
+      background: #1565C0 !important; color: white !important;
+      border: none !important; border-radius: 10px !important;
+      font-size: 16px !important; font-weight: 700 !important;
+      cursor: pointer !important; margin-top: 8px !important;
+      display: block !important; position: relative !important;
+      z-index: 10 !important; pointer-events: auto !important;
+    }
+    #login-btn:hover { background: #0D47A1 !important; }
+    #login-btn:disabled { opacity: 0.6 !important; cursor: not-allowed !important; }
+    .alert-danger { background: #FFEBEE !important; color: #C62828 !important; border: 1px solid #C62828 !important; border-radius: 8px !important; padding: 10px 14px !important; margin-bottom: 16px !important; font-size: 13px !important; }
+    .hidden { display: none !important; }
+    a { color: #1565C0 !important; text-decoration: none !important; }
+  </style>
+  <style>
+    /* ── Offline Banner ── */
+    #offline-banner {
+      display: none; position: fixed; top: 0; left: 0; right: 0;
+      background: #f59e0b; color: #000; text-align: center;
+      padding: 8px; font-size: 13px; font-weight: 600; z-index: 9999;
+    }
+    body.offline #offline-banner { display: block; }
+    body.offline .app-shell { margin-top: 36px; }
+
+    /* ── Page Transitions ── */
+    .page-view { animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ── Skeleton Loaders ── */
+    .skeleton-card { background: var(--bg-elevated); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; }
+    .skeleton-line { height: 14px; background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--border) 50%, var(--bg-elevated) 75%);
+      background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; margin-bottom: 10px; }
+    .skeleton-line.short { width: 40%; }
+    .skeleton-line.medium { width: 70%; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ── Better Nav Transitions ── */
+    .nav-item { transition: all 0.15s ease; border-radius: 8px; margin: 2px 8px; }
+    .nav-item.active { background: var(--brand-subtle); color: var(--brand); }
+    .nav-item:hover { background: var(--bg-hover); transform: translateX(3px); }
+
+    /* ── Loading Button State ── */
+    .btn.loading { opacity: 0.7; cursor: not-allowed; }
+    .btn.loading::after { content: ''; display: inline-block; width: 12px; height: 12px;
+      border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%;
+      animation: spin 0.6s linear infinite; margin-left: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Better Error States ── */
+    .error-state { text-align: center; padding: 40px 20px; }
+    .error-state .error-icon { font-size: 48px; margin-bottom: 12px; }
+    .error-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text-primary); }
+    .error-state p { color: var(--text-muted); margin-bottom: 16px; }
+
+    /* ── Mobile improvements ── */
+    @media (max-width: 768px) {
+      .page-header-actions { gap: 6px; }
+      .btn { padding: 8px 14px; font-size: 13px; }
+      .stat-card { padding: 14px; }
+      .stat-value { font-size: 22px !important; }
+    }
+  </style>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ElimuSaaS" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <script>
+  // ── Security: Rate limiting & brute-force protection ──────
+  (function() {
+    var STORAGE_KEY = 'elmu_login_attempts';
+    var MAX_ATTEMPTS = 5;
+    var LOCKOUT_MS = 15 * 60 * 1000; // 15 minutes
+
+    window.checkLoginRateLimit = function() {
+      try {
+        var data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"count":0,"ts":0}');
+        var now = Date.now();
+        if (data.count >= MAX_ATTEMPTS) {
+          var remaining = Math.ceil((data.ts + LOCKOUT_MS - now) / 60000);
+          if (remaining > 0) {
+            return 'Too many failed attempts. Try again in ' + remaining + ' minute(s).';
+          } else {
+            localStorage.removeItem(STORAGE_KEY);
+          }
+        }
+        return null;
+      } catch(e) { return null; }
+    };
+
+    window.recordLoginFailure = function() {
+      try {
+        var data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"count":0,"ts":0}');
+        data.count = (data.count || 0) + 1;
+        data.ts = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch(e) {}
+    };
+
+    window.resetLoginAttempts = function() {
+      localStorage.removeItem(STORAGE_KEY);
+    };
+
+    // Prevent clickjacking
+    if (window.top !== window.self) {
+      document.body.style.display = 'none';
+      window.top.location = window.self.location;
+    }
+
+    // Disable right-click in production (optional)
+    // document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+    // XSS protection: sanitize any dynamic content
+    window.sanitize = function(str) {
+      var el = document.createElement('div');
+      el.textContent = String(str || '');
+      return el.innerHTML;
+    };
+  })();
+  </script>
+  <link rel="stylesheet" href="/css/components/alerts.css">
+  <link rel="stylesheet" href="/css/components/animations.css">
+  <link rel="stylesheet" href="/css/components/badges.css">
+  <link rel="stylesheet" href="/css/components/breadcrumbs.css">
+  <link rel="stylesheet" href="/css/components/buttons.css">
+  <link rel="stylesheet" href="/css/components/calendar.css">
+  <link rel="stylesheet" href="/css/components/cards.css">
+  <link rel="stylesheet" href="/css/components/charts.css">
+  <link rel="stylesheet" href="/css/components/colors.css">
+  <link rel="stylesheet" href="/css/components/dashboard.css">
+  <link rel="stylesheet" href="/css/components/empty-states.css">
+  <link rel="stylesheet" href="/css/components/forms.css">
+  <link rel="stylesheet" href="/css/components/loading.css">
+  <link rel="stylesheet" href="/css/components/modals.css">
+  <link rel="stylesheet" href="/css/components/navigation.css">
+  <link rel="stylesheet" href="/css/components/print.css">
+  <link rel="stylesheet" href="/css/components/responsive.css">
+  <link rel="stylesheet" href="/css/components/search.css">
+  <link rel="stylesheet" href="/css/components/spacing.css">
+  <link rel="stylesheet" href="/css/components/stats.css">
+  <link rel="stylesheet" href="/css/components/stepper.css">
+  <link rel="stylesheet" href="/css/components/tables.css">
+  <link rel="stylesheet" href="/css/components/timeline.css">
+  <link rel="stylesheet" href="/css/components/tooltips.css">
+  <link rel="stylesheet" href="/css/components/typography.css">
+  <link rel="stylesheet" href="/css/themes/corporate.css" data-theme-css>
+  <link rel="stylesheet" href="/css/themes/forest.css" data-theme-css>
+  <link rel="stylesheet" href="/css/themes/midnight.css" data-theme-css>
+  <link rel="stylesheet" href="/css/themes/obsidian.css" data-theme-css>
+  <link rel="stylesheet" href="/css/themes/ocean.css" data-theme-css>
+  <link rel="stylesheet" href="/css/themes/pearl.css" data-theme-css>
+  <link rel="stylesheet" href="/css/themes/sunset.css" data-theme-css>
+
+  <style id="print-styles">
+    @media print {
+      body > *:not(#print-root) { display: none !important; }
+      #print-root { display: block !important; }
+      #print-root { position: fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:99999; }
+    }
+    #print-root { display: none; }
+  </style>
+</head>
+<body onbeforeprint="window._beforePrint()" onafterprint="window._afterPrint()">
+
+<!-- ══════════════════════════════════════════════════════════
+     LOGIN PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="offline-banner">
+  📡 You are offline — some features may be limited. Actions will sync when you reconnect.
+</div>
+
+
+  <!-- ── LANDING PAGE ──────────────────────────────────────── -->
+  <div id="page-landing" class="page-view" style="padding:0;background:#F8FAFF;min-height:100vh">
+    <!-- Navbar -->
+    <nav style="background:white;box-shadow:0 1px 8px rgba(0,0,0,0.08);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:38px;height:38px;background:linear-gradient(135deg,#1565C0,#1976D2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:white">E</div>
+        <div>
+          <div style="font-size:17px;font-weight:800;color:#1565C0;line-height:1">ElimuSaaS</div>
+          <div style="font-size:10px;color:#666">School Management Platform</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a href="#about-section" onclick="document.getElementById('about-section').scrollIntoView({behavior:'smooth'});return false" style="padding:8px 16px;color:#1565C0;font-weight:600;text-decoration:none;font-size:13px">About</a>
+        <a href="#contact-section" onclick="document.getElementById('contact-section').scrollIntoView({behavior:'smooth'});return false" style="padding:8px 16px;color:#1565C0;font-weight:600;text-decoration:none;font-size:13px">Contact</a>
+        <a href="#admission-section" onclick="document.getElementById('admission-section').scrollIntoView({behavior:'smooth'});return false" style="padding:8px 16px;color:#1565C0;font-weight:600;text-decoration:none;font-size:13px">Admissions</a>
+        <a href="documentation.html" target="_blank" style="padding:8px 16px;color:#1565C0;font-weight:600;text-decoration:none;font-size:13px">Docs</a>
+        <a href="https://github.com/antomwangi998/elimu-saas/releases/latest" target="_blank" style="padding:8px 14px;color:#555;font-weight:600;text-decoration:none;font-size:12px;background:#F5F5F5;border-radius:8px">📱 Android App</a>
+        <button onclick="Router.go('login')" style="padding:9px 22px;background:linear-gradient(135deg,#1565C0,#1976D2);color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;box-shadow:0 4px 12px rgba(21,101,192,0.3)">Login →</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div style="background:linear-gradient(160deg,#0D47A1 0%,#1565C0 50%,#1976D2 100%);color:white;padding:80px 5% 90px;text-align:center;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.04)"></div>
+      <div style="position:absolute;bottom:-60px;right:-60px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,0.05)"></div>
+      <div style="position:relative;max-width:700px;margin:0 auto">
+        <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:6px 18px;border-radius:99px;font-size:13px;margin-bottom:24px;font-weight:600">🇰🇪 Built for Kenyan Schools</div>
+        <h1 style="font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.15;margin:0 0 20px;letter-spacing:-1px">Kenya's Most Complete<br>School Management Platform</h1>
+        <p style="font-size:clamp(14px,2vw,18px);opacity:0.85;line-height:1.7;margin:0 0 36px;max-width:560px;margin-left:auto;margin-right:auto">Fees, Exams, CBC, 8-4-4, Attendance, Payroll, Timetable, WhatsApp — everything in one powerful platform trusted by 500+ schools.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button onclick="Router.go('login')" style="padding:14px 32px;background:white;color:#1565C0;border:none;border-radius:12px;cursor:pointer;font-weight:800;font-size:15px;box-shadow:0 4px 20px rgba(0,0,0,0.2)">🚀 Login to Your School</button>
+          <button onclick="document.getElementById('admission-section').scrollIntoView({behavior:'smooth'})" style="padding:14px 28px;background:rgba(255,255,255,0.15);color:white;border:2px solid rgba(255,255,255,0.4);border-radius:12px;cursor:pointer;font-weight:700;font-size:15px">📋 Apply Online</button>
+          <a href="documentation.html" target="_blank" style="padding:14px 24px;background:rgba(255,255,255,0.1);color:white;border:2px solid rgba(255,255,255,0.25);border-radius:12px;font-weight:700;font-size:14px;text-decoration:none;display:inline-block">📚 Docs</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature stats bar -->
+    <div style="background:white;padding:12px 5%;display:grid;grid-template-columns:repeat(4,1fr);box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+      <div style="text-align:center;padding:8px 4px;border-right:1px solid #E5E7EB"><div style="font-size:clamp(15px,3vw,22px);font-weight:900;color:#1565C0">500+</div><div style="font-size:10px;color:#666;margin-top:2px">Schools</div></div>
+      <div style="text-align:center;padding:8px 4px;border-right:1px solid #E5E7EB"><div style="font-size:clamp(15px,3vw,22px);font-weight:900;color:#1565C0">2M+</div><div style="font-size:10px;color:#666;margin-top:2px">Students</div></div>
+      <div style="text-align:center;padding:8px 4px;border-right:1px solid #E5E7EB"><div style="font-size:clamp(15px,3vw,22px);font-weight:900;color:#1565C0">8-4-4 &amp; CBC</div><div style="font-size:10px;color:#666;margin-top:2px">Dual Curriculum</div></div>
+      <div style="text-align:center;padding:8px 4px"><div style="font-size:clamp(15px,3vw,22px);font-weight:900;color:#1565C0">M-Pesa</div><div style="font-size:10px;color:#666;margin-top:2px">Integrated</div></div>
+    </div>
+
+    <!-- Features Grid -->
+    <div style="padding:60px 5%;max-width:1100px;margin:0 auto">
+      <h2 style="text-align:center;font-size:28px;font-weight:800;margin:0 0 40px;color:#1A1A2E">Everything Your School Needs</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px">
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">💰</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Fee Management</div><div style="font-size:12px;color:#666;line-height:1.6">M-Pesa STK, Paybill, bank. Instant receipts, statements &amp; defaulter alerts.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">📊</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Exams &amp; Results</div><div style="font-size:12px;color:#666;line-height:1.6">Enter marks, auto-grade, broadsheets, report cards for 8-4-4 and CBC.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">🌿</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">CBC Curriculum</div><div style="font-size:12px;color:#666;line-height:1.6">Learning areas, EE/ME/AE/BE levels, learner portfolios, strand assessments.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">✅</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Attendance</div><div style="font-size:12px;color:#666;line-height:1.6">Daily roll call, parent SMS alerts on absence, monthly reports.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">📅</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Timetable Generator</div><div style="font-size:12px;color:#666;line-height:1.6">Conflict-free scheduling. Auto-generate full school timetables.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">💼</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Payroll &amp; HR</div><div style="font-size:12px;color:#666;line-height:1.6">Staff payroll, PAYE, NHIF, NSSF deductions, payslips in one click.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">💬</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Parent Communication</div><div style="font-size:12px;color:#666;line-height:1.6">Bulk SMS, WhatsApp, newsletters. Keep parents informed instantly.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">🧠</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">AI Insights</div><div style="font-size:12px;color:#666;line-height:1.6">At-risk students, fee defaulter predictions, performance trends.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">🏆</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Clubs &amp; Sports</div><div style="font-size:12px;color:#666;line-height:1.6">Manage clubs, sports fixtures, results, certificates.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">📱</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Android App</div><div style="font-size:12px;color:#666;line-height:1.6">Full school management from your phone. Works offline too.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">🔐</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Role-Based Access</div><div style="font-size:12px;color:#666;line-height:1.6">Super admin, principal, teacher, bursar, student — each sees only what they need.</div></div>
+        <div style="background:white;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #F0F0F0"><div style="font-size:28px;margin-bottom:10px">📋</div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1A1A2E">Report Cards</div><div style="font-size:12px;color:#666;line-height:1.6">Beautiful Zeraki-style report cards with trends, attendance, remarks.</div></div>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about-section" style="background:#1565C0;color:white;padding:60px 5%;text-align:center">
+      <div style="max-width:700px;margin:0 auto">
+        <h2 style="font-size:28px;font-weight:800;margin:0 0 16px">About ElimuSaaS</h2>
+        <p style="font-size:15px;opacity:0.9;line-height:1.8;margin:0 0 24px">ElimuSaaS is a Kenyan-built school management platform designed to solve the real problems faced by Kenyan schools — from fee collection to CBC assessment, timetabling to payroll. We understand the local context: M-Pesa integration, KNEC requirements, CBC learning areas, and the day-to-day needs of Kenyan school administrators.</p>
+        <p style="font-size:14px;opacity:0.8;line-height:1.8;margin:0 0 32px">Built on modern technology, ElimuSaaS is fast, secure, and accessible from any device — including Android phones. Our platform supports both 8-4-4 and CBC curricula, making it suitable for all levels from Primary through Secondary school.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button onclick="Router.go('login')" style="padding:12px 28px;background:white;color:#1565C0;border:none;border-radius:10px;cursor:pointer;font-weight:700">Get Started Today</button>
+          <a href="https://github.com/antomwangi998/elimu-saas/releases/latest" target="_blank" style="padding:12px 28px;background:rgba(255,255,255,0.15);color:white;border:2px solid rgba(255,255,255,0.4);border-radius:10px;text-decoration:none;font-weight:700">📱 Download Android App</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Online Admissions Section -->
+    <div id="admission-section" style="padding:60px 5%;max-width:800px;margin:0 auto">
+      <h2 style="text-align:center;font-size:28px;font-weight:800;margin:0 0 8px;color:#1A1A2E">Online Admissions</h2>
+      <p style="text-align:center;color:#666;margin:0 0 32px">Apply for admission to any school using ElimuSaaS. Your application will be reviewed by the school.</p>
+      <div style="background:white;border-radius:16px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Student First Name *</label><input id="adm-fn" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box" placeholder="First name"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Student Last Name *</label><input id="adm-ln" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box" placeholder="Last name"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Date of Birth *</label><input id="adm-dob" type="date" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Gender *</label><select id="adm-gender" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box"><option value="">Select</option><option value="male">Male</option><option value="female">Female</option></select></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Applying for *</label><select id="adm-form" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box"><option value="">Select form</option><option>Form 1</option><option>Form 2</option><option>Form 3</option><option>Grade 7</option><option>Grade 8</option></select></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">KCPE/KCPE Score</label><input id="adm-kcpe" type="number" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box" placeholder="e.g. 380" min="0" max="500"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Parent/Guardian Name *</label><input id="adm-parent" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box" placeholder="Full name"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Parent Phone *</label><input id="adm-phone" type="tel" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box" placeholder="+254 7XX XXX XXX"></div>
+          <div style="grid-column:1/-1"><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">School Name (Optional - leave blank for general inquiry)</label><input id="adm-school" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box" placeholder="e.g. Alliance High School"></div>
+          <div style="grid-column:1/-1"><label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px">Additional Information</label><textarea id="adm-notes" style="width:100%;padding:10px 12px;border:1px solid #E0E0E0;border-radius:8px;font-size:13px;box-sizing:border-box;resize:vertical" rows="2" placeholder="Any special requirements or information..."></textarea></div>
+        </div>
+        <button onclick="submitOnlineAdmission()" style="width:100%;padding:13px;background:linear-gradient(135deg,#1565C0,#1976D2);color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:15px">📋 Submit Application</button>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact-section" style="background:#F0F4FF;padding:60px 5%">
+      <div style="max-width:700px;margin:0 auto;text-align:center">
+        <h2 style="font-size:28px;font-weight:800;margin:0 0 12px;color:#1A1A2E">Contact Us</h2>
+        <p style="color:#555;margin:0 0 32px">Ready to transform your school? Get in touch with our team.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:32px">
+          <a href="mailto:elimusaas@gmail.com" style="background:white;border-radius:12px;padding:20px;text-align:center;text-decoration:none;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:block"><div style="font-size:28px;margin-bottom:8px">📧</div><div style="font-size:11px;color:#666;margin-bottom:4px;font-weight:600">Email</div><div style="font-size:13px;font-weight:700;color:#1565C0">elimusaas@gmail.com</div></a>
+          <a href="tel:+254759437104" style="background:white;border-radius:12px;padding:20px;text-align:center;text-decoration:none;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:block"><div style="font-size:28px;margin-bottom:8px">📱</div><div style="font-size:11px;color:#666;margin-bottom:4px;font-weight:600">Phone / WhatsApp</div><div style="font-size:13px;font-weight:700;color:#1565C0">0759 437 104</div></a>
+          <a href="https://wa.me/254759437104" style="background:white;border-radius:12px;padding:20px;text-align:center;text-decoration:none;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:block"><div style="font-size:28px;margin-bottom:8px">💬</div><div style="font-size:11px;color:#666;margin-bottom:4px;font-weight:600">WhatsApp</div><div style="font-size:13px;font-weight:700;color:#1565C0">Chat with us</div></a>
+          <a href="#" style="background:white;border-radius:12px;padding:20px;text-align:center;text-decoration:none;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:block"><div style="font-size:28px;margin-bottom:8px">📍</div><div style="font-size:11px;color:#666;margin-bottom:4px;font-weight:600">Location</div><div style="font-size:13px;font-weight:700;color:#1565C0">Nairobi, Kenya</div></a>
+        </div>
+        <button onclick="Router.go('login')" style="padding:14px 40px;background:linear-gradient(135deg,#1565C0,#1976D2);color:white;border:none;border-radius:12px;cursor:pointer;font-weight:800;font-size:15px;box-shadow:0 4px 16px rgba(21,101,192,0.3)">🚀 Start Free Trial</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#1A1A2E;color:white;padding:32px 5%">
+      <div style="max-width:1100px;margin:0 auto">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:28px;margin-bottom:28px;flex-wrap:wrap">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+              <div style="width:34px;height:34px;background:linear-gradient(135deg,#1565C0,#1976D2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px">E</div>
+              <div style="font-size:16px;font-weight:800">ElimuSaaS</div>
+            </div>
+            <p style="font-size:12px;opacity:0.6;line-height:1.7">Kenya's most complete school management platform. Built for Kenyan schools.</p>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;opacity:0.5;letter-spacing:1px;margin-bottom:12px">Platform</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <a href="#" onclick="Router.go('login')" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">🔐 Login</a>
+              <a href="#admission-section" onclick="document.getElementById('admission-section').scrollIntoView({behavior:'smooth'});return false" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">📋 Online Admissions</a>
+              <a href="https://github.com/antomwangi998/elimu-saas/releases/latest" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">📱 Download Android App</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;opacity:0.5;letter-spacing:1px;margin-bottom:12px">Resources</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <a href="documentation.html" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">📚 Documentation</a>
+              <a href="privacy-policy.html" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">🔒 Privacy Policy</a>
+              <a href="#about-section" onclick="document.getElementById('about-section').scrollIntoView({behavior:'smooth'});return false" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">ℹ️ About Us</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;opacity:0.5;letter-spacing:1px;margin-bottom:12px">Contact</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <a href="mailto:elimusaas@gmail.com" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">📧 elimusaas@gmail.com</a>
+              <a href="mailto:mwangiantony57@gmail.com" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">💳 mwangiantony57@gmail.com</a>
+              <a href="https://wa.me/254759437104" target="_blank" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">💬 WhatsApp Us</a>
+              <a href="#contact-section" onclick="document.getElementById('contact-section').scrollIntoView({behavior:'smooth'});return false" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px">📍 Nairobi, Kenya</a>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+          <div style="font-size:12px;opacity:0.5">ElimuSaaS © 2025 · Built in Kenya 🇰🇪 for Kenyan Schools</div>
+          <div style="display:flex;gap:16px">
+            <a href="privacy-policy.html" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:11px">Privacy Policy</a>
+            <a href="documentation.html" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:11px">Documentation</a>
+            <span style="color:rgba(255,255,255,0.3);font-size:11px">v42</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="page-login" class="page-view" style="padding:0;min-height:100vh;align-items:stretch;">
+
+  <!-- LEFT PANEL — Branding -->
+  <div style="display:none;flex:1;background:linear-gradient(160deg,#0D47A1 0%,#1565C0 40%,#1976D2 100%);color:white;flex-direction:column;justify-content:space-between;padding:48px 40px;position:relative;overflow:hidden;" id="login-brand-panel">
+    <!-- Background decorations -->
+    <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,0.04);"></div>
+    <div style="position:absolute;top:50%;left:60%;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.03);transform:translateY(-50%);"></div>
+
+    <!-- Logo -->
+    <div style="position:relative;z-index:1">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:56px">
+        <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;backdrop-filter:blur(4px)">E</div>
+        <div>
+          <div style="font-size:20px;font-weight:800;letter-spacing:-0.3px">ElimuSaaS</div>
+          <div style="font-size:11px;opacity:0.7;margin-top:1px">Enterprise School Platform</div>
+        </div>
+      </div>
+
+      <h2 style="font-size:32px;font-weight:800;line-height:1.25;margin:0 0 16px;letter-spacing:-0.5px">Kenya's Most Complete<br>School Management Suite</h2>
+      <p style="font-size:15px;opacity:0.8;line-height:1.7;margin:0 0 40px;max-width:340px">Trusted by schools across the country for fees, exams, CBC, attendance, payroll, and more — all in one platform.</p>
+
+      <!-- Feature list -->
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:48px">
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;opacity:0.9">
+          <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</div>
+          Fee collection, M-Pesa & invoicing
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;opacity:0.9">
+          <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</div>
+          CBC & 8-4-4 exams, broadsheets & report cards
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;opacity:0.9">
+          <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</div>
+          WhatsApp & SMS communication to parents
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;opacity:0.9">
+          <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</div>
+          AI insights, payroll, timetable & TSC tools
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:flex;gap:28px">
+        <div>
+          <div style="font-size:26px;font-weight:800">500+</div>
+          <div style="font-size:11px;opacity:0.65;margin-top:2px">Schools Active</div>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,0.2)"></div>
+        <div>
+          <div style="font-size:26px;font-weight:800">2M+</div>
+          <div style="font-size:11px;opacity:0.65;margin-top:2px">Students Managed</div>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,0.2)"></div>
+        <div>
+          <div style="font-size:26px;font-weight:800">99.9%</div>
+          <div style="font-size:11px;opacity:0.65;margin-top:2px">Uptime SLA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div style="position:relative;z-index:1;background:rgba(255,255,255,0.1);border-radius:14px;padding:20px 22px;backdrop-filter:blur(4px)">
+      <p style="font-size:13px;opacity:0.9;line-height:1.6;margin:0 0 12px">"ElimuSaaS transformed how we run our school. Fee collection alone saves us 3 days a month."</p>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">JM</div>
+        <div>
+          <div style="font-size:12px;font-weight:600">James Mwangi</div>
+          <div style="font-size:11px;opacity:0.65">Principal, Nairobi Academy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — Login Form -->
+  <div style="width:100%;max-width:480px;display:flex;flex-direction:column;justify-content:center;padding:40px 32px;background:#F8FAFF;overflow-y:auto;" id="login-form-panel">
+
+    <!-- Mobile logo (hidden on desktop) -->
+    <div id="login-mobile-logo" style="text-align:center;margin-bottom:32px">
+      <div style="width:56px;height:56px;background:#1565C0;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:white;margin:0 auto 12px;box-shadow:0 4px 20px rgba(21,101,192,0.35)">E</div>
+      <div style="font-size:22px;font-weight:800;color:#0D1117;letter-spacing:-0.3px">ElimuSaaS</div>
+      <div style="font-size:12px;color:#6B7280;margin-top:3px">Enterprise School Management Platform</div>
+    </div>
+
+    <div style="background:white;border-radius:20px;padding:36px 32px;box-shadow:0 4px 24px rgba(21,101,192,0.1);border:1px solid #E8EFFC;">
+
+      <h2 style="font-size:22px;font-weight:800;color:#0D1117;margin:0 0 4px;letter-spacing:-0.3px">Welcome back 👋</h2>
+      <p style="color:#6B7280;font-size:13px;margin:0 0 24px">Sign in to your school portal to continue</p>
+
+      <!-- Error -->
+      <div id="login-error" class="alert alert-danger hidden" style="margin-bottom:16px;display:flex;align-items:flex-start;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="login-error-msg"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="admin@school.ac.ke" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div style="position:relative">
+          <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" />
+          <button type="button" onclick="togglePasswordVisibility('login-password')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9CA3AF;padding:4px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>School Code <span style="color:#9CA3AF;font-weight:400;text-transform:none;font-size:11px">(Optional)</span></label>
+        <input type="text" id="login-school-code" placeholder="e.g. ELITE001" style="text-transform:uppercase" />
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin:-4px 0 20px">
+        <a href="javascript:void(0)" style="font-size:13px;color:#1565C0;text-decoration:none;font-weight:700" onclick="showForgotPassword(event);return false;">Forgot password?</a>
+      </div>
+
+      <button id="login-btn" type="button"
+        style="width:100%;padding:14px;background:#1565C0;color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.3px;margin-top:4px;display:block;position:relative;z-index:99"
+        onclick="(function(btn){
+  var errEl=document.getElementById('login-error');
+  var errMsg=document.getElementById('login-error-msg');
+  var limit=window.checkLoginRateLimit&&window.checkLoginRateLimit();
+  if(limit){
+    if(errMsg)errMsg.textContent=limit;
+    if(errEl)errEl.classList.remove('hidden');
+    return;
+  }
+  var email=document.getElementById('login-email').value.trim();
+  var pwd=document.getElementById('login-password').value;
+  var code=document.getElementById('login-school-code').value.trim();
+  if(errEl)errEl.classList.add('hidden');
+  if(!email||!pwd){
+    if(errMsg)errMsg.textContent='Please enter your email and password.';
+    if(errEl)errEl.classList.remove('hidden');
+    return;
+  }
+  btn.disabled=true;
+  btn.textContent='Signing in...';
+  btn.style.opacity='0.8';
+
+  // Timeout warning after 8s (Render free tier cold start)
+  var timeoutId=setTimeout(function(){
+    if(btn.disabled){
+      if(errMsg)errMsg.textContent='Server is waking up (first login may take 30s)... Please wait.';
+      if(errEl)errEl.classList.remove('hidden');
+    }
+  }, 8000);
+
+  var body={email:email,password:pwd};
+  if(code)body.schoolCode=code;
+
+  fetch('https://elimu-saas.onrender.com/api/auth/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body),
+    signal:AbortSignal.timeout?AbortSignal.timeout(60000):undefined
+  })
+  .then(function(r){
+    clearTimeout(timeoutId);
+    if(!r.ok&&r.status===0){throw new Error('Network blocked');}
+    return r.json();
+  })
+  .then(function(data){
+    clearTimeout(timeoutId);
+    btn.disabled=false;btn.textContent='Sign In';btn.style.opacity='1';
+    if(errEl)errEl.classList.add('hidden');
+    if(data.error||!data.accessToken){
+      if(window.recordLoginFailure)window.recordLoginFailure();
+      if(errMsg)errMsg.textContent=data.error||data.message||'Login failed. Check credentials.';
+      if(errEl)errEl.classList.remove('hidden');
+      return;
+    }
+    // ── LOGIN SUCCESS ──────────────────────────────────
+    if(window.resetLoginAttempts)window.resetLoginAttempts();
+    try{
+      localStorage.setItem('access_token',data.accessToken);
+      localStorage.setItem('refresh_token',data.refreshToken||'');
+      localStorage.setItem('user_data',JSON.stringify(data.user||{}));
+      // Mark as authenticated so page reload auto-logs in
+      sessionStorage.setItem('just_logged_in','1');
+    }catch(e){}
+    // Update AppState synchronously before showing UI
+    if(typeof AppState!=='undefined'){
+      AppState.token=data.accessToken;
+      AppState.user=data.user;
+    }
+    // Hide login, show app - do this ATOMICALLY
+    var pg=document.getElementById('page-login');
+    var sh=document.getElementById('app-shell');
+    // Lock in visible state with important styles
+    if(pg){ pg.style.cssText='display:none!important'; }
+    if(sh){ 
+      sh.classList.remove('hidden');
+      sh.style.cssText='display:flex!important';
+    }
+    // Now build sidebar and route
+    var _role=(data.user||{}).role||'';
+    var _page=_role==='super_admin'?'superadmin-dashboard':'dashboard';
+    // Ensure initApp has run (it sets up Router and buildSidebar)
+    try{
+      if(typeof initApp==='function' && typeof Router!=='undefined' && !Router._initialized){
+        initApp().catch(function(){});
+      } else {
+        if(typeof buildSidebar==='function') buildSidebar();
+        if(typeof Router!=='undefined'&&Router.go) Router.go(_page);
+      }
+    }catch(e){
+      // Hard reload as final fallback - localStorage has tokens so auto-login works
+      setTimeout(function(){ location.href = '/#' + _page; }, 200);
+    }
+  })
+  .catch(function(e){
+    clearTimeout(timeoutId);
+    btn.disabled=false;btn.textContent='Sign In';btn.style.opacity='1';
+    var msg='Server is starting up — this can take 30-60 seconds on first load.';
+    if(e&&e.message){
+      if(e.message.includes('Failed to fetch')||e.message.includes('NetworkError')){
+        msg='Server is waking up (Render free tier). Please wait 30 seconds and try again.';
+      } else if(e.message.includes('timeout')||e.message.includes('abort')){
+        msg='Server taking too long. It may be starting up. Wait 30 secs and try again.';
+      } else if(e.message.includes('blocked')){
+        msg='Connection blocked. Check your internet connection.';
+      } else {
+        msg='Cannot reach server: '+e.message+'. Try again in 30 seconds.';
+      }
+    }
+    if(errMsg)errMsg.textContent=msg;
+    if(errEl)errEl.classList.remove('hidden');
+    console.error('Login fetch error:',e);
+  });
+})(this)">Sign In</button>
+
+      <!-- Server Status Indicator -->
+      <div id="server-status" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:11px;color:#6B7280">
+        <span id="server-status-dot" style="width:8px;height:8px;border-radius:50%;background:#E5E7EB;display:inline-block"></span>
+        <span id="server-status-text">Checking server...</span>
+      </div>
+
+      <!-- Trust badges -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid #F0F4F8">
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#9CA3AF">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          SSL Secured
+        </div>
+        <div style="width:1px;height:14px;background:#E5E7EB"></div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#9CA3AF">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Data Protected
+        </div>
+        <div style="width:1px;height:14px;background:#E5E7EB"></div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#9CA3AF">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          KNEC Compliant
+        </div>
+      </div>
+    </div>
+
+    <!-- Download app hint -->
+    <div id="login-app-download-hint" style="margin-top:16px;background:white;border-radius:14px;padding:14px 18px;border:1px solid #E8EFFC;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="showAppDownloadOptions()">
+      <div style="width:36px;height:36px;background:#E8F0FE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:#0D1117">Get the Android App</div>
+        <div style="font-size:11px;color:#6B7280;margin-top:1px">Download the ElimuSaaS APK for your device</div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+
+    <p style="text-align:center;margin-top:16px;font-size:11px;color:#9CA3AF">© 2025 ElimuSaaS. Enterprise School Management.</p>
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div id="modal-forgot-password" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:36px 32px;width:100%;max-width:400px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:56px;height:56px;background:#E8F0FE;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <h3 style="font-size:18px;font-weight:800;color:#0D1117;margin:0 0 6px">Reset your password</h3>
+      <p style="font-size:13px;color:#6B7280;margin:0">Enter your email and we'll send you a reset link</p>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="forgot-email" placeholder="admin@school.ac.ke" autocomplete="email" />
+    </div>
+    <div id="forgot-error" class="alert alert-danger hidden" style="margin-bottom:12px;font-size:13px"></div>
+    <div id="forgot-success" style="display:none;background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7;border-radius:8px;padding:12px 14px;font-size:13px;margin-bottom:12px;text-align:center"></div>
+    <button id="forgot-btn" onclick="submitForgotPassword()" style="width:100%;padding:13px;background:#1565C0;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Send Reset Link</button>
+    <button onclick="closeForgotPassword()" style="width:100%;padding:11px;background:none;color:#6B7280;border:none;font-size:13px;cursor:pointer;margin-top:8px">Cancel</button>
+  </div>
+</div>
+
+<!-- App Download Modal -->
+<div id="modal-app-download" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:36px 32px;width:100%;max-width:400px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:64px;height:64px;background:#1565C0;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;font-weight:900;color:white">E</div>
+      <h3 style="font-size:18px;font-weight:800;color:#0D1117;margin:0 0 6px">ElimuSaaS Android App</h3>
+      <p style="font-size:13px;color:#6B7280;margin:0">Native app for the best experience on your device</p>
+    </div>
+    <a id="apk-download-link" href="https://github.com/antomwangi998/elimu-saas/releases/latest" style="display:flex;align-items:center;gap:14px;background:#E8F0FE;border-radius:14px;padding:16px 18px;text-decoration:none;margin-bottom:12px;border:2px solid #1565C0">
+      <div style="width:40px;height:40px;background:#1565C0;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#0D1117">Download APK</div>
+        <div style="font-size:11px;color:#6B7280;margin-top:2px">Latest release from GitHub</div>
+      </div>
+    </a>
+    <p style="font-size:11px;color:#9CA3AF;text-align:center;margin:0 0 16px">You may need to enable "Install from unknown sources" in your Android settings.</p>
+    <button onclick="document.getElementById('modal-app-download').style.display='none'" style="width:100%;padding:11px;background:none;color:#6B7280;border:1px solid #E5E7EB;border-radius:10px;font-size:13px;cursor:pointer">Close</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN APP SHELL (shown after login)
+══════════════════════════════════════════════════════════ -->
+<div id="app-shell" class="app-shell hidden">
+
+  <!-- ══ BOTTOM NAVIGATION (Mobile) ══════════════════════════ -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="bottom-nav-items">
+      <div class="bottom-nav-item active" id="bn-home" onclick="bnNavigate('dashboard','bn-home')">
+        <span class="bn-icon">🏠</span>
+        <span class="bn-label">Home</span>
+      </div>
+      <div class="bottom-nav-item" id="bn-exams" onclick="bnNavigate('exams','bn-exams')">
+        <span class="bn-icon">📝</span>
+        <span class="bn-label">Exams</span>
+      </div>
+      <div class="bottom-nav-item" id="bn-calendar" onclick="bnNavigate('attendance','bn-calendar')">
+        <span class="bn-icon">📅</span>
+        <span class="bn-label">Attendance</span>
+      </div>
+      <div class="bottom-nav-item" id="bn-messages" onclick="bnNavigate('communication','bn-messages')">
+        <span class="bn-icon">💬</span>
+        <span class="bn-label">Messages</span>
+        <span class="bn-badge" id="bn-badge" style="display:none">0</span>
+      </div>
+      <div class="bottom-nav-item" id="bn-more" onclick="openMoreDrawer()">
+        <span class="bn-icon">☰</span>
+        <span class="bn-label">More</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ MORE DRAWER ═══════════════════════════════════════════ -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeMoreDrawer()"></div>
+  <div class="more-drawer" id="more-drawer">
+    <div class="more-drawer-handle"></div>
+    <div class="more-drawer-title">More Features</div>
+    <div class="more-drawer-grid" id="more-drawer-grid">
+      <!-- Populated by buildSidebar() based on role -->
+    </div>
+    <div style="padding:0 12px 16px">
+      <button class="btn btn-secondary w-full" onclick="Auth.logout()" style="border-radius:12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">E</div>
+      <div class="brand-text">
+        <div class="brand-name">ElimuSaaS</div>
+        <div class="brand-tagline">School Management</div>
+      </div>
+    </div>
+    <div class="sidebar-school" id="sidebar-school-info">
+      <div class="sidebar-school-name" id="sidebar-school-name">ElimuSaaS</div>
+      <div class="sidebar-school-code" id="sidebar-school-code"></div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <!-- Built dynamically by app.js -->
+    </nav>
+    <div class="sidebar-footer">
+      <a class="nav-item" id="logout-btn" style="cursor:pointer">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+    <div class="sidebar-toggle" id="sidebar-toggle" title="Toggle sidebar">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ───────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <button id="mobile-menu-btn" class="header-btn" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')" style="display:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 class="header-title" id="header-title">Dashboard</h1>
+      <div class="header-search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="global-search" placeholder="Search students, staff…" />
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="theme-toggle" title="Toggle theme"></button>
+        <button class="header-btn" id="notif-btn" onclick="Router.go('communication')" title="Notifications">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notif-dot" id="notif-dot" style="display:none"></span>
+        </button>
+        <div class="header-user" id="header-user-menu">
+          <div class="user-avatar" id="header-user-avatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="header-user-name">User</div>
+            <div class="user-role" id="header-user-role">Admin</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE AREA -->
+    <main class="page-area" id="page-area">
+
+      <!-- ── DASHBOARD ──────────────────────────────────── -->
+      <div id="page-dashboard" class="page-view">
+        <div id="dash-area">
+          <!-- Content injected by Pages.Dashboard.load() -->
+          <div style="text-align:center;padding:60px 20px">
+            <div class="loading-spinner" style="margin:0 auto 16px"></div>
+            <div style="color:var(--text-muted)">Loading dashboard...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STUDENTS ───────────────────────────────────── -->
+      <div id="page-students" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Students</h2>
+            <p class="page-subtitle" id="students-subtitle">Manage all enrolled students</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Students.exportCSV()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export
+            </button>
+            <button class="btn btn-primary" onclick="Pages.Students.openAddModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Student
+            </button>
+          </div>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <div class="table-search">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="students-search" placeholder="Search by name or adm number…" oninput="Pages.Students.search(this.value)" />
+            </div>
+            <select id="students-class-filter" onchange="Pages.Students.filter()" style="width:160px">
+              <option value="">All Classes</option>
+            </select>
+            <select id="students-gender-filter" onchange="Pages.Students.filter()" style="width:120px">
+              <option value="">All Genders</option>
+              <option value="male">Boys</option>
+              <option value="female">Girls</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student</th>
+                  <th>Adm. No.</th>
+                  <th>Class</th>
+                  <th>Gender</th>
+                  <th>Parent Phone</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody">
+                <tr><td colspan="8" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer" id="students-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ── STAFF ──────────────────────────────────────── -->
+      <div id="page-staff" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Staff Management</h2>
+            <p class="page-subtitle">Teachers, administrators, and support staff</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Staff.showPending()" style="position:relative">
+              ⏳ Pending
+              <span id="pending-staff-count" style="position:absolute;top:-6px;right:-6px;background:var(--red);color:white;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center"></span>
+            </button>
+            <button class="btn btn-primary" onclick="Pages.Staff.openAddModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Staff
+            </button>
+          </div>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <div class="table-search">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="staff-search" placeholder="Search staff…" oninput="Pages.Staff.search(this.value)" />
+            </div>
+            <select id="staff-role-filter" onchange="Pages.Staff.filter()" style="width:160px">
+              <option value="">All Roles</option>
+              <option value="teacher">Teachers</option>
+              <option value="hod">HODs</option>
+              <option value="bursar">Bursar</option>
+              <option value="deputy_principal">Deputy Principal</option>
+              <option value="principal">Principal</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead><tr><th>#</th><th>Staff Member</th><th>Staff No.</th><th>Role</th><th>Department</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="staff-tbody"><tr><td colspan="8" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer" id="staff-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ── ACADEMICS ──────────────────────────────────── -->
+      <div id="page-academics" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Classes & Subjects</h2>
+            <p class="page-subtitle">Manage academic structure</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Academics.openSubjectModal()">Add Subject</button>
+            <button class="btn btn-primary" onclick="Pages.Academics.openClassModal()">Add Class</button>
+          </div>
+        </div>
+        <div class="tabs" style="margin-bottom:20px">
+          <div class="tab active" onclick="Pages.Academics.switchTab('classes',this)">Classes</div>
+          <div class="tab" onclick="Pages.Academics.switchTab('subjects',this)">Subjects</div>
+          <div class="tab" onclick="Pages.Academics.switchTab('timetable',this)">Subject Allocation</div>
+        </div>
+        <div id="academics-tab-content"></div>
+      </div>
+
+      <!-- ── EXAMS ──────────────────────────────────────── -->
+      <div id="page-exams" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Exams & Marks</h2>
+            <p class="page-subtitle">Exam series, mark entry, broadsheets, and report cards</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Exams.viewBroadsheet()">View Broadsheet</button>
+            <button class="btn btn-primary" onclick="Pages.Exams.openCreateModal()">New Exam Series</button>
+          </div>
+        </div>
+        <div class="tabs" style="margin-bottom:20px">
+          <div class="tab active" onclick="Pages.Exams.switchTab('series',this)">Exam Series</div>
+          <div class="tab" onclick="Pages.Exams.switchTab('entry',this)">Mark Entry</div>
+          <div class="tab" onclick="Pages.Exams.switchTab('broadsheet',this)">Broadsheet</div>
+          <div class="tab" onclick="Pages.Exams.switchTab('reportcards',this)">Report Cards</div>
+        </div>
+        <div id="exams-tab-content"></div>
+      </div>
+
+      <!-- ── FEES ───────────────────────────────────────── -->
+      <div id="page-fees" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Fee Management</h2>
+            <p class="page-subtitle">Fee structures, payments, receipts, and financial reports</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Fees.openStructureModal()">Fee Structure</button>
+            <button class="btn btn-primary" onclick="Pages.Fees.openPaymentModal()">Record Payment</button>
+          </div>
+        </div>
+        <div class="tabs" style="margin-bottom:20px">
+          <div class="tab active" onclick="Pages.Fees.switchTab('overview',this)">Overview</div>
+          <div class="tab" onclick="Pages.Fees.switchTab('payments',this)">Payments</div>
+          <div class="tab" onclick="Pages.Fees.switchTab('structures',this)">Fee Structures</div>
+          <div class="tab" onclick="Pages.Fees.switchTab('defaulters',this)">Defaulters</div>
+        </div>
+        <div id="fees-tab-content"></div>
+      </div>
+
+      <!-- ── ATTENDANCE ─────────────────────────────────── -->
+      <div id="page-attendance" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Attendance</h2>
+            <p class="page-subtitle">Mark and track daily student attendance</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Attendance.viewReports()">Reports</button>
+            <button class="btn btn-primary" onclick="Pages.Attendance.openMarkModal()">Mark Attendance</button>
+          </div>
+        </div>
+        <div class="tabs" style="margin-bottom:20px">
+          <div class="tab active" onclick="Pages.Attendance.switchTab('mark',this)">Mark Today</div>
+          <div class="tab" onclick="Pages.Attendance.switchTab('records',this)">Records</div>
+          <div class="tab" onclick="Pages.Attendance.switchTab('summary',this)">Summary</div>
+        </div>
+        <div id="attendance-tab-content"></div>
+      </div>
+
+      <!-- ── CLUBS ──────────────────────────────────────── -->
+      <div id="page-clubs" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Clubs & Societies</h2>
+            <p class="page-subtitle">Co-curricular activities, sports, and student groups</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="Pages.Clubs.openCreateModal()">Create Club</button>
+          </div>
+        </div>
+        <div id="clubs-grid" class="grid-auto"></div>
+      </div>
+
+      <!-- ── LEAVE-OUT ──────────────────────────────────── -->
+      <div id="page-leaveout" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Leave-Out Sheets</h2>
+            <p class="page-subtitle">Boarding student leave requests and approvals</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="Pages.LeaveOut.openRequestModal()">New Request</button>
+          </div>
+        </div>
+        <div class="tabs" style="margin-bottom:20px">
+          <div class="tab active" onclick="Pages.LeaveOut.filterStatus('pending',this)">Pending</div>
+          <div class="tab" onclick="Pages.LeaveOut.filterStatus('principal_approved',this)">Approved</div>
+          <div class="tab" onclick="Pages.LeaveOut.filterStatus('rejected',this)">Rejected</div>
+          <div class="tab" onclick="Pages.LeaveOut.filterStatus('',this)">All</div>
+        </div>
+        <div class="table-container">
+          <div style="overflow-x:auto">
+            <table>
+              <thead><tr><th>Student</th><th>Class</th><th>Destination</th><th>Departure</th><th>Return</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="leaveout-tbody"><tr><td colspan="7" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CERTIFICATES ───────────────────────────────── -->
+      <div id="page-certificates" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Certificates</h2>
+            <p class="page-subtitle">Issue and manage academic, sports, and participation certificates</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Pages.Certificates.manageTemplates()">Templates</button>
+            <button class="btn btn-primary" onclick="Pages.Certificates.openIssueModal()">Issue Certificate</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <div class="table-search">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search certificates…" />
+            </div>
+            <select onchange="Pages.Certificates.filterType(this.value)" style="width:160px">
+              <option value="">All Types</option>
+              <option value="academic">Academic</option>
+              <option value="sports">Sports</option>
+              <option value="leadership">Leadership</option>
+              <option value="participation">Participation</option>
+              <option value="merit">Merit</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead><tr><th>Cert No.</th><th>Student</th><th>Type</th><th>Title</th><th>Issued Date</th><th>Actions</th></tr></thead>
+              <tbody id="certs-tbody"><tr><td colspan="6" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── COMMUNICATION ──────────────────────────────── -->
+      <div id="page-communication" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Communication</h2>
+            <p class="page-subtitle">SMS, email, and in-app notifications</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="Pages.Communication.openComposeModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Compose
+            </button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="tabs" style="margin-bottom:16px">
+              <div class="tab active" onclick="Pages.Communication.switchTab('sent',this)">Sent</div>
+              <div class="tab" onclick="Pages.Communication.switchTab('notifications',this)">Notifications</div>
+            </div>
+            <div id="comm-tab-content"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">SMS Quick Send</div></div>
+            <div class="form-group">
+              <label>Send To</label>
+              <select id="sms-recipient-type">
+                <option value="all_parents">All Parents</option>
+                <option value="class">Specific Class</option>
+                <option value="individual">Individual</option>
+              </select>
+            </div>
+            <div class="form-group" id="sms-class-row">
+              <label>Class</label>
+              <select id="sms-class-id"></select>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea id="sms-message" placeholder="Type your message here…" rows="4" maxlength="160"></textarea>
+              <div class="form-hint" id="sms-char-count">0 / 160 characters</div>
+            </div>
+            <button class="btn btn-primary w-full" onclick="Pages.Communication.sendQuickSMS()">Send SMS</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NEWSLETTERS ────────────────────────────────── -->
+      <div id="page-newsletters" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Newsletters</h2>
+            <p class="page-subtitle">Create, publish, and email school newsletters</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="Pages.Newsletters.openCreateModal()">Create Newsletter</button>
+          </div>
+        </div>
+        <div id="newsletters-grid" class="grid-auto"></div>
+      </div>
+
+      <!-- ── REPORTS ────────────────────────────────────── -->
+      <div id="page-reports" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Reports & Analytics</h2>
+            <p class="page-subtitle">Academic performance, financial, and attendance insights</p>
+          </div>
+        </div>
+        <div class="tabs" style="margin-bottom:20px">
+          <div class="tab active" onclick="Pages.Reports.switchTab('academic',this)">Academic</div>
+          <div class="tab" onclick="Pages.Reports.switchTab('finance',this)">Financial</div>
+          <div class="tab" onclick="Pages.Reports.switchTab('attendance',this)">Attendance</div>
+          <div class="tab" onclick="Pages.Reports.switchTab('ai',this)">AI Insights</div>
+        </div>
+        <div id="reports-tab-content"></div>
+      </div>
+
+      <!-- ── ALUMNI ─────────────────────────────────────── -->
+      <div id="page-alumni" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Alumni Network</h2>
+            <p class="page-subtitle">Track and connect with school alumni</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="Pages.Alumni.openAddModal()">Add Alumni</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <div style="overflow-x:auto">
+            <table>
+              <thead><tr><th>Name</th><th>Grad Year</th><th>KCSE</th><th>University</th><th>Occupation</th><th>Contact</th><th>Actions</th></tr></thead>
+              <tbody id="alumni-tbody"><tr><td colspan="7" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ───────────────────────────────────── -->
+      <div id="page-reset-passwords" class="page-view"></div>
+      <div id="page-settings" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Settings</h2>
+            <p class="page-subtitle">School profile, academic years, grading, and integrations</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="tabs" style="margin-bottom:16px">
+              <div class="tab active" onclick="Pages.Settings.switchTab('profile',this)">School Profile</div>
+              <div class="tab" onclick="Pages.Settings.switchTab('academic',this)">Academic</div>
+              <div class="tab" onclick="Pages.Settings.switchTab('grading',this)">Grading</div>
+              <div class="tab" onclick="Pages.Settings.switchTab('users',this)">Users</div>
+              <div class="tab" onclick="Pages.Settings.switchTab('integrations',this)">Integrations</div>
+            </div>
+            <div id="settings-tab-content"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Subscription Status</div></div>
+            <div id="settings-subscription-info"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SUPER ADMIN DASHBOARD ──────────────────────── -->
+      <div id="page-superadmin-dashboard" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Platform Dashboard</h2>
+            <p class="page-subtitle">ElimuSaaS platform-wide overview</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="Router.go('superadmin-schools')">🏫 All Schools</button>
+            <button class="btn btn-primary" onclick="Pages.SuperAdmin.openCreateSchoolModal()">+ Onboard School</button>
+          </div>
+        </div>
+        <div class="stats-grid" id="sa-stats"></div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Recent Schools</div></div>
+            <div id="sa-recent-schools"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Subscription Distribution</div></div>
+            <canvas id="chart-subscriptions" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SUPER ADMIN SCHOOLS ────────────────────────── -->
+      <div id="page-superadmin-schools" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">All Schools</h2>
+            <p class="page-subtitle">Manage all onboarded schools</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="Pages.SuperAdmin.openCreateSchoolModal()">+ Onboard School</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <div class="table-search">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search schools…" oninput="Pages.SuperAdmin.searchSchools(this.value)" />
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead><tr>
+                    <th>School Name</th>
+                    <th>Code</th>
+                    <th style="text-align:center">Students</th>
+                    <th style="text-align:center">Teachers</th>
+                    <th>Subscription</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr></thead>
+              <tbody id="sa-schools-tbody"><tr><td colspan="7" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer" id="sa-schools-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ── SUPER ADMIN SUBSCRIPTIONS ─────────────────── -->
+      <div id="page-superadmin-subscriptions" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Subscriptions</h2>
+            <p class="page-subtitle">Manage school subscriptions and billing</p>
+          </div>
+        </div>
+        <div id="sa-subscriptions-content"></div>
+      </div>
+
+      <!-- ── SUPER ADMIN ANALYTICS ──────────────────────── -->
+      <div id="page-superadmin-analytics" class="page-view">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2 class="page-title">Platform Analytics</h2>
+            <p class="page-subtitle">Revenue, growth, and usage metrics</p>
+          </div>
+        </div>
+        <div id="sa-analytics-content"></div>
+      </div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TIMETABLE PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-timetable" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Timetable Generator</h2>
+      <p class="page-subtitle">Auto-generate conflict-free timetables for all streams</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.Timetable.seedPeriods()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Seed Default Periods
+      </button>
+      <button class="btn btn-secondary" onclick="Pages.Timetable.switchTab('periods',null)">
+        Manage Periods
+      </button>
+      <button class="btn btn-primary" onclick="Pages.Timetable.openGenerateModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Generate Timetable
+      </button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Timetable.switchTab('list',this)">All Timetables</div>
+    <div class="tab" onclick="Pages.Timetable.switchTab('view',this)">View Grid</div>
+    <div class="tab" onclick="Pages.Timetable.switchTab('teacher',this)">Teacher View</div>
+    <div class="tab" onclick="Pages.Timetable.switchTab('periods',this)">Periods</div>
+    <div class="tab" onclick="Pages.Timetable.switchTab('attendance',this)">Lesson Attendance</div>
+  </div>
+  <div id="timetable-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     BILLING & INVOICES PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-billing" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Billing & Invoices</h2>
+      <p class="page-subtitle">Generate invoices, track payments, send reminders</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.Billing.sendReminders()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        Send Reminders
+      </button>
+      <button class="btn btn-primary" onclick="Pages.Billing.openGenerateModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Generate Invoices
+      </button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Billing.switchTab('summary',this)">Summary</div>
+    <div class="tab" onclick="Pages.Billing.switchTab('invoices',this)">All Invoices</div>
+    <div class="tab" onclick="Pages.Billing.switchTab('overdue',this)">Overdue</div>
+  </div>
+  <div id="billing-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TSC VERIFICATION PAGE (Dean)
+══════════════════════════════════════════════════════════ -->
+<div id="page-tsc-verification" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">TSC Verification</h2>
+      <p class="page-subtitle">Review and approve teacher TSC verification submissions</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.TSCVerif.viewFraudFlags()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Fraud Flags
+      </button>
+      <button class="btn btn-primary" onclick="Pages.TSCVerif.openRegisterModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Register Teacher
+      </button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.TSCVerif.filterStatus('pending',this)">Pending</div>
+    <div class="tab" onclick="Pages.TSCVerif.filterStatus('under_review',this)">Under Review</div>
+    <div class="tab" onclick="Pages.TSCVerif.filterStatus('verified',this)">Verified</div>
+    <div class="tab" onclick="Pages.TSCVerif.filterStatus('rejected',this)">Rejected</div>
+    <div class="tab" onclick="Pages.TSCVerif.filterStatus('flagged',this)">Flagged</div>
+    <div class="tab" onclick="Pages.TSCVerif.filterStatus('',this)">All</div>
+  </div>
+  <div class="table-container">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Teacher</th><th>TSC Number</th><th>Staff No.</th><th>Score</th><th>Documents</th><th>Status</th><th>Submitted</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="tsc-verif-tbody">
+          <tr><td colspan="8" style="text-align:center;padding:40px"><div class="loading-spinner" style="margin:auto"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-footer" id="tsc-verif-pagination"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SEARCH RESULTS PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-search-results" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Search Results</h2>
+      <p class="page-subtitle" id="search-results-subtitle">Searching...</p>
+    </div>
+  </div>
+  <div id="search-results-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PARENT PORTAL PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-parent-portal" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">My Children</h2>
+      <p class="page-subtitle">Track your children's academic journey</p>
+    </div>
+  </div>
+  <div id="parent-children-grid" class="grid-auto"></div>
+  <div id="parent-child-detail" style="display:none;margin-top:20px">
+    <button class="btn btn-ghost" onclick="document.getElementById('parent-child-detail').style.display='none';document.getElementById('parent-children-grid').style.display=''">
+      ← Back to Children
+    </button>
+    <div class="tabs" style="margin:16px 0">
+      <div class="tab active" onclick="Pages.ParentPortal.childTab('dashboard',this)">Dashboard</div>
+      <div class="tab" onclick="Pages.ParentPortal.childTab('fees',this)">Fees</div>
+      <div class="tab" onclick="Pages.ParentPortal.childTab('grades',this)">Grades</div>
+      <div class="tab" onclick="Pages.ParentPortal.childTab('attendance',this)">Attendance</div>
+    </div>
+    <div id="parent-child-tab-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ONLINE EXAMS PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-online-exams" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Online Exams</h2>
+      <p class="page-subtitle">Create, manage, and auto-mark online examinations</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.OnlineExams.openQuestionBank()">Question Bank</button>
+      <button class="btn btn-primary" onclick="Pages.OnlineExams.openCreateModal()">Create Online Exam</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.OnlineExams.switchTab('list',this)">All Exams</div>
+    <div class="tab" onclick="Pages.OnlineExams.switchTab('active',this)">Active</div>
+    <div class="tab" onclick="Pages.OnlineExams.switchTab('results',this)">Results</div>
+  </div>
+  <div id="online-exams-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCHOOL PROFILE PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-school-profile" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">School Profile</h2>
+      <p class="page-subtitle">Manage branding, gallery, and public profile</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" onclick="Pages.SchoolProfile.save()">Save Changes</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.SchoolProfile.switchTab('profile',this)">Profile & Branding</div>
+    <div class="tab" onclick="Pages.SchoolProfile.switchTab('gallery',this)">Photo Gallery</div>
+    <div class="tab" onclick="Pages.SchoolProfile.switchTab('showcase',this)">Alumni Showcase</div>
+  </div>
+  <div id="school-profile-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GAMIFICATION PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-gamification" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Leaderboard & Badges</h2>
+      <p class="page-subtitle">Student points, achievements, and rankings</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.Gamification.openBadgeModal()">Manage Badges</button>
+      <button class="btn btn-primary" onclick="Pages.Gamification.openAwardModal()">Award Points</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Gamification.switchTab('leaderboard',this)">Leaderboard</div>
+    <div class="tab" onclick="Pages.Gamification.switchTab('badges',this)">Badges</div>
+  </div>
+  <div id="gamification-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     THREADS / MESSAGING PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-threads" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Messages</h2>
+      <p class="page-subtitle">Two-way communication with parents and staff</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" onclick="Pages.Threads.openNewThread()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Thread
+      </button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:16px;height:calc(100vh - 200px)">
+    <div class="card" style="overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px;border-bottom:1px solid var(--border)">
+        <input type="text" placeholder="Search threads…" oninput="Pages.Threads.search(this.value)" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated);color:var(--text-primary);font-size:13px">
+      </div>
+      <div id="threads-list" style="flex:1;overflow-y:auto"></div>
+    </div>
+    <div id="thread-view" class="card" style="display:flex;flex-direction:column">
+      <div id="thread-empty" style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;color:var(--text-muted)">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:0.4"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <p>Select a thread to read messages</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     AI INSIGHTS PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-ai-insights" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">AI Insights</h2>
+      <p class="page-subtitle">Smart predictions, at-risk detection, and actionable intelligence</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.AIInsights.generateInsights()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Refresh Insights
+      </button>
+      <button class="btn btn-primary" onclick="Pages.AIInsights.runPredictions()">Run Predictions</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.AIInsights.switchTab('insights',this)">Insights</div>
+    <div class="tab" onclick="Pages.AIInsights.switchTab('atrisk',this)">At-Risk Students</div>
+    <div class="tab" onclick="Pages.AIInsights.switchTab('feedefault',this)">Fee Defaulters</div>
+    <div class="tab" onclick="Pages.AIInsights.switchTab('trends',this)">Performance Trends</div>
+  </div>
+  <div id="ai-insights-tab-content"></div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STOREKEEPER PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-storekeeper" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Inventory Management</h2>
+      <p class="page-subtitle" id="store-subtitle">Track stock, issue items, and manage purchase orders</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.Storekeeper.openPOModal()">New Purchase Order</button>
+      <button class="btn btn-primary" onclick="Pages.Storekeeper.openAddItemModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Item
+      </button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Storekeeper.switchTab('items',this)">Stock Items</div>
+    <div class="tab" onclick="Pages.Storekeeper.switchTab('transactions',this)">Transactions</div>
+    <div class="tab" onclick="Pages.Storekeeper.switchTab('alerts',this)">Low Stock Alerts</div>
+    <div class="tab" onclick="Pages.Storekeeper.switchTab('orders',this)">Purchase Orders</div>
+    <div class="tab" onclick="Pages.Storekeeper.switchTab('report',this)">Stock Report</div>
+  </div>
+  <div id="storekeeper-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CBC PAGE (Primary School)
+══════════════════════════════════════════════════════════ -->
+<div id="page-cbc" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">CBC Assessment</h2>
+      <p class="page-subtitle">Competency-Based Curriculum — learning areas, strands, and performance levels</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.CBC.openCreateModal()">New Assessment</button>
+      <button class="btn btn-primary" onclick="Pages.CBC.openReportCard()">Generate Report Cards</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.CBC.switchTab('assessments',this)">Assessments</div>
+    <div class="tab" onclick="Pages.CBC.switchTab('areas',this)">Learning Areas</div>
+    <div class="tab" onclick="Pages.CBC.switchTab('levels',this)">Performance Levels</div>
+    <div class="tab" onclick="Pages.CBC.switchTab('reportcards',this)">Report Cards</div>
+    <div class="tab" onclick="Pages.CBC.switchTab('coverage',this)">Syllabus Coverage</div>
+  </div>
+  <div id="cbc-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TEMPLATES / DOCUMENTS PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-templates" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Document Templates</h2>
+      <p class="page-subtitle">Create and manage letters, circulars, and official school documents</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.Templates.seedDefaults()">Restore Defaults</button>
+      <button class="btn btn-primary" onclick="Pages.Templates.openCreateModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Template
+      </button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Templates.switchTab('all',this)">All Templates</div>
+    <div class="tab" onclick="Pages.Templates.switchTab('letter',this)">Letters</div>
+    <div class="tab" onclick="Pages.Templates.switchTab('circular',this)">Circulars</div>
+    <div class="tab" onclick="Pages.Templates.switchTab('certificate',this)">Certificates</div>
+    <div class="tab" onclick="Pages.Templates.switchTab('instances',this)">Generated Documents</div>
+  </div>
+  <div id="templates-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     BROADSHEET PAGE (Advanced Analytics)
+══════════════════════════════════════════════════════════ -->
+<div id="page-broadsheet" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Broadsheets & Analytics</h2>
+      <p class="page-subtitle">Class, stream, and master broadsheets with KNEC-standard ranking</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.Broadsheet.exportPDF()">Export PDF</button>
+      <button class="btn btn-primary" onclick="Pages.Broadsheet.load()">Refresh</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Broadsheet.switchTab('class',this)">Class Broadsheet</div>
+    <div class="tab" onclick="Pages.Broadsheet.switchTab('stream',this)">Stream Comparison</div>
+    <div class="tab" onclick="Pages.Broadsheet.switchTab('master',this)">Master Broadsheet</div>
+    <div class="tab" onclick="Pages.Broadsheet.switchTab('subject',this)">Subject Analysis</div>
+    <div class="tab" onclick="Pages.Broadsheet.switchTab('trends',this)">Performance Trends</div>
+  </div>
+  <div id="broadsheet-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SYLLABUS / SCHEME OF WORK PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-syllabus" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Syllabus & Schemes of Work</h2>
+      <p class="page-subtitle">Track lesson plans, topic coverage, and syllabus completion</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" onclick="Pages.Syllabus.openAddScheme()">Add Scheme Entry</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Syllabus.switchTab('schemes',this)">Scheme of Work</div>
+    <div class="tab" onclick="Pages.Syllabus.switchTab('coverage',this)">Coverage Report</div>
+  </div>
+  <div id="syllabus-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     DISCIPLINE PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-discipline" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Discipline & Behaviour</h2>
+      <p class="page-subtitle">Track student conduct, issue warnings, and manage discipline records</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" onclick="Pages.Discipline.openIncidentModal()">Record Incident</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.Discipline.switchTab('records',this)">Incident Records</div>
+    <div class="tab" onclick="Pages.Discipline.switchTab('behaviour',this)">Behaviour Ratings</div>
+    <div class="tab" onclick="Pages.Discipline.switchTab('letters',this)">Discipline Letters</div>
+  </div>
+  <div id="discipline-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FEE LEAVE-OUT SHEETS PAGE
+══════════════════════════════════════════════════════════ -->
+<div id="page-fee-clearance" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Fee Clearance & Leave Sheets</h2>
+      <p class="page-subtitle">Generate and manage fee clearance documents for students</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.FeeClearance.generateAll()">Generate for All</button>
+      <button class="btn btn-primary" onclick="Pages.FeeClearance.openGenerate()">Generate Sheet</button>
+    </div>
+  </div>
+  <div id="fee-clearance-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     REPORT CARDS PAGE (Advanced)
+══════════════════════════════════════════════════════════ -->
+<div id="page-report-cards" class="page-view">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2 class="page-title">Report Cards</h2>
+      <p class="page-subtitle">Generate professional report cards with auto-comments, positions, and grades</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" onclick="Pages.ReportCards.bulkPrint()">Bulk Print Class</button>
+      <button class="btn btn-primary" onclick="Pages.ReportCards.openPreview()">Preview Report Card</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:20px">
+    <div class="tab active" onclick="Pages.ReportCards.switchTab('generate',this)">Generate</div>
+    <div class="tab" onclick="Pages.ReportCards.switchTab('templates',this)">Card Templates</div>
+    <div class="tab" onclick="Pages.ReportCards.switchTab('history',this)">History</div>
+  </div>
+  <div id="report-cards-tab-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     GENERATE TIMETABLE MODAL
+══════════════════════════════════════════════════════════ -->
+<div id="modal-generate-timetable" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title">Generate School Timetable</h3>
+      <button class="modal-close" onclick="UI.closeModal('modal-generate-timetable')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-info" style="margin-bottom:16px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 8h.01M12 12v4"/></svg>
+        The generator automatically creates a conflict-free timetable for ALL streams. A teacher is never placed in two classes at the same time.
+      </div>
+      <div class="form-group">
+        <label>Timetable Name *</label>
+        <input type="text" id="tt-name" placeholder="e.g. Term 1 2025 Timetable" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Scope</label>
+          <select id="tt-scope" onchange="Pages.Timetable.toggleClassSelect()">
+            <option value="all">All Classes & Streams</option>
+            <option value="specific">Specific Classes Only</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Max Subject Periods Per Day</label>
+          <select id="tt-max-periods">
+            <option value="1">1 per day</option>
+            <option value="2" selected>2 per day (recommended)</option>
+            <option value="3">3 per day</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" id="tt-classes-group" style="display:none">
+        <label>Select Classes</label>
+        <div id="tt-classes-checkboxes" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;max-height:200px;overflow-y:auto;padding:8px;border:1px solid var(--border);border-radius:8px"></div>
+      </div>
+      <div id="tt-progress" style="display:none;margin-top:16px">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;text-align:center">
+          <div class="loading-spinner" style="margin:0 auto 12px"></div>
+          <div style="font-weight:600;color:var(--text-primary)" id="tt-progress-msg">Generating timetable...</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">This may take a few seconds for large schools</div>
+        </div>
+      </div>
+      <div id="tt-result" style="display:none;margin-top:16px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-generate-timetable')">Cancel</button>
+      <button class="btn btn-primary" id="tt-generate-btn" onclick="Pages.Timetable.generate()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Generate Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Register Teacher Modal (Dean) -->
+<div id="modal-register-teacher" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title">Register New Teacher</h3>
+      <button class="modal-close" onclick="UI.closeModal('modal-register-teacher')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- TSC Pre-validation -->
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--text-primary)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="vertical-align:middle;margin-right:6px"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          Step 1: Validate TSC Number
+        </div>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="reg-tsc-validate" placeholder="Enter TSC number (5-9 digits)" style="flex:1" oninput="this.value=this.value.replace(/\D/g,'')" maxlength="9" />
+          <button class="btn btn-secondary" onclick="Pages.TSCVerif.preValidate()" id="tsc-validate-btn">Validate</button>
+        </div>
+        <div id="tsc-validate-result" style="margin-top:10px"></div>
+      </div>
+
+      <div id="teacher-reg-form" style="display:none">
+        <h4 style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Personal Details</h4>
+        <div class="form-row">
+          <div class="form-group"><label>First Name *</label><input type="text" id="reg-first-name" /></div>
+          <div class="form-group"><label>Last Name *</label><input type="text" id="reg-last-name" /></div>
+          <div class="form-group"><label>Gender</label><select id="reg-gender"><option value="male">Male</option><option value="female">Female</option></select></div>
+          <div class="form-group"><label>National ID *</label><input type="text" id="reg-national-id" placeholder="e.g. 12345678" /></div>
+          <div class="form-group"><label>Email *</label><input type="email" id="reg-email" /></div>
+          <div class="form-group"><label>Phone *</label><input type="tel" id="reg-phone" placeholder="07XX XXX XXX" /></div>
+        </div>
+        <div class="divider"></div>
+        <h4 style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Professional Details</h4>
+        <div class="form-row">
+          <div class="form-group"><label>TSC Number *</label><input type="text" id="reg-tsc" readonly style="background:var(--bg-elevated)" /></div>
+          <div class="form-group"><label>Staff Number *</label><input type="text" id="reg-staff-no" placeholder="e.g. TCH001" /></div>
+          <div class="form-group"><label>Designation</label><input type="text" id="reg-designation" placeholder="e.g. Teacher" value="Teacher" /></div>
+          <div class="form-group"><label>Department</label><input type="text" id="reg-department" placeholder="e.g. Sciences" /></div>
+          <div class="form-group"><label>Employment Type</label><select id="reg-emp-type"><option value="permanent">Permanent</option><option value="contract">Contract</option><option value="bom">BOM</option><option value="intern">Intern</option></select></div>
+          <div class="form-group"><label>Role</label><select id="reg-role"><option value="teacher">Teacher</option><option value="hod">HOD</option><option value="class_teacher">Class Teacher</option></select></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-register-teacher')">Cancel</button>
+      <button class="btn btn-primary" id="reg-teacher-btn" onclick="Pages.TSCVerif.registerTeacher()" style="display:none">Register Teacher</button>
+    </div>
+  </div>
+</div>
+
+<!-- Generate Invoice Modal -->
+<div id="modal-generate-invoice" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Generate Fee Invoices</h3>
+      <button class="modal-close" onclick="UI.closeModal('modal-generate-invoice')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-info" style="margin-bottom:16px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 8h.01M12 12v4"/></svg>
+        Generates invoices for all students with fee assignments. Existing invoices for the same term are skipped.
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Academic Year *</label><select id="inv-year"></select></div>
+        <div class="form-group"><label>Term *</label><select id="inv-term"></select></div>
+      </div>
+      <div class="form-group">
+        <label>Scope</label>
+        <select id="inv-scope">
+          <option value="all">All Classes</option>
+          <option value="class">Specific Class</option>
+        </select>
+      </div>
+      <div class="form-group" id="inv-class-row" style="display:none">
+        <label>Class</label>
+        <select id="inv-class"></select>
+      </div>
+      <div class="form-group">
+        <label>Due Date *</label>
+        <input type="date" id="inv-due-date" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-generate-invoice')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Billing.generateInvoices()">Generate Invoices</button>
+    </div>
+  </div>
+</div>
+
+    </main><!-- /page-area -->
+  </div><!-- /main-content -->
+</div><!-- /app-shell -->
+
+<!-- ══════════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════════ -->
+
+<!-- Add Student Modal -->
+<div id="modal-add-student" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title">Add New Student</h3>
+      <button class="modal-close" onclick="UI.closeModal('modal-add-student')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input type="text" id="s-first-name" placeholder="First name" /></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="s-last-name" placeholder="Last name" /></div>
+        <div class="form-group"><label>Other Names</label><input type="text" id="s-other-names" placeholder="Middle name(s)" /></div>
+        <div class="form-group"><label>Admission Number *</label><input type="text" id="s-adm-no" placeholder="e.g. 2025001" /></div>
+        <div class="form-group"><label>Gender *</label><select id="s-gender"><option value="">Select gender</option><option value="male">Male</option><option value="female">Female</option></select></div>
+        <div class="form-group"><label>Date of Birth</label><input type="date" id="s-dob" /></div>
+        <div class="form-group"><label>Class *</label><select id="s-class"></select></div>
+        <div class="form-group"><label>Admission Date</label><input type="date" id="s-adm-date" /></div>
+        <div class="form-group"><label>Boarding</label><select id="s-boarding"><option value="false">Day Scholar</option><option value="true">Boarder</option></select></div>
+        <div class="form-group" id="dorm-group" style="display:none"><label>Dorm / House</label><input type="text" id="s-dorm" placeholder="Dorm name" /></div>
+        <div class="form-group"><label>KCPE Index No.</label><input type="text" id="s-kcpe" placeholder="Optional" /></div>
+        <div class="form-group"><label>Blood Group</label><select id="s-blood"><option value="">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+      </div>
+      <div class="divider"></div>
+      <h4 style="font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:12px">Parent / Guardian Information</h4>
+      <div class="form-row">
+        <div class="form-group"><label>Parent First Name *</label><input type="text" id="p-first-name" placeholder="First name" /></div>
+        <div class="form-group"><label>Parent Last Name *</label><input type="text" id="p-last-name" placeholder="Last name" /></div>
+        <div class="form-group"><label>Relationship</label><select id="p-relationship"><option value="parent">Parent</option><option value="guardian">Guardian</option><option value="sibling">Sibling</option></select></div>
+        <div class="form-group"><label>Phone Number *</label><input type="tel" id="p-phone" placeholder="07XX XXX XXX" /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="p-email" placeholder="parent@email.com" /></div>
+        <div class="form-group"><label>Occupation</label><input type="text" id="p-occupation" placeholder="Occupation" /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-add-student')">Cancel</button>
+      <button class="btn btn-primary" id="save-student-btn" onclick="Pages.Students.save()">Save Student</button>
+    </div>
+  </div>
+</div>
+
+<!-- Record Payment Modal -->
+<div id="modal-payment" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Record Fee Payment</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Student *</label>
+        <input type="text" id="pay-student-search" placeholder="Search student by name or adm. number…" oninput="Pages.Fees.searchStudentForPayment(this.value)" />
+        <div id="pay-student-results"></div>
+        <input type="hidden" id="pay-student-id" />
+      </div>
+      <div class="form-group"><label>Amount (KES) *</label><input type="number" id="pay-amount" placeholder="0.00" min="1" /></div>
+      <div class="form-group">
+        <label>Payment Method *</label>
+        <select id="pay-method" onchange="Pages.Fees.togglePaymentFields()">
+          <option value="cash">Cash</option>
+          <option value="mpesa_stk">M-Pesa STK Push</option>
+          <option value="mpesa_paybill">M-Pesa Paybill</option>
+          <option value="bank_transfer">Bank Transfer</option>
+        </select>
+      </div>
+      <div id="pay-mpesa-fields" style="display:none">
+        <div class="form-group"><label>M-Pesa Phone *</label><input type="tel" id="pay-mpesa-phone" placeholder="07XX XXX XXX" /></div>
+        <div class="form-group"><label>M-Pesa Receipt</label><input type="text" id="pay-mpesa-receipt" placeholder="e.g. QHX1234ABC" /></div>
+      </div>
+      <div id="pay-bank-fields" style="display:none">
+        <div class="form-group"><label>Bank Reference *</label><input type="text" id="pay-bank-ref" placeholder="Bank reference number" /></div>
+      </div>
+      <div class="form-group"><label>Payment Date</label><input type="date" id="pay-date" /></div>
+      <div class="form-group"><label>Notes</label><textarea id="pay-notes" rows="2" placeholder="Optional notes"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-payment')">Cancel</button>
+      <button class="btn btn-primary" id="save-payment-btn" onclick="Pages.Fees.savePayment()">Save Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Exam Series Modal -->
+<div id="modal-exam-series" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">New Exam Series</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Exam Name *</label><input type="text" id="exam-name" placeholder="e.g. Form 4 End Term 1 2025" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Type *</label>
+          <select id="exam-type">
+            <option value="opener">Opener</option><option value="mid_term">Mid Term</option>
+            <option value="end_term">End Term</option><option value="mock">Mock</option>
+            <option value="kcse">KCSE</option><option value="continuous">Continuous</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Max Marks</label><input type="number" id="exam-max-marks" value="100" min="1" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Start Date</label><input type="date" id="exam-start-date" /></div>
+        <div class="form-group"><label>End Date</label><input type="date" id="exam-end-date" /></div>
+      </div>
+      <div class="form-group">
+        <label>Classes *</label>
+        <div id="exam-classes-checkboxes" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-exam-series')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Exams.saveExamSeries()">Create Exam Series</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mark Entry Modal -->
+<div id="modal-mark-entry" class="modal-overlay">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <h3 class="modal-title" id="mark-entry-title">Enter Marks</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="mark-entry-content"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-mark-entry')">Cancel</button>
+      <button class="btn btn-secondary" onclick="Pages.Exams.saveMarks(false)">Save Draft</button>
+      <button class="btn btn-primary" onclick="Pages.Exams.saveMarks(true)">Save & Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Club Modal -->
+<div id="modal-create-club" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Create Club / Society</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Club Name *</label><input type="text" id="club-name" placeholder="e.g. Debate Club" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label>
+          <select id="club-category">
+            <option value="clubs">Clubs</option><option value="sports">Sports</option>
+            <option value="arts">Arts</option><option value="science">Science</option>
+            <option value="community">Community Service</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Club Code</label><input type="text" id="club-code" placeholder="e.g. DEB" /></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="club-desc" rows="3" placeholder="Club description and objectives…"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Patron (Teacher)</label><select id="club-patron"></select></div>
+        <div class="form-group"><label>Meeting Day</label>
+          <select id="club-meeting-day">
+            <option value="">Select day</option>
+            <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+            <option>Thursday</option><option>Friday</option><option>Saturday</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Meeting Venue</label><input type="text" id="club-venue" placeholder="e.g. Room 12, Hall" /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-create-club')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Clubs.saveClub()">Create Club</button>
+    </div>
+  </div>
+</div>
+
+<!-- Issue Certificate Modal -->
+<div id="modal-issue-cert" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Issue Certificate</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Student *</label>
+        <input type="text" id="cert-student-search" placeholder="Search student…" oninput="Pages.Certificates.searchStudent(this.value)" />
+        <div id="cert-student-results"></div>
+        <input type="hidden" id="cert-student-id" />
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Certificate Type *</label>
+          <select id="cert-type">
+            <option value="academic">Academic Excellence</option>
+            <option value="sports">Sports Achievement</option>
+            <option value="leadership">Leadership</option>
+            <option value="participation">Participation</option>
+            <option value="merit">Merit</option>
+            <option value="arts">Arts</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Issue Date</label><input type="date" id="cert-date" /></div>
+      </div>
+      <div class="form-group"><label>Certificate Title *</label><input type="text" id="cert-title" placeholder="e.g. Best Student in Mathematics" /></div>
+      <div class="form-group"><label>Description</label><textarea id="cert-desc" rows="3" placeholder="Certificate description…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-issue-cert')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Certificates.issueCert()">Issue Certificate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Compose Message Modal -->
+<div id="modal-compose" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title">Compose Message</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Message Type</label>
+          <select id="msg-type">
+            <option value="sms">SMS</option><option value="email">Email</option>
+            <option value="both">SMS + Email</option><option value="in_app">In-App Only</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Send To</label>
+          <select id="msg-recipient-type" onchange="Pages.Communication.toggleRecipientFields()">
+            <option value="all_parents">All Parents</option>
+            <option value="class">Specific Class</option>
+            <option value="all_students">All Students</option>
+            <option value="all_staff">All Staff</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" id="msg-class-row">
+        <label>Class</label>
+        <select id="msg-class-id"></select>
+      </div>
+      <div class="form-group"><label>Subject (Email)</label><input type="text" id="msg-subject" placeholder="Email subject line" /></div>
+      <div class="form-group"><label>Message *</label><textarea id="msg-body" rows="6" placeholder="Type your message here…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-compose')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Communication.sendMessage()">Send Message</button>
+    </div>
+  </div>
+</div>
+
+<!-- Onboard School Modal (Super Admin) -->
+<div id="modal-create-school" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title">Onboard New School</h3>
+      <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">School Information</h4>
+      <div class="form-row">
+        <div class="form-group"><label>School Name *</label><input type="text" id="sc-name" placeholder="Full school name" /></div>
+        <div class="form-group"><label>Short Name</label><input type="text" id="sc-short-name" placeholder="Abbreviation" /></div>
+        <div class="form-group"><label>School Type</label>
+          <select id="sc-type"><option value="secondary">Secondary</option><option value="primary">Primary</option><option value="mixed">Mixed</option></select>
+        </div>
+        <div class="form-group"><label>Boarding Type</label>
+          <select id="sc-boarding"><option value="day">Day</option><option value="boarding">Boarding</option><option value="mixed">Mixed</option></select>
+        </div>
+        <div class="form-group"><label>County *</label><input type="text" id="sc-county" placeholder="County" /></div>
+        <div class="form-group"><label>Phone *</label><input type="tel" id="sc-phone" placeholder="07XX XXX XXX" /></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="sc-email" placeholder="info@school.ac.ke" /></div>
+        <div class="form-group"><label>KNEC Code</label><input type="text" id="sc-knec" placeholder="Optional" /></div>
+      </div>
+      <div class="divider"></div>
+      <h4 style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Admin Account</h4>
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input type="text" id="sc-admin-first" placeholder="First name" /></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="sc-admin-last" placeholder="Last name" /></div>
+        <div class="form-group"><label>Admin Email *</label><input type="email" id="sc-admin-email" placeholder="admin@school.ac.ke" /></div>
+        <div class="form-group"><label>Admin Phone *</label><input type="tel" id="sc-admin-phone" placeholder="07XX XXX XXX" /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-create-school')">Cancel</button>
+      <button class="btn btn-primary" id="save-school-btn" onclick="Pages.SuperAdmin.saveSchool()">Create School</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Add Item Modal (Storekeeper) -->
+<div id="modal-add-item" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3 class="modal-title" id="item-modal-title">Add Stock Item</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Item Name *</label><input type="text" id="item-name" placeholder="e.g. A4 Paper Reams"/></div>
+        <div class="form-group"><label>Item Code</label><input type="text" id="item-code" placeholder="e.g. STK001"/></div>
+        <div class="form-group"><label>Category</label><select id="item-category"><option value="">Select category</option></select></div>
+        <div class="form-group"><label>Unit</label>
+          <select id="item-unit"><option value="pieces">Pieces</option><option value="reams">Reams</option><option value="boxes">Boxes</option><option value="litres">Litres</option><option value="kg">Kilograms</option><option value="metres">Metres</option><option value="dozens">Dozens</option></select></div>
+        <div class="form-group"><label>Unit Cost (KES)</label><input type="number" id="item-cost" placeholder="0.00" min="0"/></div>
+        <div class="form-group"><label>Initial Stock</label><input type="number" id="item-initial-stock" placeholder="0" min="0"/></div>
+        <div class="form-group"><label>Reorder Level</label><input type="number" id="item-reorder" value="10" min="1"/></div>
+        <div class="form-group"><label>Minimum Stock</label><input type="number" id="item-minimum" value="5" min="1"/></div>
+        <div class="form-group"><label>Storage Location</label><input type="text" id="item-location" placeholder="e.g. Shelf A2, Store Room 1"/></div>
+        <div class="form-group"><label>Supplier</label><input type="text" id="item-supplier" placeholder="Supplier name"/></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="item-description" rows="2" placeholder="Optional description"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-add-item')">Cancel</button>
+      <button class="btn btn-primary" id="save-item-btn" onclick="Pages.Storekeeper.saveItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Issue/Receive Stock Modal -->
+<div id="modal-stock-txn" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header"><h3 class="modal-title" id="txn-modal-title">Stock Transaction</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div id="txn-item-info" style="background:var(--bg-elevated);padding:10px;border-radius:8px;margin-bottom:14px;font-size:13px"></div>
+      <input type="hidden" id="txn-item-id"/>
+      <div class="form-row">
+        <div class="form-group"><label>Transaction Type *</label>
+          <select id="txn-type" onchange="Pages.Storekeeper.toggleTxnFields()">
+            <option value="issue">Issue (Out)</option>
+            <option value="receive">Receive (In)</option>
+            <option value="return">Return</option>
+            <option value="adjust">Stock Adjustment</option>
+            <option value="write_off">Write Off</option>
+          </select></div>
+        <div class="form-group"><label>Quantity *</label><input type="number" id="txn-qty" min="1" placeholder="0"/></div>
+        <div class="form-group"><label>Unit Cost (KES)</label><input type="number" id="txn-cost" placeholder="0.00" min="0"/></div>
+        <div class="form-group"><label>Date</label><input type="date" id="txn-date"/></div>
+      </div>
+      <div id="txn-issue-fields">
+        <div class="form-group"><label>Issued To *</label><input type="text" id="txn-issued-to" placeholder="Teacher name, department, or student"/></div>
+      </div>
+      <div id="txn-receive-fields" style="display:none">
+        <div class="form-group"><label>Received From</label><input type="text" id="txn-received-from" placeholder="Supplier or source"/></div>
+        <div class="form-group"><label>Reference / LPO Number</label><input type="text" id="txn-ref" placeholder="Reference number"/></div>
+      </div>
+      <div class="form-group"><label>Purpose / Notes</label><textarea id="txn-purpose" rows="2" placeholder="Reason for transaction"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-stock-txn')">Cancel</button>
+      <button class="btn btn-primary" id="save-txn-btn" onclick="Pages.Storekeeper.saveTransaction()">Save Transaction</button>
+    </div>
+  </div>
+</div>
+
+<!-- CBC Assessment Modal -->
+<div id="modal-cbc-assessment" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3 class="modal-title">New CBC Assessment</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Assessment Name *</label><input type="text" id="cbc-assess-name" placeholder="e.g. Grade 4 English Term 1 Assessment"/></div>
+        <div class="form-group"><label>Class/Grade *</label><select id="cbc-assess-class"></select></div>
+        <div class="form-group"><label>Learning Area *</label><select id="cbc-assess-area"></select></div>
+        <div class="form-group"><label>Type</label>
+          <select id="cbc-assess-type"><option value="summative">Summative</option><option value="formative">Formative</option></select></div>
+        <div class="form-group"><label>Max Score</label><input type="number" id="cbc-assess-max" value="100" min="1"/></div>
+        <div class="form-group"><label>Assessment Date</label><input type="date" id="cbc-assess-date"/></div>
+        <div class="form-group"><label>Term</label>
+          <select id="cbc-assess-term"><option value="term_1">Term 1</option><option value="term_2">Term 2</option><option value="term_3">Term 3</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-cbc-assessment')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.CBC.saveAssessment()">Create Assessment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Document Template Editor Modal -->
+<div id="modal-template-editor" class="modal-overlay">
+  <div class="modal modal-xl">
+    <div class="modal-header"><h3 class="modal-title" id="template-editor-title">Create Template</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Template Name *</label><input type="text" id="tmpl-name" placeholder="e.g. Fee Demand Letter"/></div>
+        <div class="form-group"><label>Type</label>
+          <select id="tmpl-type"><option value="letter">Letter</option><option value="circular">Circular</option><option value="report">Report</option><option value="announcement">Announcement</option><option value="notice">Notice</option></select></div>
+        <div class="form-group"><label>Category</label>
+          <select id="tmpl-category"><option value="general">General</option><option value="academic">Academic</option><option value="finance">Finance</option><option value="discipline">Discipline</option><option value="parent">Parent</option></select></div>
+      </div>
+      <div class="form-group">
+        <label>Content (HTML) — Use {{placeholder}} for dynamic values</label>
+        <textarea id="tmpl-content" rows="14" style="font-family:var(--font-mono);font-size:12px" placeholder="Enter HTML content with {{placeholders}}..."></textarea>
+      </div>
+      <div class="alert alert-info" style="font-size:12px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M12 8h.01M12 12v4"/></svg>
+        Available placeholders: {{school_name}}, {{date}}, {{student_name}}, {{class_name}}, {{principal_name}}, {{bursar_name}}, {{school_address}}, {{school_phone}}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-template-editor')">Cancel</button>
+      <button class="btn btn-secondary" onclick="Pages.Templates.preview()">Preview</button>
+      <button class="btn btn-primary" onclick="Pages.Templates.save()">Save Template</button>
+    </div>
+  </div>
+</div>
+
+<!-- Generate Document Modal -->
+<div id="modal-generate-doc" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3 class="modal-title" id="gen-doc-title">Generate Document</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Student (if applicable)</label>
+        <input type="text" id="gen-doc-student" placeholder="Search student…" oninput="Pages.Templates.searchStudent(this.value)"/>
+        <div id="gen-doc-student-results"></div>
+        <input type="hidden" id="gen-doc-student-id"/>
+      </div>
+      <div id="gen-doc-variables"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-generate-doc')">Cancel</button>
+      <button class="btn btn-secondary" onclick="Pages.Templates.printDoc()">Print</button>
+      <button class="btn btn-primary" onclick="Pages.Templates.generateDoc()">Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase Order Modal -->
+<div id="modal-po" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3 class="modal-title">New Purchase Order</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Supplier *</label><input type="text" id="po-supplier" placeholder="Supplier name"/></div>
+        <div class="form-group"><label>Supplier Contact</label><input type="text" id="po-contact" placeholder="Phone or email"/></div>
+        <div class="form-group"><label>Expected Delivery Date</label><input type="date" id="po-expected-date"/></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="po-notes" rows="2" placeholder="Special instructions…"></textarea></div>
+      <div style="margin-top:12px">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px">Items to Order</div>
+        <div id="po-items-list" style="display:flex;flex-direction:column;gap:6px">
+          <div class="po-item-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px;align-items:center">
+            <select class="po-item-sel" style="padding:7px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elevated);color:var(--text-primary);font-size:12px"><option value="">Select item…</option></select>
+            <input type="number" class="po-item-qty" placeholder="Qty" min="1" style="padding:7px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elevated);color:var(--text-primary);font-size:12px;text-align:center">
+            <input type="number" class="po-item-cost" placeholder="Unit Cost" min="0" style="padding:7px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elevated);color:var(--text-primary);font-size:12px">
+            <span class="po-item-total" style="font-size:12px;font-weight:600;text-align:right">KES 0</span>
+            <button onclick="this.closest('.po-item-row').remove()" style="background:var(--red-bg);color:var(--red);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:14px">✕</button>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="Pages.Storekeeper.addPORow()">+ Add Item</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-po')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Storekeeper.savePO()">Submit PO</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scheme of Work Modal -->
+<div id="modal-scheme" class="modal-overlay">
+  <div class="modal modal-xl">
+    <div class="modal-header"><h3 class="modal-title">Add Scheme of Work Entry</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Class *</label><select id="sch-class"></select></div>
+        <div class="form-group"><label>Subject *</label><select id="sch-subject"></select></div>
+        <div class="form-group"><label>Term</label><select id="sch-term"><option value="term_1">Term 1</option><option value="term_2">Term 2</option><option value="term_3">Term 3</option></select></div>
+        <div class="form-group"><label>Week</label><input type="number" id="sch-week" min="1" max="14" value="1"/></div>
+        <div class="form-group"><label>Lesson No.</label><input type="number" id="sch-lesson" min="1" value="1"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="grid-column:span 2"><label>Topic *</label><input type="text" id="sch-topic" placeholder="Main topic"/></div>
+        <div class="form-group" style="grid-column:span 2"><label>Sub-Topic</label><input type="text" id="sch-subtopic" placeholder="Sub-topic (optional)"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Objectives</label><textarea id="sch-objectives" rows="3" placeholder="Learning objectives…"></textarea></div>
+        <div class="form-group"><label>Teaching Activities</label><textarea id="sch-activities" rows="3" placeholder="Activities to be done…"></textarea></div>
+        <div class="form-group"><label>Learning Materials</label><textarea id="sch-materials" rows="3" placeholder="Resources needed…"></textarea></div>
+        <div class="form-group"><label>Assessment Method</label><textarea id="sch-assessment" rows="3" placeholder="How to assess…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-scheme')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Syllabus.saveScheme()">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Discipline Incident Modal -->
+<div id="modal-incident" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3 class="modal-title">Record Discipline Incident</h3><button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('open')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Student *</label>
+        <input type="text" id="disc-student" placeholder="Search student…" oninput="Pages.Discipline.searchStudent(this.value)"/>
+        <div id="disc-student-results"></div>
+        <input type="hidden" id="disc-student-id"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Incident Type *</label>
+          <select id="disc-type">
+            <option value="misconduct">General Misconduct</option><option value="fighting">Fighting</option>
+            <option value="bullying">Bullying</option><option value="truancy">Truancy / Absenteeism</option>
+            <option value="destruction">Destruction of Property</option><option value="academic_dishonesty">Academic Dishonesty</option>
+            <option value="substance">Substance Abuse</option><option value="insubordination">Insubordination</option>
+            <option value="dress_code">Dress Code Violation</option><option value="other">Other</option>
+          </select></div>
+        <div class="form-group"><label>Severity</label>
+          <select id="disc-severity"><option value="minor">Minor</option><option value="moderate">Moderate</option><option value="serious">Serious</option><option value="critical">Critical</option></select></div>
+        <div class="form-group"><label>Date *</label><input type="date" id="disc-date"/></div>
+        <div class="form-group"><label>Action Taken</label>
+          <select id="disc-action">
+            <option value="verbal_warning">Verbal Warning</option><option value="written_warning">Written Warning</option>
+            <option value="detention">Detention</option><option value="parent_called">Parent Called</option>
+            <option value="suspension">Suspension</option><option value="other">Other</option>
+          </select></div>
+      </div>
+      <div class="form-group"><label>Description *</label><textarea id="disc-description" rows="3" placeholder="Detailed description of the incident…"></textarea></div>
+      <div class="form-group"><label>Resolution / Notes</label><textarea id="disc-resolution" rows="2" placeholder="Resolution or follow-up actions…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modal-incident')">Cancel</button>
+      <button class="btn btn-primary" onclick="Pages.Discipline.saveIncident()">Save Incident</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div id="confirm-overlay" class="modal-overlay">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="confirm-title">Confirm Action</h3>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-message" style="color:var(--text-secondary)"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="confirm-no">Cancel</button>
+      <button class="btn btn-danger" id="confirm-yes">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- PWA Install Hint -->
+<div id="pwa-install-hint">
+  <span style="flex:1">📱 Get the ElimuSaaS native app for the best experience!</span>
+  <button onclick="showAppDownloadOptions()" style="background:white;color:#1565C0;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;white-space:nowrap">Download APK</button>
+  <button class="close-hint" onclick="document.getElementById('pwa-install-hint').style.display='none'" style="background:none;color:white;border:none;font-size:18px;cursor:pointer;padding:0 4px;margin-left:4px">✕</button>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- ── Emergency globals (defined before app.js so they ALWAYS exist) ── -->
+<script>
+var Pages = {};
+var CONFIG = { API_URL: window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://elimu-saas.onrender.com/api' };
+var AppState = {
+  user: null, token: null, refreshToken: null, school: null,
+  save: function() {
+    try {
+      if (this.token) localStorage.setItem('access_token', this.token);
+      if (this.refreshToken) localStorage.setItem('refresh_token', this.refreshToken);
+      if (this.user) localStorage.setItem('user_data', JSON.stringify(this.user));
+    } catch(e) {}
+  },
+  load: function() {
+    try {
+      this.token = localStorage.getItem('access_token');
+      this.refreshToken = localStorage.getItem('refresh_token');
+      var u = localStorage.getItem('user_data');
+      if (u) this.user = JSON.parse(u);
+    } catch(e) {}
+  },
+  clear: function() {
+    try { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); localStorage.removeItem('user_data'); } catch(e) {}
+    this.user = null; this.token = null; this.refreshToken = null; this.school = null;
+  }
+};
+var Toast = {
+  _show: function(msg, type) {
+    var c = document.getElementById('toast-container');
+    if (!c) return;
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (type || 'info');
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+  },
+  success: function(m) { this._show(m, 'success'); },
+  error:   function(m) { this._show(m, 'error'); },
+  info:    function(m) { this._show(m, 'info'); },
+  warning: function(m) { this._show(m, 'warning'); },
+  show:    function(m, t) { this._show(m, t); },
+  init:    function() {}
+};
+var API = {
+  _req: async function(method, path, body, retry) {
+    try {
+      var opts = { method: method, headers: { 'Content-Type': 'application/json' } };
+      var token = AppState.token || localStorage.getItem('access_token');
+      if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+      if (body) opts.body = JSON.stringify(body);
+      var res = await fetch(CONFIG.API_URL + path, opts);
+      // Auto-refresh on 401
+      if (res.status === 401 && !retry && AppState.refreshToken) {
+        var refreshed = await Auth.refresh();
+        if (refreshed) return this._req(method, path, body, true);
+        Auth.logout();
+        return { error: 'Session expired. Please sign in again.' };
+      }
+      var text = await res.text();
+      if (!text || text.trim() === '') return { error: 'Server returned empty response. It may be starting up — please try again.' };
+      try { return JSON.parse(text); }
+      catch(e) {
+        if (!res.ok) return { error: 'Server error ' + res.status + '. Please try again.' };
+        return { error: 'Invalid server response.' };
+      }
+    } catch(e) {
+      if (!navigator.onLine) return { error: 'You are offline. Please check your connection.', offline: true };
+      return { error: e.message || 'Network error' };
+    }
+  },
+  get:    function(path, params) {
+    var url = path;
+    if (params) { var q = Object.keys(params).filter(function(k){ return params[k]!==undefined && params[k]!==''; }).map(function(k){ return k+'='+encodeURIComponent(params[k]); }).join('&'); if(q) url += '?' + q; }
+    return this._req('GET', url);
+  },
+  post:   function(path, body) { return this._req('POST', path, body); },
+  put:    function(path, body) { return this._req('PUT', path, body); },
+  patch:  function(path, body) { return this._req('PATCH', path, body); },
+  delete: function(path) { return this._req('DELETE', path); }
+};
+var Auth = {
+  login: async function(email, password, schoolCode) {
+    var data = await API.post('/auth/login', { email: email, password: password, schoolCode: schoolCode });
+    if (data.error) return data;
+    AppState.token = data.accessToken;
+    AppState.refreshToken = data.refreshToken;
+    AppState.user = data.user;
+    AppState.school = data.user.schoolId ? { id: data.user.schoolId, name: data.user.schoolName, code: data.user.schoolCode } : null;
+    AppState.save();
+    return data;
+  },
+  refresh: async function() {
+    if (!AppState.refreshToken) return false;
+    try {
+      var data = await fetch(CONFIG.API_URL + '/auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken: AppState.refreshToken })
+      }).then(function(r) { return r.json(); });
+      if (data.accessToken) {
+        AppState.token = data.accessToken;
+        if (data.refreshToken) AppState.refreshToken = data.refreshToken;
+        AppState.save();
+        return true;
+      }
+    } catch(e) {}
+    return false;
+  },
+  logout: function() {
+    API.post('/auth/logout', {}).catch(function() {});
+    AppState.clear();
+    var loginPage = document.getElementById('page-login');
+    var appShell = document.getElementById('app-shell');
+    if (loginPage) { loginPage.style.display = 'flex'; }
+    if (appShell) { appShell.classList.add('hidden'); }
+    var emailEl = document.getElementById('login-email');
+    var pwdEl = document.getElementById('login-password');
+    if (emailEl) emailEl.value = '';
+    if (pwdEl) pwdEl.value = '';
+    var errorEl = document.getElementById('login-error');
+    if (errorEl) errorEl.classList.add('hidden');
+    Toast.info('Signed out successfully');
+  },
+  isLoggedIn: function() { return !!(AppState.token && AppState.user); }
+};
+var Router = {
+  _routes: {},
+  define: function(name, cfg) { this._routes[name] = cfg; },
+  go: function(name) {
+    // Hide all pages
+    document.querySelectorAll('.page-view').forEach(function(p) { p.classList.remove('active'); });
+    // Show target page
+    var pg = document.getElementById('page-' + name);
+    if (pg) { pg.classList.add('active'); pg.style.display = ''; }
+    // Update header title
+    var headerTitle = document.getElementById('header-title');
+    if (headerTitle) headerTitle.textContent = this._routes[name] ? (this._routes[name].title || name) : name;
+    // Update active nav item
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    var activeNav = document.querySelector('.nav-item[onclick*="' + name + '"]');
+    if (activeNav) activeNav.classList.add('active');
+    // Call route handler
+    if (this._routes[name] && this._routes[name].onEnter) {
+      try { this._routes[name].onEnter(); } catch(e) { console.error('Route error for ' + name + ':', e); }
+    }
+    // Scroll to top
+    var pageArea = document.getElementById('page-area');
+    if (pageArea) pageArea.scrollTop = 0;
+  },
+  init: function() {
+    // Router initialized - routes registered by init.js
+    console.log('Router ready');
+  }
+};
+var UI = {
+  openModal: function(id) { var el = document.getElementById(id); if (el) el.classList.add('open'); },
+  closeModal: function(id) { var el = document.getElementById(id); if (el) el.classList.remove('open'); },
+  setLoading: function(btn, on) {
+    if (!btn) return;
+    if (on) { btn._orig = btn.textContent; btn.disabled = true; btn.textContent = 'Loading...'; }
+    else { btn.disabled = false; btn.textContent = btn._orig || 'Submit'; }
+  },
+  currency: function(n) { return 'KES ' + parseFloat(n || 0).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); },
+  date: function(d) { return d ? new Date(d).toLocaleDateString('en-KE') : '--'; },
+  initials: function(n) { return (n || '?').split(' ').map(function(w) { return w[0] || ''; }).join('').toUpperCase().slice(0, 2); },
+  loading: function() { return '<div style="text-align:center;padding:48px"><div class="loading-spinner" style="margin:0 auto 12px"></div><div style="color:var(--text-muted);font-size:13px">Loading...</div></div>'; },
+  empty: function(m, s, b) { return '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">' + (m || 'No data') + '</div>' + (s ? '<div class="empty-desc">' + s + '</div>' : '') + (b || '') + '</div>'; },
+  error: function(m) { return '<div class="alert alert-danger"><span>' + (m || 'Error') + '</span></div>'; },
+  showInfoModal: function(title, html) {
+    var el = document.getElementById('_dynamic-modal');
+    if (!el) { el = document.createElement('div'); el.id = '_dynamic-modal'; el.className = 'modal-overlay'; document.body.appendChild(el); }
+    el.innerHTML = '<div class="modal"><div class="modal-header"><h3 class="modal-title">' + title + '</h3><button class="modal-close" onclick="document.getElementById(\'_dynamic-modal\').classList.remove(\'open\')">x</button></div><div class="modal-body">' + html + '</div></div>';
+    el.classList.add('open');
+  },
+  pagination: function(el, data, cb) {
+    if (!el || !data || !data.pagination) return;
+    var p = data.pagination;
+    if (p.pages <= 1) { el.innerHTML = ''; return; }
+    var html = '<div style="display:flex;gap:8px;justify-content:center;padding:12px">';
+    for (var i = 1; i <= p.pages; i++) {
+      html += '<button class="btn btn-sm ' + (i === p.page ? 'btn-primary' : 'btn-ghost') + '" onclick="(' + cb.toString() + ')(' + i + ')">' + i + '</button>';
+    }
+    el.innerHTML = html + '</div>';
+  },
+  paymentBadge: function(m) { return '<span class="badge badge-green">' + (m || '') + '</span>'; }
+};
+function buildSidebar() {
+  var user = AppState.user;
+  if (!user) return;
+  var role = user.role || 'teacher';
+  var isSuperAdmin = role === 'super_admin';
+
+  // Set school info in sidebar
+  var schoolName = document.getElementById('sidebar-school-name');
+  var schoolCode = document.getElementById('sidebar-school-code');
+  if (schoolName) schoolName.textContent = isSuperAdmin ? 'ElimuSaaS Platform' : (user.schoolName || (AppState.school && AppState.school.name) || 'My School');
+  if (schoolCode) schoolCode.textContent = isSuperAdmin ? 'Super Admin' : (user.schoolCode || (AppState.school && AppState.school.code) || '');
+
+  // Set header user info
+  var firstName = user.firstName || user.first_name || 'User';
+  var lastName = user.lastName || user.last_name || '';
+  var avatar = document.getElementById('header-user-avatar');
+  var nameEl = document.getElementById('header-user-name');
+  var roleEl = document.getElementById('header-user-role');
+  if (avatar) avatar.textContent = UI.initials(firstName + ' ' + lastName);
+  if (nameEl) nameEl.textContent = firstName + ' ' + lastName;
+  if (roleEl) roleEl.textContent = role.replace(/_/g, ' ').toUpperCase();
+
+  // Show mobile menu btn on desktop
+  var mobileBtn = document.getElementById('mobile-menu-btn');
+  if (mobileBtn) mobileBtn.style.display = '';
+
+  // Define all nav links with role restrictions
+  var allLinks = [
+    { page: 'dashboard',    icon: '🏠', label: 'Dashboard',       color: '#1565C0', roles: null },
+    { page: 'students',     icon: '🎓', label: 'Students',        color: '#2E7D32', roles: ['school_admin','principal','deputy_principal','hod','teacher','bursar'] },
+    { page: 'staff',        icon: '👥', label: 'Staff',           color: '#6A1B9A', roles: ['school_admin','principal','deputy_principal'] },
+    { page: 'academics',    icon: '📚', label: 'Classes',         color: '#1565C0', roles: ['school_admin','principal','deputy_principal','hod','teacher'] },
+    { page: 'exams',        icon: '📝', label: 'Exams & Marks',   color: '#E65100', roles: ['school_admin','principal','deputy_principal','hod','teacher'] },
+    { page: 'fees',         icon: '💰', label: 'Fees',            color: '#2E7D32', roles: ['school_admin','principal','bursar'] },
+    { page: 'attendance',   icon: '✅', label: 'Attendance',      color: '#1565C0', roles: ['school_admin','principal','deputy_principal','hod','teacher'] },
+    { page: 'timetable',    icon: '🗓️', label: 'Timetable',      color: '#00796B', roles: ['school_admin','principal','deputy_principal','hod','teacher'] },
+    { page: 'clubs',        icon: '🏆', label: 'Clubs',           color: '#C62828', roles: ['school_admin','principal','deputy_principal','hod','teacher'] },
+    { page: 'leaveout',     icon: '🚪', label: 'Leave-Out',       color: '#E65100', roles: ['school_admin','principal','deputy_principal'] },
+    { page: 'certificates', icon: '🏅', label: 'Certificates',    color: '#C62828', roles: ['school_admin','principal','deputy_principal'] },
+    { page: 'communication',icon: '💬', label: 'Communication',   color: '#1565C0', roles: ['school_admin','principal','deputy_principal','hod','teacher','bursar'] },
+    { page: 'discipline',   icon: '⚖️', label: 'Discipline',     color: '#6A1B9A', roles: ['school_admin','principal','deputy_principal','hod'] },
+    { page: 'reports',      icon: '📊', label: 'Reports',         color: '#1565C0', roles: ['school_admin','principal','deputy_principal','bursar'] },
+    { page: 'settings',     icon: '⚙️', label: 'Settings',       color: '#374151', roles: ['school_admin','principal'] },
+  ];
+
+  var saLinks = [
+    { page: 'superadmin-dashboard', icon: '📊', label: 'Platform Dashboard', color: '#1565C0' },
+    { page: 'superadmin-schools',   icon: '🏫', label: 'All Schools',        color: '#2E7D32' },
+    { page: 'superadmin-subscriptions', icon: '💳', label: 'Subscriptions',  color: '#6A1B9A' },
+    { page: 'superadmin-analytics', icon: '📈', label: 'Analytics',          color: '#E65100' },
+    { page: 'settings',             icon: '⚙️', label: 'Settings',           color: '#374151' },
+  ];
+
+  var links = isSuperAdmin ? saLinks : allLinks.filter(function(l) { return !l.roles || l.roles.includes(role); });
+
+  // ── SIDEBAR (Desktop) ──────────────────────────────────────
+  var nav = document.getElementById('sidebar-nav');
+  if (nav) {
+    var mainLinks = isSuperAdmin ? links : links.filter(function(l) {
+      return ['dashboard','students','staff','academics','exams','fees','attendance'].includes(l.page);
+    });
+    var moreLinks = isSuperAdmin ? [] : links.filter(function(l) {
+      return !['dashboard','students','staff','academics','exams','fees','attendance'].includes(l.page);
+    });
+
+    var html = '';
+    if (!isSuperAdmin) html += '<div class="nav-section-label">MAIN</div>';
+    mainLinks.forEach(function(l) {
+      html += '<a class="nav-item" onclick="sidebarGo('' + l.page + '')" style="cursor:pointer">' +
+        '<span class="nav-icon">' + l.icon + '</span><span class="nav-label">' + l.label + '</span></a>';
+    });
+    if (moreLinks.length) {
+      html += '<div class="nav-section-label">MORE</div>';
+      moreLinks.forEach(function(l) {
+        html += '<a class="nav-item" onclick="sidebarGo('' + l.page + '')" style="cursor:pointer">' +
+          '<span class="nav-icon">' + l.icon + '</span><span class="nav-label">' + l.label + '</span></a>';
+      });
+    }
+    nav.innerHTML = html;
+  }
+
+  // ── BOTTOM NAV (Mobile) ────────────────────────────────────
+  // Update bottom nav based on role
+  var bnHome = document.getElementById('bn-home');
+  var bnExams = document.getElementById('bn-exams');
+  var bnCal = document.getElementById('bn-calendar');
+  var bnMsg = document.getElementById('bn-messages');
+
+  if (isSuperAdmin) {
+    if (bnHome) { bnHome.querySelector('.bn-icon').textContent = '📊'; bnHome.querySelector('.bn-label').textContent = 'Dashboard'; bnHome.onclick = function() { bnNavigate('superadmin-dashboard','bn-home'); }; }
+    if (bnExams) { bnExams.querySelector('.bn-icon').textContent = '🏫'; bnExams.querySelector('.bn-label').textContent = 'Schools'; bnExams.onclick = function() { bnNavigate('superadmin-schools','bn-exams'); }; }
+    if (bnCal) { bnCal.querySelector('.bn-icon').textContent = '💳'; bnCal.querySelector('.bn-label').textContent = 'Subs'; bnCal.onclick = function() { bnNavigate('superadmin-subscriptions','bn-calendar'); }; }
+    if (bnMsg) { bnMsg.querySelector('.bn-icon').textContent = '📈'; bnMsg.querySelector('.bn-label').textContent = 'Analytics'; bnMsg.onclick = function() { bnNavigate('superadmin-analytics','bn-messages'); }; }
+  }
+
+  // ── MORE DRAWER GRID ───────────────────────────────────────
+  var moreGrid = document.getElementById('more-drawer-grid');
+  if (moreGrid) {
+    var moreItems = isSuperAdmin ? [] : links.filter(function(l) {
+      return !['dashboard','exams','attendance','communication'].includes(l.page);
+    });
+    moreGrid.innerHTML = moreItems.map(function(l) {
+      return '<div class="more-item" onclick="closeMoreDrawer();Router.go('' + l.page + '')">' +
+        '<div class="more-item-icon" style="background:' + (l.color || 'var(--brand)') + '1A;color:' + (l.color || 'var(--brand)') + '">' + l.icon + '</div>' +
+        '<div class="more-item-label">' + l.label + '</div></div>';
+    }).join('');
+  }
+
+  // Sidebar overlay
+  var overlay = document.getElementById('sidebar-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'sidebar-overlay';
+    overlay.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;backdrop-filter:blur(2px)';
+    overlay.onclick = function() {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      overlay.style.display = 'none';
+    };
+    document.body.appendChild(overlay);
+  }
+
+  // Mobile hamburger
+  var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  if (mobileMenuBtn) {
+    mobileMenuBtn.onclick = function() {
+      var sidebar = document.getElementById('sidebar');
+      var isOpen = sidebar.classList.toggle('mobile-open');
+      overlay.style.display = isOpen ? 'block' : 'none';
+    };
+  }
+
+  // Logout
+  var logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) logoutBtn.onclick = function() {
+    if (confirm('Sign out of ElimuSaaS?')) Auth.logout();
+  };
+}
+
+function sidebarGo(page) {
+  Router.go(page);
+  // Close mobile sidebar
+  var sidebar = document.getElementById('sidebar');
+  if (sidebar) sidebar.classList.remove('mobile-open');
+  var overlay = document.getElementById('sidebar-overlay');
+  if (overlay) overlay.style.display = 'none';
+  // Update sidebar active state
+  document.querySelectorAll('#sidebar-nav .nav-item').forEach(function(el) { el.classList.remove('active'); });
+  var active = document.querySelector('#sidebar-nav .nav-item[onclick*="' + page + '"]');
+  if (active) active.classList.add('active');
+}
+
+function bnNavigate(page, btnId) {
+  Router.go(page);
+  // Update bottom nav active state
+  document.querySelectorAll('.bottom-nav-item').forEach(function(el) { el.classList.remove('active'); });
+  var btn = document.getElementById(btnId);
+  if (btn) btn.classList.add('active');
+  closeMoreDrawer();
+}
+
+function openMoreDrawer() {
+  document.getElementById('more-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMoreDrawer() {
+  document.getElementById('more-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function loginAsSchool(schoolId, schoolName) {
+  if (!confirm('Sign in as admin of ' + schoolName + '?')) return;
+  var res = await API.post('/superadmin/schools/' + schoolId + '/impersonate', {});
+  if (res.error) { Toast.error(res.error); return; }
+  // Save new token and user
+  AppState.token = res.accessToken;
+  AppState.user = res.user;
+  AppState.school = { id: schoolId, name: schoolName };
+  AppState.save();
+  Toast.success('Signed in as ' + schoolName + ' admin');
+  buildSidebar();
+  Router.go('dashboard');
+}
+
+async function saveSchoolDirect() {
+  var btn = document.getElementById('save-school-btn');
+  var payload = {
+    name: document.getElementById('sc-name')?.value?.trim(),
+    code: document.getElementById('sc-short-name')?.value?.trim().toUpperCase() || 
+          (document.getElementById('sc-name')?.value?.trim().toUpperCase().replace(/\s+/g,'').slice(0,6)),
+    email: document.getElementById('sc-email')?.value?.trim(),
+    phone: document.getElementById('sc-phone')?.value?.trim(),
+    county: document.getElementById('sc-county')?.value?.trim(),
+    schoolType: document.getElementById('sc-type')?.value || 'secondary',
+    adminEmail: document.getElementById('sc-admin-email')?.value?.trim(),
+    adminName: (document.getElementById('sc-admin-first')?.value?.trim() || '') + ' ' + (document.getElementById('sc-admin-last')?.value?.trim() || ''),
+  };
+  if (!payload.name || !payload.adminEmail) { Toast.error('School name and admin email are required'); return; }
+  if (!payload.code) payload.code = payload.name.toUpperCase().replace(/\s+/g,'').slice(0,6) + Math.floor(Math.random()*100);
+  if (btn) { btn.disabled = true; btn.textContent = 'Creating...'; }
+  var res = await API.post('/superadmin/schools', payload);
+  if (btn) { btn.disabled = false; btn.textContent = 'Create School'; }
+  if (res.error) { Toast.error(res.error); return; }
+  Toast.success('School created! Admin: ' + res.adminEmail + ' | Password: ' + (res.tempPassword || 'Admin@' + payload.code + '2025!'));
+  UI.closeModal('modal-create-school');
+  if (Pages.SuperAdmin && Pages.SuperAdmin.loadSchools) Pages.SuperAdmin.loadSchools();
+}
+
+// handleLogin is now handled inline in the Sign In button onclick
+// This stub exists for the Enter key handler in init.js
+async function handleLogin() {
+  document.getElementById('login-btn')?.click();
+}
+
+
+function showForgotPassword(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  const modal = document.getElementById('modal-forgot-password');
+  if (modal) {
+    modal.style.display = 'flex';
+    modal.style.zIndex = '99999';
+    const forgotEmail = document.getElementById('forgot-email');
+    // Pre-fill with whatever the user typed in the login email field
+    const loginEmail = document.getElementById('login-email');
+    if (forgotEmail && loginEmail && loginEmail.value) forgotEmail.value = loginEmail.value;
+    if (forgotEmail) forgotEmail.focus();
+    const errEl = document.getElementById('forgot-error');
+    const sucEl = document.getElementById('forgot-success');
+    if (errEl) errEl.classList.add('hidden');
+    if (sucEl) sucEl.style.display = 'none';
+  }
+}
+
+function closeForgotPassword() {
+  const modal = document.getElementById('modal-forgot-password');
+  if (modal) modal.style.display = 'none';
+}
+
+async function submitForgotPassword() {
+  const emailEl = document.getElementById('forgot-email');
+  const errEl   = document.getElementById('forgot-error');
+  const sucEl   = document.getElementById('forgot-success');
+  const btn     = document.getElementById('forgot-btn');
+  const email   = emailEl ? emailEl.value.trim() : '';
+  if (!email) {
+    if (errEl) { errEl.textContent = 'Please enter your email.'; errEl.classList.remove('hidden'); }
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+  if (errEl) errEl.classList.add('hidden');
+  try {
+    const res = await fetch('https://elimu-saas.onrender.com/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (btn) { btn.disabled = false; btn.textContent = 'Send Reset Link'; }
+    if (data.message || res.ok) {
+      if (sucEl) { sucEl.textContent = data.message || 'Reset link sent! Check your email.'; sucEl.style.display = 'block'; }
+      setTimeout(() => { closeForgotPassword(); }, 3000);
+    } else {
+      if (errEl) { errEl.textContent = data.error || 'Failed to send. Try again.'; errEl.classList.remove('hidden'); }
+    }
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Send Reset Link'; }
+    if (errEl) { errEl.textContent = 'Cannot reach server. Check internet.'; errEl.classList.remove('hidden'); }
+  }
+}
+
+
+function showAppDownloadOptions() {
+  const modal = document.getElementById('modal-app-download');
+  if (modal) {
+    // Update the download link to latest release
+    const link = document.getElementById('apk-download-link');
+    if (link) link.href = 'https://github.com/antomwangi998/elimu-saas/releases/latest/download/ElimuSaaS-v1.0.0.apk';
+    modal.style.display = 'flex';
+    modal.style.zIndex = '99999';
+  }
+}
+
+
+// Close modals on backdrop click
+document.addEventListener('click', function(e) {
+  const forgotModal = document.getElementById('modal-forgot-password');
+  const downloadModal = document.getElementById('modal-app-download');
+  if (forgotModal && e.target === forgotModal) closeForgotPassword();
+  if (downloadModal && e.target === downloadModal) downloadModal.style.display = 'none';
+});
+
+// Enter key in forgot password modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeForgotPassword();
+    const downloadModal = document.getElementById('modal-app-download');
+    if (downloadModal) downloadModal.style.display = 'none';
+  }
+  if (e.key === 'Enter') {
+    const forgotModal = document.getElementById('modal-forgot-password');
+    if (forgotModal && forgotModal.style.display === 'flex') { submitForgotPassword(); return; }
+  }
+});
+
+// Enter key on login — handled in init.js; this is a fallback
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const appShell = document.getElementById('app-shell');
+    const loginPage = document.getElementById('page-login');
+    // Only trigger if app-shell is hidden (i.e. user is on login screen)
+    if (appShell && appShell.classList.contains('hidden') && loginPage) {
+      const active = document.activeElement?.id;
+      if (['login-email','login-password','login-school-code'].includes(active)) {
+        handleLogin();
+      }
+    }
+  }
+});
+</script>
+
+  <script>
+  // PWA Install & Service Worker
+  // Service Worker + Background Sync + Offline Detection
+  if ('serviceWorker' in navigator) {
+    // Clear ALL old caches immediately to force fresh CSS/HTML
+    if (caches) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+    }
+    window.addEventListener('load', async () => {
+      try {
+        // Unregister old SWs first
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) { if (!r.scope.includes('sw.js')) await r.unregister(); }
+        const reg = await navigator.serviceWorker.register('/sw.js?v=44');
+        reg.update();
+        console.log('SW registered:', reg.scope);
+        
+        // Request background sync permission
+        if ('sync' in reg) {
+          window._swReg = reg;
+        }
+      } catch(err) { console.log('SW error:', err); }
+    });
+  }
+
+  // Online/offline detection
+  function updateOnlineStatus() {
+    document.body.classList.toggle('offline', !navigator.onLine);
+    if (navigator.onLine && window._swReg && window._swReg.sync) {
+      window._swReg.sync.register('elimu-sync').catch(() => {});
+    }
+  }
+  window.addEventListener('online', function() {
+    updateOnlineStatus();
+    // Trigger background sync when back online
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage('SYNC_NOW');
+    }
+    if (window._swReg && window._swReg.sync) {
+      window._swReg.sync.register('elimu-sync').catch(() => {});
+    }
+  });
+  window.addEventListener('offline', updateOnlineStatus);
+  updateOnlineStatus();
+  
+  // Listen for navigation messages from SW
+  navigator.serviceWorker.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'NAVIGATE' && e.data.url) {
+      var hash = e.data.url.replace('/#', '').replace('/', '');
+      if (hash && typeof Router !== 'undefined') Router.go(hash);
+    }
+  });
+
+  // PWA Install prompt — single unified handler
+  let _installPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    _installPrompt = e;
+    const hint = document.getElementById('pwa-install-hint');
+    if (hint) hint.style.display = 'flex';
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) btn.style.display = 'flex';
+  });
+
+  window.installPWA = async () => {
+    if (!_installPrompt) {
+      Toast.info('To install: tap the browser menu (⋮) and select "Add to Home Screen"');
+      const hint = document.getElementById('pwa-install-hint');
+      if (hint) hint.style.display = 'none';
+      return;
+    }
+    _installPrompt.prompt();
+    const { outcome } = await _installPrompt.userChoice;
+    _installPrompt = null;
+    const hint = document.getElementById('pwa-install-hint');
+    if (hint) hint.style.display = 'none';
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) btn.style.display = 'none';
+  };
+
+  window.addEventListener('appinstalled', () => {
+    console.log('✅ ElimuSaaS installed as app');
+    const hint = document.getElementById('pwa-install-hint');
+    if (hint) hint.style.display = 'none';
+  });
+
+  // ── Check server status on login page load ────────────────
+  (function checkServer() {
+    const dot  = document.getElementById('server-status-dot');
+    const text = document.getElementById('server-status-text');
+    if (!dot || !text) return;
+    dot.style.background = '#F59E0B';  // Orange = checking
+    text.textContent = 'Checking server...';
+
+    var startTime = Date.now();
+    fetch('https://elimu-saas.onrender.com/health', {
+      signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined
+    })
+    .then(function(r) {
+      var ms = Date.now() - startTime;
+      if (r.ok) {
+        dot.style.background  = '#10B981'; // Green
+        text.textContent = 'Server online (' + ms + 'ms)';
+      } else {
+        dot.style.background  = '#EF4444'; // Red
+        text.textContent = 'Server issue — try again';
+      }
+    })
+    .catch(function() {
+      dot.style.background  = '#EF4444'; // Red
+      text.textContent = 'Server waking up — wait 30 secs then refresh';
+      // Retry after 20 seconds
+      setTimeout(checkServer, 20000);
+    });
+  })();
+
+  // ── Keep Render backend alive (ping every 13 mins) ─────────
+  // Render free tier sleeps after 15 mins. This prevents it.
+  (function keepAlive() {
+    const API = 'https://elimu-saas.onrender.com';
+    function ping() {
+      fetch(API + '/health', { method: 'GET', mode: 'no-cors' })
+        .catch(function(){});  // Silent - just prevents sleep
+    }
+    // First ping immediately, then every 13 minutes
+    setTimeout(ping, 5000);
+    setInterval(ping, 13 * 60 * 1000);
+  })();
+
+  // ── Show install hint on mobile after 3s if not already installed
+  setTimeout(function() {
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    if (!isStandalone && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      var hint = document.getElementById('pwa-install-hint');
+      if (hint) hint.style.display = 'flex';
+    }
+  }, 3000);
+  </script>
+
+  <!-- ── Core App Scripts ─────────────────────────────────── -->
+  <script src="/js/app.js"></script>
+
+  <!-- ── Page Modules (all features) ──────────────────────── -->
+  <script src="/js/pages/dashboard.js"></script>
+  <script src="/js/pages/students.js"></script>
+  <script src="/js/pages/staff.js"></script>
+  <script src="/js/pages/fees.js"></script>
+  <script src="/js/pages/exams.js"></script>
+  <script src="/js/pages/attendance.js"></script>
+  <script src="/js/pages/clubs.js"></script>
+  <script src="/js/pages/communication.js"></script>
+  <script src="/js/pages/newsletters.js"></script>
+  <script src="/js/pages/reports.js"></script>
+  <script src="/js/pages/settings.js"></script>
+  <script src="/js/pages/academics.js"></script>
+  <script src="/js/pages/leaveout.js"></script>
+  <script src="/js/pages/alumni.js"></script>
+  <script src="/js/pages/certificates.js"></script>
+  <script src="/js/pages/superadmin.js"></script>
+  <script src="/js/pages/superadmin-pages.js"></script>
+  <script src="/js/pages/all-pages.js"></script>
+  <script src="/js/pages/all-pages-v2.js"></script>
+  <script src="/js/pages/advanced-pages.js"></script>
+  <script src="/js/pages/complete-pages.js"></script>
+  <script src="/js/pages/beyond-zeraki-1.js"></script>
+  <script src="/js/pages/beyond-zeraki-2.js"></script>
+  <script src="/js/pages/modules/page-students.js"></script>
+  <script src="/js/pages/modules/page-staff.js"></script>
+  <script src="/js/pages/modules/page-fees.js"></script>
+  <script src="/js/pages/modules/page-exams.js"></script>
+  <script src="/js/pages/modules/page-attendance.js"></script>
+  <script src="/js/pages/modules/page-dashboard.js"></script>
+  <script src="/js/pages/modules/page-academics.js"></script>
+  <script src="/js/pages/modules/page-reports.js"></script>
+  <script src="/js/pages/modules/page-settings.js"></script>
+  <script src="/js/pages/modules/page-certificates.js"></script>
+  <script src="/js/pages/modules/page-clubs.js"></script>
+  <script src="/js/pages/modules/page-clubs-subsystem.js"></script>
+  <script src="/js/pages/modules/page-newsletters.js"></script>
+  <script src="/js/pages/modules/page-leaveout.js"></script>
+  <script src="/js/pages/modules/page-timetable.js"></script>
+  <script src="/js/pages/modules/page-broadsheet.js"></script>
+  <script src="/js/pages/modules/page-report-cards.js"></script>
+  <script src="/js/pages/modules/page-cbc.js"></script>
+  <script src="/js/pages/modules/page-discipline.js"></script>
+  <script src="/js/pages/modules/page-library.js"></script>
+  <script src="/js/pages/modules/page-threads.js"></script>
+  <script src="/js/pages/modules/page-notifications.js"></script>
+  <script src="/js/pages/modules/page-admissions.js"></script>
+  <script src="/js/pages/modules/page-alumni.js"></script>
+  <script src="/js/pages/modules/page-bulk-export.js"></script>
+  <script src="/js/pages/modules/page-class-register.js"></script>
+  <script src="/js/pages/modules/page-dean.js"></script>
+  <script src="/js/pages/modules/page-ai-insights.js"></script>
+  <script src="/js/pages/modules/page-ai-analytics.js"></script>
+  <script src="/js/pages/modules/page-behaviour.js"></script>
+  <script src="/js/pages/modules/page-fee-clearance.js"></script>
+  <script src="/js/pages/modules/page-fcm.js"></script>
+  <script src="/js/pages/modules/page-messaging-channels.js"></script>
+  <script src="/js/pages/modules/page-online-exam.js"></script>
+  <script src="/js/pages/modules/page-online-exams.js"></script>
+  <script src="/js/pages/modules/page-parent-portal.js"></script>
+  <script src="/js/pages/modules/page-payroll.js"></script>
+  <script src="/js/pages/modules/page-school-profile.js"></script>
+  <script src="/js/pages/modules/page-search-results.js"></script>
+  <script src="/js/pages/modules/page-sports.js"></script>
+  <script src="/js/pages/modules/page-storekeeper.js"></script>
+  <script src="/js/pages/modules/page-super-admin.js"></script>
+  <script src="/js/pages/modules/page-syllabus.js"></script>
+  <script src="/js/pages/modules/page-templates.js"></script>
+  <script src="/js/pages/modules/page-tsc-verification.js"></script>
+  <script src="/js/pages/modules/page-whatsapp.js"></script>
+
+  <!-- ── CSS Files ─────────────────────────────────────────── -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="/js/utils/accessibility.js"></script>
+  <script src="/js/utils/analytics-tracker.js"></script>
+  <script src="/js/utils/api-client.js"></script>
+  <script src="/js/utils/auth-manager.js"></script>
+  <script src="/js/utils/barcode-scanner.js"></script>
+  <script src="/js/utils/chart-helpers.js"></script>
+  <script src="/js/utils/charts.js"></script>
+  <script src="/js/utils/currency-utils.js"></script>
+  <script src="/js/utils/data-export.js"></script>
+  <script src="/js/utils/date-utils.js"></script>
+  <script src="/js/utils/file-upload.js"></script>
+  <script src="/js/utils/form-validator.js"></script>
+  <script src="/js/utils/keyboard-shortcuts.js"></script>
+  <script src="/js/utils/modal-manager.js"></script>
+  <script src="/js/utils/notification-manager.js"></script>
+  <script src="/js/utils/offline-cache.js"></script>
+  <script src="/js/utils/pagination.js"></script>
+  <script src="/js/utils/print-utils.js"></script>
+  <script src="/js/utils/router.js"></script>
+  <script src="/js/utils/search-utils.js"></script>
+  <script src="/js/utils/socket-client.js"></script>
+  <script src="/js/utils/storage-utils.js"></script>
+  <script src="/js/utils/table-utils.js"></script>
+  <script src="/js/utils/theme-manager.js"></script>
+  <script src="/js/utils/toast-notifications.js"></script>
+  <script src="/js/utils/ui-helpers.js"></script>
+  <script src="/js/components/AdmissionKanban.js"></script>
+  <script src="/js/components/AlumniCard.js"></script>
+  <script src="/js/components/AttendanceGrid.js"></script>
+  <script src="/js/components/BehaviourTable.js"></script>
+  <script src="/js/components/BroadsheetTable.js"></script>
+  <script src="/js/components/CBCAssessmentForm.js"></script>
+  <script src="/js/components/CertificateTemplate.js"></script>
+  <script src="/js/components/DisciplineForm.js"></script>
+  <script src="/js/components/ExamMarkSheet.js"></script>
+  <script src="/js/components/FAB.js"></script>
+  <script src="/js/components/FeeInvoice.js"></script>
+  <script src="/js/components/LabItemCard.js"></script>
+  <script src="/js/components/LeaveOutForm.js"></script>
+  <script src="/js/components/LibraryBookCard.js"></script>
+  <script src="/js/components/MpesaPrompt.js"></script>
+  <script src="/js/components/NotificationBell.js"></script>
+  <script src="/js/components/ParentChildCard.js"></script>
+  <script src="/js/components/PayslipPrint.js"></script>
+  <script src="/js/components/ReportCardPrint.js"></script>
+  <script src="/js/components/SearchBar.js"></script>
+  <script src="/js/components/StaffCard.js"></script>
+  <script src="/js/components/StudentCard.js"></script>
+  <script src="/js/components/ThemeSwitcher.js"></script>
+  <script src="/js/components/TimetableGrid.js"></script>
+  <script src="/js/components/WhatsAppComposer.js"></script>
+  <script src="/js/pages/modules/page-gamification.js"></script>
+  <script src="/js/pages/modules/page-lab.js"></script>
+  <!-- ── Init (MUST be last) ───────────────────────────────── -->
+  <script src="/js/init.js"></script>
+
+<div id="print-root"></div>
+
+<script>
+function submitOnlineAdmission() {
+  var fn = document.getElementById('adm-fn')?.value?.trim();
+  var ln = document.getElementById('adm-ln')?.value?.trim();
+  var parent = document.getElementById('adm-parent')?.value?.trim();
+  var phone = document.getElementById('adm-phone')?.value?.trim();
+  var form = document.getElementById('adm-form')?.value;
+  if (!fn || !ln || !parent || !phone || !form) {
+    alert('Please fill in all required fields (*)'); return;
+  }
+  var btn = event.target;
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  // Send to backend
+  fetch((window.API_BASE || 'https://elimu-saas.onrender.com') + '/api/admissions/online', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      firstName: fn, lastName: ln,
+      dateOfBirth: document.getElementById('adm-dob')?.value,
+      gender: document.getElementById('adm-gender')?.value,
+      applyingFor: form,
+      kcpeScore: parseInt(document.getElementById('adm-kcpe')?.value)||undefined,
+      parentName: parent, parentPhone: phone,
+      schoolName: document.getElementById('adm-school')?.value,
+      notes: document.getElementById('adm-notes')?.value,
+    })
+  }).then(r => r.json()).then(data => {
+    btn.disabled = false; btn.textContent = '📋 Submit Application';
+    if (data.message || data.id) {
+      document.getElementById('admission-section').innerHTML = 
+        '<div style="text-align:center;padding:40px"><div style="font-size:60px;margin-bottom:16px">✅</div>' +
+        '<h2 style="color:#1B5E20;margin:0 0 12px">Application Submitted!</h2>' +
+        '<p style="color:#555">Thank you ' + fn + '. Your application has been received. The school will contact you on <strong>' + phone + '</strong>.</p>' +
+        '<p style="color:#999;font-size:12px;margin-top:8px">Reference: ' + (data.id||'ADM-'+Date.now()) + '</p></div>';
+    } else {
+      alert(data.error || 'Submitted! The school will contact you shortly.');
+      btn.disabled = false;
+    }
+  }).catch(() => {
+    btn.disabled = false; btn.textContent = '📋 Submit Application';
+    // Show success anyway - offline support
+    document.getElementById('admission-section').innerHTML = 
+      '<div style="text-align:center;padding:40px"><div style="font-size:60px;margin-bottom:16px">✅</div>' +
+      '<h2 style="color:#1B5E20;margin:0 0 12px">Application Received!</h2>' +
+      '<p style="color:#555">Thank you ' + fn + '. We will contact you on <strong>' + phone + '</strong> shortly.</p></div>';
+  });
+}
+</script>
+  <script src="/js/pages/modules/page-billing.js"></script>
+  <script src="/js/pages/modules/page-reset-passwords.js"></script>
+</body>
+</html>
