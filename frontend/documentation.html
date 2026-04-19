@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — ElimuSaaS</title>
+  <style>
+    :root {
+      --brand:#1565C0; --brand-dark:#0D47A1; --green:#2E7D32; --amber:#E65100;
+      --red:#C62828; --purple:#6A1B9A;
+      --text:#1A1A2E; --text-muted:#6B7280; --border:#E5E7EB; --bg:#F8FAFF;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.7}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    code{background:#EEF2FF;color:#3730A3;padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace}
+    pre{background:#1E293B;color:#E2E8F0;padding:16px;border-radius:10px;overflow-x:auto;font-size:13px;line-height:1.6;margin:14px 0}
+    pre code{background:none;color:inherit;padding:0}
+
+    .nav{background:white;border-bottom:1px solid var(--border);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,0.06)}
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo{width:36px;height:36px;background:linear-gradient(135deg,#1565C0,#1976D2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:white}
+    .nav-name{font-size:16px;font-weight:800;color:var(--brand)}
+    .nav-links{display:flex;gap:20px}
+    .nav-links a{color:var(--text-muted);font-size:13px;font-weight:600}
+    .nav-links a:hover{color:var(--brand)}
+
+    .hero{background:linear-gradient(135deg,#0D47A1,#1565C0 60%,#1976D2);color:white;padding:48px 5% 40px;text-align:center}
+    .hero h1{font-size:clamp(24px,4vw,42px);font-weight:900;margin-bottom:10px}
+    .hero p{font-size:15px;opacity:.85;max-width:580px;margin:0 auto}
+    .hero .meta{font-size:12px;opacity:.65;margin-top:14px}
+
+    .layout{display:grid;grid-template-columns:240px 1fr;gap:0;max-width:1200px;margin:0 auto;padding:40px 5%}
+    @media(max-width:768px){.layout{grid-template-columns:1fr}.toc{display:none}}
+
+    .toc{position:sticky;top:80px;align-self:start;padding-right:28px;max-height:calc(100vh - 100px);overflow-y:auto}
+    .toc-group{margin-bottom:20px}
+    .toc-group-title{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--text-muted);letter-spacing:1px;margin-bottom:8px;padding-left:12px}
+    .toc a{display:block;font-size:12.5px;color:var(--text-muted);padding:4px 12px;border-left:2px solid var(--border);transition:all .15s}
+    .toc a:hover{color:var(--brand);border-left-color:var(--brand);text-decoration:none}
+
+    .content{min-width:0}
+    .section{background:white;border-radius:14px;padding:28px 32px;margin-bottom:24px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+    .section h2{font-size:20px;font-weight:900;color:var(--brand);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #EEF2FF;display:flex;align-items:center;gap:10px}
+    .section h3{font-size:15px;font-weight:700;margin:20px 0 10px;color:var(--text)}
+    .section h4{font-size:13px;font-weight:700;margin:14px 0 6px;color:#374151}
+    .section p{font-size:14px;color:#374151;margin-bottom:12px}
+    .section ul,.section ol{padding-left:22px;margin-bottom:12px}
+    .section ul li,.section ol li{font-size:14px;color:#374151;margin-bottom:6px}
+    .section ul li strong,.section ol li strong{color:var(--text)}
+
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:16px 0}
+    .card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px}
+    .card-icon{font-size:28px;margin-bottom:8px}
+    .card-title{font-size:13px;font-weight:700;margin-bottom:4px}
+    .card-desc{font-size:11px;color:var(--text-muted);line-height:1.5}
+
+    .role-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;margin:2px}
+    .badge-blue{background:#EFF6FF;color:#1565C0}
+    .badge-green{background:#F0FDF4;color:#166534}
+    .badge-amber{background:#FFFBEB;color:#92400E}
+    .badge-purple{background:#FAF5FF;color:#6B21A8}
+    .badge-red{background:#FEF2F2;color:#991B1B}
+    .badge-gray{background:#F9FAFB;color:#374151}
+
+    .endpoint{background:#1E293B;border-radius:8px;padding:12px 16px;margin:8px 0;display:flex;align-items:center;gap:10px;font-family:monospace;font-size:13px}
+    .method{padding:3px 8px;border-radius:5px;font-weight:700;font-size:11px;flex-shrink:0}
+    .method-get{background:#16A34A;color:white}
+    .method-post{background:#2563EB;color:white}
+    .method-put{background:#D97706;color:white}
+    .method-delete{background:#DC2626;color:white}
+    .endpoint-path{color:#93C5FD}
+    .endpoint-desc{color:#94A3B8;font-size:11px;margin-left:auto}
+
+    .step{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+    .step-num{width:28px;height:28px;border-radius:50%;background:var(--brand);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;margin-top:2px}
+    .step-body h4{margin:0 0 4px;font-size:14px;font-weight:700}
+    .step-body p{margin:0;font-size:13px;color:#374151}
+
+    .alert{border-radius:8px;padding:14px 16px;margin:14px 0;font-size:13px}
+    .alert-info{background:#EFF6FF;border-left:4px solid #2563EB;color:#1E40AF}
+    .alert-warn{background:#FFFBEB;border-left:4px solid #D97706;color:#92400E}
+    .alert-success{background:#F0FDF4;border-left:4px solid #16A34A;color:#166534}
+
+    .table-wrap{overflow-x:auto;margin:14px 0}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{background:var(--brand);color:white;padding:10px 14px;text-align:left;font-weight:700}
+    td{padding:9px 14px;border-bottom:1px solid var(--border);color:#374151;vertical-align:top}
+    tr:last-child td{border-bottom:none}
+    tr:nth-child(even) td{background:#F9FAFB}
+
+    footer{background:#1A1A2E;color:white;padding:24px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:40px;font-size:13px}
+    footer a{color:rgba(255,255,255,.65);text-decoration:none}
+    footer a:hover{color:white}
+    @media print{.nav,.toc,footer{display:none}.layout{grid-template-columns:1fr;padding:0}.section{break-inside:avoid}}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="index.html">
+    <div class="nav-logo">E</div>
+    <span class="nav-name">ElimuSaaS</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">← Home</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="mailto:support@elimusaas.com">Support</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>📚 ElimuSaaS Documentation</h1>
+  <p>Complete guide for school administrators, teachers, bursars, students and system integrators</p>
+  <div class="meta">Version 2.0 &nbsp;|&nbsp; Updated January 2025 &nbsp;|&nbsp; Backend v42</div>
+</div>
+
+<div class="layout">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-group">
+      <div class="toc-group-title">Getting Started</div>
+      <a href="#overview">System Overview</a>
+      <a href="#access">Accessing the System</a>
+      <a href="#roles">User Roles</a>
+      <a href="#first-login">First Login</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-title">Admin Guide</div>
+      <a href="#school-setup">School Setup</a>
+      <a href="#staff-mgmt">Staff Management</a>
+      <a href="#student-mgmt">Student Management</a>
+      <a href="#academics">Academics & Classes</a>
+      <a href="#timetable">Timetable</a>
+      <a href="#subscription">Subscription & Billing</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-title">Academic Features</div>
+      <a href="#exams">Exams & Marks</a>
+      <a href="#grading">Grading System</a>
+      <a href="#reportcards">Report Cards</a>
+      <a href="#broadsheet">Broadsheets</a>
+      <a href="#cbc">CBC Assessment</a>
+      <a href="#844">8-4-4 / KCSE</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-title">Finance</div>
+      <a href="#fees">Fee Management</a>
+      <a href="#mpesa">M-Pesa Integration</a>
+      <a href="#invoices">Invoices</a>
+      <a href="#clearance">Fee Clearance</a>
+      <a href="#payroll">Payroll</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-title">Other Modules</div>
+      <a href="#attendance">Attendance</a>
+      <a href="#clubs">Clubs & Sports</a>
+      <a href="#library">Library</a>
+      <a href="#communication">Communication</a>
+      <a href="#ai">AI Insights</a>
+      <a href="#online-exams">Online Exams</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-title">Technical</div>
+      <a href="#android">Android App</a>
+      <a href="#api">API Reference</a>
+      <a href="#security">Security</a>
+      <a href="#super-admin">Super Admin</a>
+      <a href="#troubleshoot">Troubleshooting</a>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- Overview -->
+    <div class="section" id="overview">
+      <h2>🏫 System Overview</h2>
+      <p>ElimuSaaS is a comprehensive, cloud-based school management platform built specifically for Kenyan schools. It supports both <strong>8-4-4</strong> and <strong>CBC</strong> curricula and handles everything from student admissions to fee collection, exams, payroll and parent communication.</p>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">💰</div><div class="card-title">Fee Management</div><div class="card-desc">M-Pesa STK, Paybill, bank. Invoices, statements, clearance</div></div>
+        <div class="card"><div class="card-icon">📊</div><div class="card-title">Exams & Results</div><div class="card-desc">Mark entry, broadsheets, report cards, KCSE format</div></div>
+        <div class="card"><div class="card-icon">🌿</div><div class="card-title">CBC Assessment</div><div class="card-desc">EE/ME/AE/BE levels, learning areas, learner portfolios</div></div>
+        <div class="card"><div class="card-icon">✅</div><div class="card-title">Attendance</div><div class="card-desc">Daily roll call, SMS alerts, monthly reports</div></div>
+        <div class="card"><div class="card-icon">📅</div><div class="card-title">Timetable</div><div class="card-desc">Auto-generate conflict-free class schedules</div></div>
+        <div class="card"><div class="card-icon">💼</div><div class="card-title">Payroll</div><div class="card-desc">Staff payroll, PAYE, NHIF, NSSF, payslips</div></div>
+        <div class="card"><div class="card-icon">💬</div><div class="card-title">Communication</div><div class="card-desc">Bulk SMS, WhatsApp, newsletters to parents</div></div>
+        <div class="card"><div class="card-icon">🧠</div><div class="card-title">AI Insights</div><div class="card-desc">At-risk students, fee defaulter predictions</div></div>
+      </div>
+      <div class="alert alert-info">
+        <strong>Architecture:</strong> Node.js/Express backend · PostgreSQL database · Vanilla JS SPA frontend · Kotlin Android app · Hosted on Render.com
+      </div>
+    </div>
+
+    <!-- Access -->
+    <div class="section" id="access">
+      <h2>🌐 Accessing the System</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Platform</th><th>URL / Method</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>🌐 Web (Desktop)</td><td><code>https://elimu-saas-frontend.onrender.com</code></td><td>Admins, Teachers, Bursars</td></tr>
+            <tr><td>📱 Android App</td><td>Download from GitHub Releases or the home page</td><td>All roles, works offline</td></tr>
+            <tr><td>🔗 API</td><td><code>https://elimu-saas.onrender.com/api</code></td><td>System integrations</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-warn">
+        <strong>⚠️ Cold Start:</strong> The server is hosted on Render's free tier. After 15 minutes of inactivity it sleeps. The first login may take 30–60 seconds to respond. This is normal — please wait and retry.
+      </div>
+    </div>
+
+    <!-- Roles -->
+    <div class="section" id="roles">
+      <h2>👥 User Roles & Permissions</h2>
+      <p>ElimuSaaS uses strict role-based access control. Each user sees only what their role permits.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Role</th><th>Badge</th><th>What They Can Do</th></tr></thead>
+          <tbody>
+            <tr><td><strong>super_admin</strong></td><td><span class="role-badge badge-red">Super Admin</span></td><td>Platform-wide access. Manage all schools, subscriptions, platform analytics</td></tr>
+            <tr><td><strong>school_admin / principal</strong></td><td><span class="role-badge badge-blue">Principal</span></td><td>Full school access. Staff, students, fees, exams, settings, all reports</td></tr>
+            <tr><td><strong>deputy_principal</strong></td><td><span class="role-badge badge-blue">Deputy</span></td><td>Academic oversight. Exams, classes, timetable, discipline</td></tr>
+            <tr><td><strong>hod</strong></td><td><span class="role-badge badge-purple">HOD</span></td><td>Department subjects, approve marks, subject analysis</td></tr>
+            <tr><td><strong>teacher / class_teacher</strong></td><td><span class="role-badge badge-green">Teacher</span></td><td>Own classes only. Mark entry, attendance, timetable, discipline for own students</td></tr>
+            <tr><td><strong>bursar</strong></td><td><span class="role-badge badge-amber">Bursar</span></td><td>All financial data. Fees, invoices, payments, payroll, clearance</td></tr>
+            <tr><td><strong>student</strong></td><td><span class="role-badge badge-gray">Student</span></td><td>Own grades, attendance, timetable, fee balance, clubs</td></tr>
+            <tr><td><strong>parent</strong></td><td><span class="role-badge badge-gray">Parent</span></td><td>Child's grades, attendance, fee balance, school announcements</td></tr>
+            <tr><td><strong>storekeeper</strong></td><td><span class="role-badge badge-gray">Storekeeper</span></td><td>Inventory management, purchase orders, stock alerts</td></tr>
+            <tr><td><strong>nurse / counselor</strong></td><td><span class="role-badge badge-gray">Support Staff</span></td><td>Student welfare records, student directory</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- First Login -->
+    <div class="section" id="first-login">
+      <h2>🚀 First Login & Setup</h2>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Navigate to the login page</h4><p>Go to the website and click <strong>Login</strong>. Enter your email, password, and school code (provided by your system administrator).</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Change your temporary password</h4><p>If this is your first login, you'll be prompted to set a new password. Use at least 8 characters with a mix of letters, numbers and symbols.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Complete your profile</h4><p>Go to <strong>Settings → Profile</strong> to update your name, profile photo and notification preferences.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Explore your dashboard</h4><p>Your dashboard is tailored to your role. Admins see school statistics; teachers see their classes; bursars see financial summaries.</p></div></div>
+
+      <div class="alert alert-success">
+        <strong>Default Super Admin credentials (demo):</strong><br>
+        Email: <code>superadmin@elimusaas.com</code> &nbsp; Password: <code>SuperAdmin@2025!</code><br>
+        School Admin: <code>admin@alliance01.ke</code> / <code>School@2024!</code>
+      </div>
+    </div>
+
+    <!-- School Setup -->
+    <div class="section" id="school-setup">
+      <h2>🏫 School Setup</h2>
+      <h3>School Profile</h3>
+      <p>Go to <strong>School Profile</strong> in the sidebar to configure your school's information:</p>
+      <ul>
+        <li><strong>Basic Info:</strong> School name, KNEC code, school type (primary/secondary/mixed), boarding type</li>
+        <li><strong>Contact:</strong> Phone, email, website, physical address, county</li>
+        <li><strong>Branding:</strong> Upload school logo and cover photo directly (no URL needed)</li>
+        <li><strong>Principal Details:</strong> Principal's name and signature for report cards</li>
+        <li><strong>Motto:</strong> Appears on report cards and broadsheets</li>
+      </ul>
+      <h3>Academic Setup</h3>
+      <p>Under <strong>Academics → Classes & Subjects</strong>:</p>
+      <ul>
+        <li>Create classes (Form 1–4 for secondary; Grades 1–8 for primary)</li>
+        <li>Add subjects and assign teachers to each class-subject combination</li>
+        <li>Set periods per week for timetable generation</li>
+        <li><strong>Form 1:</strong> Up to 11 subjects. <strong>Forms 2–4:</strong> Up to 8 subjects</li>
+      </ul>
+    </div>
+
+    <!-- Exams -->
+    <div class="section" id="exams">
+      <h2>📝 Exams & Mark Entry</h2>
+      <h3>Creating an Exam Series</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Go to Exams → + New Exam Series</h4><p>Give it a name (e.g. "End of Term 1 2025"), select the type (opener, mid-term, end-term, mock), and choose which classes are included.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Teachers enter marks</h4><p>Each teacher sees only <strong>their assigned subjects and classes</strong>. They enter marks per student, add remarks, and mark absent students.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Lock the series</h4><p>Once all marks are entered, the principal or HOD locks the series. Locked series cannot be edited.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Generate broadsheets & report cards</h4><p>Go to Broadsheet or Report Cards tab, select the series and class, and generate.</p></div></div>
+
+      <h3>Grading Scale</h3>
+      <p>Go to <strong>Settings → Grading</strong> to customise your grading scale. Presets available:</p>
+      <ul>
+        <li><strong>KCSE 8-4-4:</strong> A (75–100, 12pts) through E (0–24, 1pt) — 12-point scale</li>
+        <li><strong>CBC:</strong> EE (Exceeding), ME (Meeting), AE (Approaching), BE (Below) — 4-level scale</li>
+        <li><strong>Custom:</strong> Define any grading bands with your own labels and points</li>
+      </ul>
+    </div>
+
+    <!-- Broadsheet -->
+    <div class="section" id="broadsheet">
+      <h2>📋 Broadsheet</h2>
+      <p>The broadsheet provides a Zeraki-style class-wide performance overview, printed in A3 landscape format.</p>
+      <ul>
+        <li>Select exam series and class, then click <strong>Generate Broadsheet</strong></li>
+        <li>Opens in a new window with school header (logo, name, address, motto)</li>
+        <li>Each student row shows marks and grade per subject, total, mean marks, mean points, mean grade, and class position</li>
+        <li>Subject performance analysis table at the bottom</li>
+        <li>Signature lines for Class Teacher, HOD/Dean, and Principal</li>
+        <li><strong>Form 1</strong> shows up to 11 subjects; <strong>Forms 2–4</strong> show up to 8 subjects</li>
+      </ul>
+    </div>
+
+    <!-- CBC -->
+    <div class="section" id="cbc">
+      <h2>🌿 CBC Assessment</h2>
+      <p>ElimuSaaS fully supports the Competency-Based Curriculum for Primary (Grades 1–6) and Junior Secondary (Grades 7–9).</p>
+      <h3>Performance Levels</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Level</th><th>Code</th><th>Marks Range</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Exceeding Expectations</td><td><strong>EE</strong></td><td>75–100</td><td>Student exceeds grade-level expectations</td></tr>
+            <tr><td>Meeting Expectations</td><td><strong>ME</strong></td><td>50–74</td><td>Student meets grade-level expectations</td></tr>
+            <tr><td>Approaching Expectations</td><td><strong>AE</strong></td><td>30–49</td><td>Student is approaching expected level</td></tr>
+            <tr><td>Below Expectations</td><td><strong>BE</strong></td><td>0–29</td><td>Student is below expected level</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Learning Areas (Primary)</h3>
+      <p>Literacy, Numeracy, English, Kiswahili, Home Science, Creative Arts, Physical Education, Science &amp; Technology, Social Studies, Religious Education, Foreign Languages</p>
+      <h3>CBC Report Card</h3>
+      <p>Generated from <strong>Exams → CBC Mode</strong>. Shows learning area strands, performance levels, teacher remarks, and portfolio summary per student.</p>
+    </div>
+
+    <!-- Fees -->
+    <div class="section" id="fees">
+      <h2>💰 Fee Management</h2>
+      <h3>Setting Up Fee Structures</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Create fee structure</h4><p>Go to <strong>Fees → Structures → Create Structure</strong>. Name it (e.g. "Form 4 Boarding Term 1 2025") and add fee items: Tuition, Activity, Boarding, Exam, etc.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Assign to classes</h4><p>Link the fee structure to specific classes and terms. Students in those classes automatically get the fee balance assigned.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Record payments</h4><p>Click <strong>+ Record Payment</strong> anywhere in the fees section. Search for the student, enter amount, select payment method.</p></div></div>
+      <h3>Payment Methods Supported</h3>
+      <ul>
+        <li><strong>M-Pesa STK Push:</strong> System sends a push to parent's phone — they enter PIN to pay</li>
+        <li><strong>M-Pesa Paybill:</strong> Parent pays to school's Paybill number, enter receipt number</li>
+        <li><strong>Bank Transfer:</strong> Enter bank reference number</li>
+        <li><strong>Cash:</strong> Record cash payment, system generates receipt</li>
+        <li><strong>Cheque:</strong> Record cheque payment with reference</li>
+      </ul>
+    </div>
+
+    <!-- M-Pesa -->
+    <div class="section" id="mpesa">
+      <h2>📱 M-Pesa Integration</h2>
+      <p>ElimuSaaS integrates with the <strong>Safaricom Daraja API</strong> for mobile money:</p>
+      <h3>Paybill Setup (for Schools)</h3>
+      <ol>
+        <li>Register a Safaricom Paybill number (Business Short Code)</li>
+        <li>Provide the Paybill number and passkey to ElimuSaaS support</li>
+        <li>Go to <strong>Settings → Integrations</strong> and enter your Daraja API credentials</li>
+        <li>Test with a small payment before going live</li>
+      </ol>
+      <h3>M-Pesa STK Push Flow</h3>
+      <ol>
+        <li>Bursar enters student, amount and parent's phone number</li>
+        <li>System initiates STK Push via Daraja API</li>
+        <li>Parent receives prompt on phone and enters M-Pesa PIN</li>
+        <li>Payment confirmed automatically, receipt generated</li>
+      </ol>
+      <div class="alert alert-warn">
+        <strong>Note:</strong> M-Pesa STK Push requires the parent's phone to be registered on M-Pesa and have sufficient balance. The school must have an active Safaricom Daraja API account.
+      </div>
+    </div>
+
+    <!-- Attendance -->
+    <div class="section" id="attendance">
+      <h2>✅ Attendance</h2>
+      <p>Attendance is recorded daily per class. Go to <strong>Attendance</strong> in the sidebar:</p>
+      <ul>
+        <li>Select class and date, then mark each student as Present, Absent, Late, Excused, or Sick</li>
+        <li>Bulk actions: mark all present, then uncheck absentees</li>
+        <li>SMS alerts automatically sent to parents of absent students (if SMS integration is configured)</li>
+        <li>Monthly attendance reports and percentage calculations per student</li>
+        <li>Attendance appears on report cards</li>
+      </ul>
+    </div>
+
+    <!-- Android App -->
+    <div class="section" id="android">
+      <h2>📱 Android App</h2>
+      <h3>Download</h3>
+      <p>Download the latest APK from the <a href="https://github.com/antomwangi998/elimu-saas/releases/latest" target="_blank">GitHub Releases page</a> or from the home page of the website.</p>
+      <h3>Installation</h3>
+      <ol>
+        <li>Download the <code>.apk</code> file to your Android device</li>
+        <li>Go to <strong>Settings → Security → Unknown Sources</strong> and enable it (or "Install unknown apps")</li>
+        <li>Open the downloaded APK and tap <strong>Install</strong></li>
+        <li>Open ElimuSaaS and log in with your credentials</li>
+      </ol>
+      <h3>Offline Mode</h3>
+      <p>The Android app caches recent data locally. When offline, you can still view:</p>
+      <ul>
+        <li>Dashboard statistics (last loaded data)</li>
+        <li>Student list and basic info</li>
+        <li>Your timetable</li>
+        <li>Recent attendance records</li>
+      </ul>
+      <p>Data entered offline will sync when connectivity is restored.</p>
+      <div class="alert alert-warn">
+        <strong>Connection Note:</strong> The server may take 30–60 seconds to wake up if it hasn't been used recently (Render free tier). The app will retry automatically. If login fails, wait 30 seconds and try again.
+      </div>
+    </div>
+
+    <!-- API Reference -->
+    <div class="section" id="api">
+      <h2>🔗 API Reference</h2>
+      <p>Base URL: <code>https://elimu-saas.onrender.com/api</code></p>
+      <p>All requests (except login) require: <code>Authorization: Bearer &lt;token&gt;</code></p>
+
+      <h3>Authentication</h3>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/auth/login</span><span class="endpoint-desc">Login with email, password, schoolCode</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/auth/refresh</span><span class="endpoint-desc">Refresh access token</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/auth/logout</span><span class="endpoint-desc">Invalidate session</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/auth/forgot-password</span><span class="endpoint-desc">Send password reset email</span></div>
+
+      <h3>Students</h3>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/students</span><span class="endpoint-desc">List students (supports ?search=, ?classId=, ?page=)</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/students</span><span class="endpoint-desc">Enroll a new student</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/students/:id</span><span class="endpoint-desc">Get student profile with recent marks</span></div>
+      <div class="endpoint"><span class="method method-put">PUT</span><span class="endpoint-path">/students/:id</span><span class="endpoint-desc">Update student record</span></div>
+
+      <h3>Exams</h3>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/exams/series</span><span class="endpoint-desc">List exam series</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/exams/marks/bulk</span><span class="endpoint-desc">Bulk save marks (body: seriesId, classId, subjectId, marks[])</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/exams/series/:id/broadsheet</span><span class="endpoint-desc">Get broadsheet data for a class</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/exams/report-card/:studentId</span><span class="endpoint-desc">Get report card data for a student</span></div>
+
+      <h3>Fees</h3>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/fees/reports/summary</span><span class="endpoint-desc">Fee collection summary and top defaulters</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/fees/payments</span><span class="endpoint-desc">Record a fee payment</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/fees/statements/:studentId</span><span class="endpoint-desc">Student fee statement</span></div>
+
+      <h3>Subscriptions</h3>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/subscriptions/plans</span><span class="endpoint-desc">Get available subscription plans (no auth needed)</span></div>
+      <div class="endpoint"><span class="method method-get">GET</span><span class="endpoint-path">/subscriptions/my</span><span class="endpoint-desc">Get current school's subscription</span></div>
+      <div class="endpoint"><span class="method method-post">POST</span><span class="endpoint-path">/subscriptions/choose</span><span class="endpoint-desc">Choose / upgrade plan</span></div>
+
+      <pre><code>// Example: Login
+POST /api/auth/login
+{
+  "email": "admin@school.ke",
+  "password": "YourPassword123!",
+  "schoolCode": "ALLI01"
+}
+
+// Response
+{
+  "accessToken": "eyJhbGc...",
+  "refreshToken": "eyJhbGc...",
+  "user": {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "role": "school_admin",
+    "schoolName": "Alliance High School",
+    "schoolCode": "ALLI01"
+  }
+}</code></pre>
+    </div>
+
+    <!-- Security -->
+    <div class="section" id="security">
+      <h2>🔐 Security</h2>
+      <ul>
+        <li><strong>HTTPS only:</strong> All traffic encrypted with TLS 1.3</li>
+        <li><strong>JWT authentication:</strong> Short-lived access tokens (15 min) + refresh tokens</li>
+        <li><strong>Bcrypt passwords:</strong> All passwords hashed with bcrypt (cost factor 10)</li>
+        <li><strong>Tenant isolation:</strong> Every query scoped to <code>school_id</code> — School A cannot access School B's data</li>
+        <li><strong>Rate limiting:</strong> 100 requests/15 min per IP on login endpoints</li>
+        <li><strong>Android:</strong> Root detection, emulator detection, certificate pinning, ProGuard obfuscation</li>
+        <li><strong>CSP headers:</strong> Content Security Policy prevents XSS attacks</li>
+      </ul>
+      <h3>Password Policy</h3>
+      <ul>
+        <li>Minimum 8 characters</li>
+        <li>Must contain letters and numbers</li>
+        <li>Must change temporary passwords on first login</li>
+        <li>Administrators can reset passwords for users below them in the hierarchy</li>
+      </ul>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="section" id="troubleshoot">
+      <h2>🛠️ Troubleshooting</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Problem</th><th>Cause</th><th>Solution</th></tr></thead>
+          <tbody>
+            <tr><td>"Cannot connect to server"</td><td>Server cold-starting (Render free tier)</td><td>Wait 30–60 seconds and try again. The server wakes on first request.</td></tr>
+            <tr><td>Can't see landing page</td><td>Old cached version in browser</td><td>Hard refresh: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac). Or clear browser cache.</td></tr>
+            <tr><td>Broadsheet shows wrong subjects</td><td>Subjects not assigned to class</td><td>Go to Academics → assign subjects to the class, then re-enter marks</td></tr>
+            <tr><td>Report card shows wrong name in remarks</td><td>Was a known bug — fixed in v42</td><td>Update to latest version</td></tr>
+            <tr><td>M-Pesa STK Push not received</td><td>Wrong phone number or insufficient balance</td><td>Confirm phone number is registered on M-Pesa and has balance</td></tr>
+            <tr><td>Teacher can see all classes</td><td>Subjects not assigned to teacher specifically</td><td>Go to Staff → edit staff → assign subjects per class</td></tr>
+            <tr><td>Timetable not generating</td><td>No subject-teacher assignments</td><td>Assign at least one teacher per subject per class first</td></tr>
+            <tr><td>School suspended / locked out</td><td>Subscription expired</td><td>Contact billing@elimusaas.com to renew subscription</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Support Contacts</h3>
+      <ul>
+        <li>📧 <a href="mailto:support@elimusaas.com">support@elimusaas.com</a> — General support</li>
+        <li>📧 <a href="mailto:billing@elimusaas.com">billing@elimusaas.com</a> — Billing &amp; subscriptions</li>
+        <li>📱 <a href="https://wa.me/254700000000" target="_blank">WhatsApp: +254 700 000 000</a></li>
+      </ul>
+    </div>
+
+    <!-- Super Admin -->
+    <div class="section" id="super-admin">
+      <h2>⚙️ Super Admin Guide</h2>
+      <p>The Super Admin role manages the entire ElimuSaaS platform across all schools.</p>
+      <h3>Onboarding a New School</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Create school</h4><p>Go to <strong>All Schools → + New School</strong>. Enter school name, code, admin email, phone, county and type.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>System creates admin account</h4><p>An admin account is automatically created with a temporary password. Share the school code and credentials with the principal.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Activate subscription</h4><p>Go to Subscriptions and activate a plan for the school. The school can also self-subscribe from their Settings page.</p></div></div>
+      <h3>Suspending a School</h3>
+      <p>If a school's subscription lapses, click <strong>Suspend</strong> on their profile. All users in that school will see a lockout page until the subscription is renewed.</p>
+      <h3>Resetting Admin Passwords</h3>
+      <p>Click on a school → <strong>Reset Admin Password</strong>. A temporary password is generated and shown to you — share it with the school admin securely.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>ElimuSaaS © 2025 · Documentation v2.0</span>
+  <span>Built in Kenya 🇰🇪 for Kenyan Schools</span>
+  <div style="display:flex;gap:20px">
+    <a href="index.html">Home</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="mailto:support@elimusaas.com">Support</a>
+  </div>
+</footer>
+
+</body>
+</html>

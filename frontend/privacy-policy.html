@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — ElimuSaaS</title>
+  <style>
+    :root {
+      --brand: #1565C0;
+      --brand-dark: #0D47A1;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --bg: #F8FAFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+
+    /* ── Top Nav ── */
+    .nav {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg,#1565C0,#1976D2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 16px; color: white;
+    }
+    .nav-name { font-size: 16px; font-weight: 800; color: var(--brand); }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a {
+      color: var(--text-muted); font-size: 13px; font-weight: 600;
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--brand); }
+
+    /* ── Hero banner ── */
+    .hero {
+      background: linear-gradient(135deg, #0D47A1, #1565C0 60%, #1976D2);
+      color: white;
+      padding: 48px 5% 40px;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(24px,4vw,40px); font-weight: 900; margin-bottom: 10px; }
+    .hero p  { font-size: 15px; opacity: 0.85; max-width: 560px; margin: 0 auto; }
+    .hero .meta { font-size: 12px; opacity: 0.65; margin-top: 14px; }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 5%;
+    }
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+    }
+
+    /* ── Table of Contents ── */
+    .toc {
+      position: sticky;
+      top: 80px;
+      align-self: start;
+      padding-right: 32px;
+    }
+    .toc-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      color: var(--text-muted); letter-spacing: 0.8px; margin-bottom: 12px;
+    }
+    .toc a {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 5px 0;
+      border-left: 2px solid var(--border);
+      padding-left: 12px;
+      transition: all 0.15s;
+    }
+    .toc a:hover { color: var(--brand); border-left-color: var(--brand); }
+
+    /* ── Content ── */
+    .content { min-width: 0; }
+    .section {
+      background: white;
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .section h2 {
+      font-size: 18px; font-weight: 800;
+      color: var(--brand);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #EEF2FF;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section h3 {
+      font-size: 14px; font-weight: 700;
+      margin: 18px 0 8px;
+      color: var(--text);
+    }
+    .section p  { font-size: 14px; color: #374151; margin-bottom: 12px; }
+    .section ul { padding-left: 20px; margin-bottom: 12px; }
+    .section ul li { font-size: 14px; color: #374151; margin-bottom: 6px; }
+    .section ul li strong { color: var(--text); }
+
+    .highlight {
+      background: #EFF6FF;
+      border-left: 4px solid var(--brand);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      margin: 14px 0;
+      font-size: 13px;
+      color: #1E40AF;
+    }
+    .highlight strong { display: block; margin-bottom: 4px; font-size: 14px; }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      background: var(--brand); color: white;
+      padding: 10px 14px; text-align: left; font-weight: 700;
+    }
+    td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: #374151; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #F9FAFB; }
+
+    /* ── Footer ── */
+    footer {
+      background: #1A1A2E; color: white;
+      padding: 24px 5%;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px; margin-top: 40px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    footer a:hover { color: white; }
+
+    @media print {
+      .nav, .toc, footer { display: none; }
+      .layout { grid-template-columns: 1fr; padding: 0; }
+      .section { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-brand" href="index.html">
+    <div class="nav-logo">E</div>
+    <span class="nav-name">ElimuSaaS</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">← Back to Home</a>
+    <a href="documentation.html">Documentation</a>
+    <a href="mailto:privacy@elimusaas.com">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🔒 Privacy Policy</h1>
+  <p>How ElimuSaaS collects, uses, and protects the personal information of schools, staff, students and parents</p>
+  <div class="meta">Last updated: January 2025 &nbsp;|&nbsp; Effective: January 1, 2025 &nbsp;|&nbsp; Version 2.1</div>
+</div>
+
+<div class="layout">
+  <!-- Table of Contents -->
+  <aside class="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#s1">1. Who We Are</a>
+    <a href="#s2">2. Information We Collect</a>
+    <a href="#s3">3. How We Use Information</a>
+    <a href="#s4">4. Data Sharing</a>
+    <a href="#s5">5. Data Security</a>
+    <a href="#s6">6. Data Retention</a>
+    <a href="#s7">7. Children's Privacy</a>
+    <a href="#s8">8. Your Rights</a>
+    <a href="#s9">9. Cookies</a>
+    <a href="#s10">10. Third-Party Services</a>
+    <a href="#s11">11. Changes to Policy</a>
+    <a href="#s12">12. Contact Us</a>
+  </aside>
+
+  <!-- Content -->
+  <main class="content">
+
+    <div class="highlight">
+      <strong>📋 Summary for School Administrators</strong>
+      ElimuSaaS is a school management platform. We process data on behalf of schools (as a data processor) under their instructions. Schools are the data controllers for their students and staff data. We do not sell any personal data and do not display advertisements.
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section" id="s1">
+      <h2>🏢 1. Who We Are</h2>
+      <p><strong>ElimuSaaS Ltd</strong> ("ElimuSaaS", "we", "us", or "our") is a technology company registered in Kenya, providing school management software-as-a-service (SaaS) to educational institutions across Kenya and East Africa.</p>
+      <p>Our registered address: Nairobi, Kenya. Contact: <a href="mailto:privacy@elimusaas.com" style="color:var(--brand)">privacy@elimusaas.com</a></p>
+      <p>This Privacy Policy applies to:</p>
+      <ul>
+        <li>The ElimuSaaS web platform (<strong>elimu-saas-frontend.onrender.com</strong>)</li>
+        <li>The ElimuSaaS backend API (<strong>elimu-saas.onrender.com</strong>)</li>
+        <li>The ElimuSaaS Android application</li>
+        <li>Any related services, tools, or communications</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="s2">
+      <h2>📊 2. Information We Collect</h2>
+
+      <h3>2.1 Information Schools Provide</h3>
+      <p>When a school registers or uses ElimuSaaS, they provide:</p>
+      <ul>
+        <li><strong>School information:</strong> Name, physical address, county, phone, email, KNEC code, school type</li>
+        <li><strong>Administrator details:</strong> Full name, email address, phone number, role</li>
+        <li><strong>Staff records:</strong> Names, employee IDs, TSC numbers, email addresses, subjects taught, class assignments, salary grades</li>
+        <li><strong>Student records:</strong> Full names, admission numbers, dates of birth, gender, class/stream, KCPE index numbers, medical information where provided</li>
+        <li><strong>Parent/guardian details:</strong> Names, phone numbers, email addresses, relationship to student</li>
+        <li><strong>Academic data:</strong> Exam marks, grades, attendance records, teacher remarks, CBC assessment levels</li>
+        <li><strong>Financial data:</strong> Fee payment amounts, M-Pesa receipt numbers, bank transfer references, fee balances</li>
+      </ul>
+
+      <h3>2.2 Information Collected Automatically</h3>
+      <ul>
+        <li>Login timestamps and IP addresses (for security)</li>
+        <li>Device type and operating system (mobile app analytics)</li>
+        <li>Pages visited and features used (usage analytics, aggregated)</li>
+        <li>Error logs for debugging (no personal content)</li>
+      </ul>
+
+      <h3>2.3 Payment Information</h3>
+      <p>ElimuSaaS integrates with <strong>M-Pesa (Safaricom Daraja API)</strong> for fee collection. We store M-Pesa receipt numbers and transaction amounts for record-keeping. We do not store full M-Pesa PINs or card numbers.</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="s3">
+      <h2>⚙️ 3. How We Use Information</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Purpose</th><th>Data Used</th><th>Legal Basis</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Providing the school management platform</td><td>All school-provided data</td><td>Contract performance</td></tr>
+            <tr><td>Generating report cards and broadsheets</td><td>Student marks, grades, attendance</td><td>Contract performance</td></tr>
+            <tr><td>Processing fee payments</td><td>Student fees, payment records</td><td>Contract performance</td></tr>
+            <tr><td>Sending SMS notifications to parents</td><td>Parent phone numbers</td><td>Legitimate interest / consent</td></tr>
+            <tr><td>Account security and fraud prevention</td><td>Login logs, IP addresses</td><td>Legitimate interest</td></tr>
+            <tr><td>Platform improvement</td><td>Aggregated, anonymised usage data</td><td>Legitimate interest</td></tr>
+            <tr><td>Customer support</td><td>Contact details, issue description</td><td>Contract performance</td></tr>
+            <tr><td>Billing and invoicing</td><td>School contact, payment history</td><td>Legal obligation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>We do <strong>not</strong> use personal data for targeted advertising, profiling for commercial purposes, or sell data to third parties.</p>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="s4">
+      <h2>🤝 4. Data Sharing</h2>
+      <p>We share personal data only in the following circumstances:</p>
+      <ul>
+        <li><strong>Within a school:</strong> Staff can only see data for their own school. Role-based access controls ensure teachers see only their classes, bursars see only financial data, etc.</li>
+        <li><strong>Service providers:</strong> We use trusted sub-processors to operate the platform:
+          <ul>
+            <li><strong>Render.com</strong> — Cloud hosting (servers located in the EU/US; covered by standard contractual clauses)</li>
+            <li><strong>Safaricom M-Pesa</strong> — Mobile payment processing</li>
+            <li><strong>Africa's Talking</strong> — SMS delivery</li>
+            <li><strong>Neon (PostgreSQL)</strong> — Database hosting</li>
+          </ul>
+        </li>
+        <li><strong>Legal requirements:</strong> If required by Kenyan law, a court order, or to protect the rights and safety of users</li>
+        <li><strong>Business transfers:</strong> In the event of a merger or acquisition, data would transfer to the new entity under the same privacy protections</li>
+      </ul>
+      <div class="highlight">
+        <strong>🔒 School Isolation</strong>
+        School A can never access School B's data. Every API request is validated against the authenticated school's tenant ID. Our multi-tenant architecture enforces strict data isolation at the database level.
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section" id="s5">
+      <h2>🛡️ 5. Data Security</h2>
+      <p>We implement industry-standard security measures:</p>
+      <ul>
+        <li><strong>Encryption in transit:</strong> All data transmitted via HTTPS/TLS 1.3</li>
+        <li><strong>Encryption at rest:</strong> Database encrypted at rest on Render/Neon infrastructure</li>
+        <li><strong>Authentication:</strong> JWT tokens with short expiry; bcrypt password hashing (cost factor 10+)</li>
+        <li><strong>Access controls:</strong> Role-based access control (RBAC) — 8 distinct roles with scoped permissions</li>
+        <li><strong>Rate limiting:</strong> API rate limiting to prevent brute-force attacks</li>
+        <li><strong>Android security:</strong> Certificate pinning, root/emulator detection, ProGuard obfuscation</li>
+        <li><strong>Audit logs:</strong> All admin actions are logged with timestamps and user IDs</li>
+        <li><strong>Dependency scanning:</strong> Regular security updates for all dependencies</li>
+      </ul>
+      <p>Despite these measures, no system is 100% secure. In the event of a data breach affecting your school, we will notify you within <strong>72 hours</strong> of becoming aware.</p>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section" id="s6">
+      <h2>🗓️ 6. Data Retention</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Data Type</th><th>Retention Period</th><th>Reason</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Student academic records</td><td>7 years after graduation</td><td>Education Act requirements</td></tr>
+            <tr><td>Fee payment records</td><td>7 years</td><td>Tax and audit requirements</td></tr>
+            <tr><td>Staff records</td><td>Duration of employment + 5 years</td><td>Labour law requirements</td></tr>
+            <tr><td>Login audit logs</td><td>2 years</td><td>Security and fraud detection</td></tr>
+            <tr><td>SMS logs</td><td>1 year</td><td>Dispute resolution</td></tr>
+            <tr><td>Deleted school data</td><td>30 days (then purged)</td><td>Recovery window</td></tr>
+            <tr><td>Backups</td><td>90 days</td><td>Disaster recovery</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>When a school terminates their subscription, we retain data for 30 days to allow export, after which all data is permanently deleted.</p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section" id="s7">
+      <h2>👶 7. Children's Privacy</h2>
+      <p>ElimuSaaS processes data about students, including minors under 18. This processing is done:</p>
+      <ul>
+        <li>Under the authority of the school (as the data controller)</li>
+        <li>For legitimate educational purposes only</li>
+        <li>With the school acting as a trusted intermediary between us and the students/parents</li>
+      </ul>
+      <p>Schools are responsible for obtaining any required parental consent for students under 18 before enrolling them in ElimuSaaS. We do not knowingly collect data directly from children without school authorisation.</p>
+      <p>Student data is <strong>never</strong> used for advertising, profiling, or shared with commercial third parties.</p>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section" id="s8">
+      <h2>✅ 8. Your Rights</h2>
+      <p>Under Kenya's <strong>Data Protection Act 2019</strong>, you have the following rights:</p>
+      <ul>
+        <li><strong>Right of access:</strong> Request a copy of personal data we hold about you or your students</li>
+        <li><strong>Right to rectification:</strong> Correct inaccurate data (school admins can do this directly in the system)</li>
+        <li><strong>Right to erasure:</strong> Request deletion of data (subject to legal retention requirements)</li>
+        <li><strong>Right to data portability:</strong> Export your school's data in CSV/PDF format</li>
+        <li><strong>Right to object:</strong> Object to processing based on legitimate interest</li>
+        <li><strong>Right to restriction:</strong> Request limitation of processing in certain circumstances</li>
+      </ul>
+      <p>To exercise these rights, contact us at <a href="mailto:privacy@elimusaas.com" style="color:var(--brand)">privacy@elimusaas.com</a>. We will respond within <strong>21 days</strong>.</p>
+      <p>If you believe your rights have been violated, you may lodge a complaint with the <strong>Office of the Data Protection Commissioner of Kenya</strong>.</p>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="section" id="s9">
+      <h2>🍪 9. Cookies & Local Storage</h2>
+      <p>ElimuSaaS uses minimal cookies and browser storage:</p>
+      <ul>
+        <li><strong>Session token:</strong> Stored in memory/localStorage to keep you logged in</li>
+        <li><strong>Theme preference:</strong> Light/dark mode setting</li>
+        <li><strong>Offline cache:</strong> Recent data cached locally in the Android app for offline use</li>
+      </ul>
+      <p>We do <strong>not</strong> use tracking cookies, advertising cookies, or third-party analytics cookies. No cookie consent banner is required as we only use strictly necessary cookies.</p>
+    </div>
+
+    <!-- Section 10 -->
+    <div class="section" id="s10">
+      <h2>🔗 10. Third-Party Services</h2>
+      <p>The platform integrates with the following third-party services. Each has its own privacy policy:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Service</th><th>Purpose</th><th>Data Shared</th><th>Policy</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Safaricom M-Pesa</td><td>Fee payment processing</td><td>Phone number, amount</td><td><a href="https://www.safaricom.co.ke/privacy-policy" target="_blank" style="color:var(--brand)">View</a></td></tr>
+            <tr><td>Africa's Talking</td><td>SMS notifications</td><td>Phone numbers, message content</td><td><a href="https://africastalking.com/privacy" target="_blank" style="color:var(--brand)">View</a></td></tr>
+            <tr><td>Render.com</td><td>Cloud hosting</td><td>All platform data (hosted)</td><td><a href="https://render.com/privacy" target="_blank" style="color:var(--brand)">View</a></td></tr>
+            <tr><td>Neon Database</td><td>PostgreSQL hosting</td><td>All database data</td><td><a href="https://neon.tech/privacy-policy" target="_blank" style="color:var(--brand)">View</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 11 -->
+    <div class="section" id="s11">
+      <h2>📝 11. Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. When we make significant changes:</p>
+      <ul>
+        <li>We will post the updated policy on this page with a new "Last updated" date</li>
+        <li>We will notify school administrators by email at least <strong>14 days</strong> before the changes take effect</li>
+        <li>Continued use of the platform after the effective date constitutes acceptance</li>
+      </ul>
+      <p>The previous version of this policy is available on request.</p>
+    </div>
+
+    <!-- Section 12 -->
+    <div class="section" id="s12">
+      <h2>📬 12. Contact Us</h2>
+      <p>For any privacy-related questions, requests, or concerns:</p>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:privacy@elimusaas.com" style="color:var(--brand)">privacy@elimusaas.com</a></li>
+        <li><strong>General enquiries:</strong> <a href="mailto:hello@elimusaas.com" style="color:var(--brand)">hello@elimusaas.com</a></li>
+        <li><strong>Phone/WhatsApp:</strong> <a href="tel:+254700000000" style="color:var(--brand)">+254 700 000 000</a></li>
+        <li><strong>Address:</strong> ElimuSaaS Ltd, Nairobi, Kenya</li>
+      </ul>
+      <p>We are committed to resolving privacy concerns promptly and fairly.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>ElimuSaaS © 2025 · Privacy Policy</span>
+  <span>Built in Kenya 🇰🇪</span>
+  <div style="display:flex;gap:20px">
+    <a href="index.html">Home</a>
+    <a href="documentation.html">Documentation</a>
+    <a href="mailto:privacy@elimusaas.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

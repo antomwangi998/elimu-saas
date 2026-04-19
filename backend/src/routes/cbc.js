@@ -1,0 +1,18 @@
+const router = require('express').Router();
+const c = require('../controllers/cbcController');
+const { requireMinRole, requireRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireRole('super_admin','school_admin','principal');
+router.get('/learning-areas', staff, c.getLearningAreas);
+router.post('/learning-areas/seed', admin, c.seedLearningAreas);
+router.get('/performance-levels', staff, c.getPerformanceLevels);
+router.get('/assessments', staff, c.getAssessments);
+router.post('/assessments', staff, c.createAssessment);
+router.get('/assessments/:id/scores', staff, c.getAssessmentScores);
+router.post('/assessments/:id/scores', staff, c.saveScores);
+router.get('/report-card/:studentId/:term/:year', staff, c.getCBCReportCard);
+router.get('/schemes', staff, c.getSchemesOfWork);
+router.post('/schemes', staff, c.saveSchemeEntry);
+router.put('/schemes/:id/status', staff, c.updateSchemeStatus);
+router.get('/coverage', staff, c.getCoverageSummary);
+module.exports = router;

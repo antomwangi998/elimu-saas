@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F0F4FF">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical" android:paddingBottom="32dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="160dp"
+        android:background="#0D47A1" android:orientation="vertical" android:gravity="center">
+      <TextView android:id="@+id/tvSettingsName" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="User Name" android:textSize="20sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+      <TextView android:id="@+id/tvSettingsEmail" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="email" android:textSize="13sp" android:textColor="#90CAF9" android:layout_marginTop="4dp"/>
+      <TextView android:id="@+id/tvSettingsRole" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="Role" android:textSize="12sp" android:textColor="#64B5F6" android:layout_marginTop="2dp"/>
+    </LinearLayout>
+    <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_margin="16dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">
+      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:orientation="vertical" android:padding="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="ACCOUNT" android:textSize="10sp" android:textStyle="bold"
+            android:textColor="#6B7280" android:letterSpacing="0.1" android:layout_marginBottom="12dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="10dp">
+          <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:text="School" android:textSize="14sp" android:textColor="#6B7280"/>
+          <TextView android:id="@+id/tvSettingsSchool" android:layout_width="wrap_content"
+              android:layout_height="wrap_content" android:text="—"
+              android:textSize="14sp" android:textColor="#0D1117" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+          <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:text="School Code" android:textSize="14sp" android:textColor="#6B7280"/>
+          <TextView android:id="@+id/tvSettingsCode" android:layout_width="wrap_content"
+              android:layout_height="wrap_content" android:text="—"
+              android:textSize="14sp" android:textColor="#0D1117" android:textStyle="bold"/>
+        </LinearLayout>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp" app:cardElevation="2dp">
+      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:orientation="vertical" android:padding="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="PREFERENCES" android:textSize="10sp" android:textStyle="bold"
+            android:textColor="#6B7280" android:letterSpacing="0.1" android:layout_marginBottom="12dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+          <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:text="Notifications" android:textSize="14sp" android:textColor="#0D1117"/>
+          <Switch android:id="@+id/switchNotifications" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+          <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:text="Biometric Login" android:textSize="14sp" android:textColor="#0D1117"/>
+          <Switch android:id="@+id/switchBiometric" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </LinearLayout>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <Button android:id="@+id/btnClearCache" android:layout_width="match_parent" android:layout_height="48dp"
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_outline" android:text="🗑️  Clear Cache" android:textColor="#0D47A1"
+        android:textStyle="bold"/>
+    <Button android:id="@+id/btnChangePassword" android:layout_width="match_parent" android:layout_height="48dp"
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_outline" android:text="🔑  Change Password" android:textColor="#0D47A1"
+        android:textStyle="bold"/>
+    <Button android:id="@+id/btnLogout" android:layout_width="match_parent" android:layout_height="48dp"
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="16dp"
+        android:background="@drawable/error_bg" android:text="🚪  Sign Out" android:textColor="#C62828"
+        android:textStyle="bold"/>
+    <TextView android:id="@+id/tvAppVersion" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" android:text="ElimuSaaS v1.0.0"
+        android:textSize="11sp" android:textColor="#9CA3AF"/>
+  </LinearLayout>
+</ScrollView>
