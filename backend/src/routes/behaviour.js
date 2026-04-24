@@ -1,0 +1,17 @@
+const router = require('express').Router();
+const c = require('../controllers/behaviourDisciplineController');
+const { requireMinRole, requireRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+const admin = requireRole('super_admin','school_admin','principal','dean_of_studies');
+router.get('/', staff, c.getBehaviourByClass);
+router.get('/student/:studentId', staff, c.getBehaviourByStudent);
+router.post('/', staff, c.saveBehaviour);
+router.post('/bulk', staff, c.bulkSaveBehaviour);
+router.get('/discipline/stats', admin, c.getDisciplineStats);
+router.get('/discipline', staff, c.getIncidents);
+router.get('/discipline/:id', staff, c.getIncident);
+router.post('/discipline', staff, c.createIncident);
+router.put('/discipline/:id', staff, c.updateIncident);
+router.get('/discipline/student/:studentId/summary', staff, c.getSummaryByStudent);
+router.post('/discipline/letter', admin, c.generateLetter);
+module.exports = router;

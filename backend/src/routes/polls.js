@@ -1,0 +1,2 @@
+const r=require('express').Router(),c=require('../controllers/pollController'),{requireMinRole,authMiddleware,requireRole}=require('../middleware/auth'),a=requireRole('super_admin','school_admin','principal','secretary');
+r.get('/',authMiddleware,c.getPolls);r.post('/',a,c.createPoll);r.post('/:id/vote',authMiddleware,c.vote);r.get('/:id/results',authMiddleware,c.getResults);module.exports=r;

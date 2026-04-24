@@ -1,0 +1,271 @@
+/* ============================================================
+   ElimuSaaS — Zeraki-Style Animations & Visual System
+   ============================================================ */
+
+/* ── Base keyframes ────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity:0; transform:translateX(-20px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity:0; transform:translateX(20px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity:0; transform:scale(0.92); }
+  to   { opacity:1; transform:scale(1); }
+}
+@keyframes pulse {
+  0%,100% { transform:scale(1); }
+  50%      { transform:scale(1.05); }
+}
+@keyframes shimmer {
+  0%   { background-position:-200% center; }
+  100% { background-position:200% center; }
+}
+@keyframes float {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-8px); }
+}
+@keyframes countUp {
+  from { opacity:0; transform:translateY(10px) scale(0.95); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes slideInDown {
+  from { opacity:0; transform:translateY(-16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes gradientShift {
+  0%   { background-position:0% 50%; }
+  50%  { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
+}
+@keyframes spinOnce {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+@keyframes bounce {
+  0%,100% { transform:translateY(0); }
+  30%      { transform:translateY(-12px); }
+  60%      { transform:translateY(-5px); }
+}
+@keyframes ripple {
+  0%   { transform:scale(0); opacity:0.6; }
+  100% { transform:scale(4); opacity:0; }
+}
+
+/* ── Page entrance animations ─────────────────────────────── */
+.page-view.active { animation: pageFadeIn 0.22s cubic-bezier(0.4,0,0.2,1) both; }
+@keyframes pageFadeIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── Stat cards animated entrance ───────────────────────────── */
+.stat-card {
+  animation: fadeInUp 0.4s cubic-bezier(0.4,0,0.2,1) both;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:nth-child(1) { animation-delay:0.05s; }
+.stat-card:nth-child(2) { animation-delay:0.10s; }
+.stat-card:nth-child(3) { animation-delay:0.15s; }
+.stat-card:nth-child(4) { animation-delay:0.20s; }
+.stat-card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* ── Cards ──────────────────────────────────────────────────── */
+.card {
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(0,0,0,0.09);
+}
+
+/* ── Nav items ──────────────────────────────────────────────── */
+.nav-item {
+  transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  position:relative;
+  overflow:hidden;
+}
+.nav-item::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:currentColor;
+  opacity:0;
+  transition:opacity 0.15s ease;
+  pointer-events:none;
+}
+.nav-item:hover::after { opacity:0.06; }
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  transition:transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  position:relative;
+  overflow:hidden;
+}
+.btn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+.btn:active:not(:disabled) { transform:translateY(0); box-shadow:none; }
+.btn-primary:hover:not(:disabled) { box-shadow:0 4px 16px rgba(21,101,192,0.35); }
+
+/* Ripple effect on buttons */
+.btn .ripple {
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,0.35);
+  animation:ripple 0.5s linear;
+  pointer-events:none;
+}
+
+/* ── Loading skeleton ───────────────────────────────────────── */
+.skeleton {
+  background:linear-gradient(90deg, var(--border) 25%, var(--bg-elevated) 50%, var(--border) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+  border-radius:6px;
+  display:inline-block;
+}
+
+/* ── Number counter animation ───────────────────────────────── */
+.stat-value { animation:countUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+.stat-value:nth-of-type(1) { animation-delay:0.1s; }
+.stat-value:nth-of-type(2) { animation-delay:0.2s; }
+
+/* ── Welcome banner ─────────────────────────────────────────── */
+.welcome-card {
+  background:linear-gradient(135deg,#0D47A1,#1565C0 50%,#1976D2);
+  background-size:200% 200%;
+  animation:gradientShift 8s ease infinite;
+}
+
+/* ── Floating elements ──────────────────────────────────────── */
+.float { animation:float 3s ease-in-out infinite; }
+.float-delay-1 { animation-delay:0.5s; }
+.float-delay-2 { animation-delay:1s; }
+
+/* ── Table row hover ────────────────────────────────────────── */
+.data-table tbody tr {
+  transition:background 0.12s ease;
+  cursor:pointer;
+}
+.data-table tbody tr:hover { background:var(--brand-subtle) !important; }
+
+/* ── Modal entrance ──────────────────────────────────────────── */
+.modal-overlay.open .modal {
+  animation:scaleIn 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* ── Badge pulse ─────────────────────────────────────────────── */
+.badge-pulse { animation:pulse 2s ease-in-out infinite; }
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+.sidebar {
+  transition:transform 0.25s cubic-bezier(0.4,0,0.2,1), width 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Progress bars animated fill ────────────────────────────── */
+@keyframes fillBar {
+  from { width:0 !important; }
+}
+.progress-bar { animation:fillBar 0.8s cubic-bezier(0.4,0,0.2,1) both; }
+
+/* ── Toast slide in ──────────────────────────────────────────── */
+@keyframes toastIn {
+  from { opacity:0; transform:translateX(100%); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes toastOut {
+  from { opacity:1; transform:translateX(0); }
+  to   { opacity:0; transform:translateX(100%); height:0; margin:0; padding:0; }
+}
+.toast { animation:toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+.toast.removing { animation:toastOut 0.25s ease forwards; }
+
+/* ── Dashboard hero counter ──────────────────────────────────── */
+@keyframes counterRoll {
+  from { transform:translateY(20px); opacity:0; }
+  to   { transform:translateY(0); opacity:1; }
+}
+.counter-animate { animation:counterRoll 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* ── Notification dot ────────────────────────────────────────── */
+.notif-dot {
+  animation:pulse 1.5s ease-in-out infinite;
+  transform-origin:center;
+}
+
+/* ── Chart area animation ────────────────────────────────────── */
+canvas { animation:fadeInUp 0.5s ease both; }
+
+/* ── Landing page hero ───────────────────────────────────────── */
+#page-landing .hero h1 { animation:fadeInUp 0.6s 0.1s both; }
+#page-landing .hero p  { animation:fadeInUp 0.6s 0.25s both; }
+#page-landing .hero .btn-row { animation:fadeInUp 0.6s 0.4s both; }
+#page-landing .stats-bar > * { animation:scaleIn 0.4s both; }
+#page-landing .stats-bar > *:nth-child(1) { animation-delay:0.1s; }
+#page-landing .stats-bar > *:nth-child(2) { animation-delay:0.2s; }
+#page-landing .stats-bar > *:nth-child(3) { animation-delay:0.3s; }
+#page-landing .stats-bar > *:nth-child(4) { animation-delay:0.4s; }
+#page-landing .feature-card {
+  animation:fadeInUp 0.4s both;
+  transition:transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+#page-landing .feature-card:hover {
+  transform:translateY(-6px);
+  box-shadow:0 12px 32px rgba(21,101,192,0.15);
+  border-color:var(--brand);
+}
+
+/* ── Zeraki-style gradient text ─────────────────────────────── */
+.gradient-text {
+  background:linear-gradient(135deg,#1565C0,#7B1FA2);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ── Glass card effect ──────────────────────────────────────── */
+.glass-card {
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 8px 32px rgba(0,0,0,0.08);
+}
+
+/* ── Zeraki-style accent line ─────────────────────────────────  */
+.accent-left {
+  border-left:4px solid var(--brand);
+  padding-left:12px;
+}
+
+/* ── Focus ring ──────────────────────────────────────────────── */
+input:focus, select:focus, textarea:focus {
+  outline:none;
+  border-color:var(--brand) !important;
+  box-shadow:0 0 0 3px rgba(21,101,192,0.12);
+  transition:border-color 0.15s, box-shadow 0.15s;
+}
+
+/* ── Section divider ─────────────────────────────────────────── */
+.section-divider {
+  height:2px;
+  background:linear-gradient(90deg,var(--brand),var(--purple),transparent);
+  border:none;
+  margin:20px 0;
+  border-radius:99px;
+}
+
+/* ── Reduce motion for accessibility ─────────────────────────── */
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    animation-duration:0.01ms !important;
+    transition-duration:0.01ms !important;
+  }
+}

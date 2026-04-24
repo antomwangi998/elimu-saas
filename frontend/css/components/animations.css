@@ -1,0 +1,199 @@
+/* ============================================================
+ * ElimuSaaS — Full Animation System
+ * Floating icons · Reveals · Counters · Micro-interactions
+ * Modals · Toasts · Cards · Buttons · Skeleton loaders
+ * ============================================================ */
+
+/* ── Floating brand-panel icons ────────────────────────────── */
+@keyframes float-drift {
+  0%   { transform: translate(0,0) rotate(0deg);   opacity:.55; }
+  25%  { transform: translate(8px,-18px) rotate(6deg);  opacity:.75; }
+  50%  { transform: translate(-4px,-28px) rotate(-3deg); opacity:.55; }
+  75%  { transform: translate(-10px,-12px) rotate(5deg); opacity:.8; }
+  100% { transform: translate(0,0) rotate(0deg);   opacity:.55; }
+}
+.float-icon { position:absolute; animation:float-drift 7s ease-in-out infinite; opacity:.55; }
+
+/* ── Page-load reveal (Intersection Observer adds .visible) ── */
+@keyframes slide-up-fade   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+@keyframes slide-right-fade{ from{opacity:0;transform:translateX(-22px)} to{opacity:1;transform:none} }
+@keyframes scale-in        { from{opacity:0;transform:scale(.88)} to{opacity:1;transform:scale(1)} }
+@keyframes fade-in         { from{opacity:0} to{opacity:1} }
+
+.anim-slide-up    { animation:slide-up-fade    .55s cubic-bezier(.22,.61,.36,1) both; }
+.anim-slide-right { animation:slide-right-fade .5s  cubic-bezier(.22,.61,.36,1) both; }
+.anim-scale-in    { animation:scale-in         .4s  cubic-bezier(.22,.61,.36,1) both; }
+.anim-fade-in     { animation:fade-in           .4s  ease both; }
+
+.anim-delay-1 { animation-delay:.08s; }
+.anim-delay-2 { animation-delay:.16s; }
+.anim-delay-3 { animation-delay:.24s; }
+.anim-delay-4 { animation-delay:.32s; }
+.anim-delay-5 { animation-delay:.42s; }
+.anim-delay-6 { animation-delay:.54s; }
+
+/* Scroll-triggered reveal */
+.reveal         { opacity:0; transform:translateY(24px); transition:opacity .55s ease, transform .55s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+/* ── Login card entrance ──────────────────────────────────── */
+@keyframes login-card-in {
+  0%   { opacity:0; transform:translateY(32px) scale(.97); }
+  100% { opacity:1; transform:none; }
+}
+#login-form-panel > div:first-child {
+  animation:login-card-in .65s cubic-bezier(.22,.61,.36,1) .1s both;
+}
+
+/* ── Feature rows (brand panel staggered slide-in) ─────────── */
+.feature-row { opacity:0; transform:translateX(-20px); transition:opacity .5s ease, transform .5s ease; }
+.feature-row.visible { opacity:.92; transform:none; }
+
+/* ── Counter number pop ─────────────────────────────────────── */
+@keyframes num-pop { 0%{transform:scale(1)} 40%{transform:scale(1.14)} 100%{transform:scale(1)} }
+.num-pop { animation:num-pop .35s cubic-bezier(.34,1.56,.64,1); }
+
+/* ── Dashboard stat cards ──────────────────────────────────── */
+.stat-card {
+  position:relative; overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.stat-card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 60%);
+  opacity:0; transition:opacity .3s ease;
+}
+.stat-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(21,101,192,.18)!important; }
+.stat-card:hover::before { opacity:1; }
+
+/* ── Button ripple + hover ──────────────────────────────────── */
+.btn-primary, #login-btn, button[type=submit] {
+  position:relative; overflow:hidden;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn-primary:hover, #login-btn:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(21,101,192,.32); }
+.btn-primary:active, #login-btn:active { transform:scale(.97); }
+
+/* Spinner for loading buttons */
+@keyframes spin { to{transform:rotate(360deg)} }
+.btn-spinner {
+  display:inline-block; width:15px; height:15px;
+  border:2.5px solid rgba(255,255,255,.3); border-top-color:#fff;
+  border-radius:50%; animation:spin .7s linear infinite;
+  vertical-align:middle; margin-right:7px;
+}
+
+/* ── Input focus ────────────────────────────────────────────── */
+input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, input[type=number]:focus, textarea:focus {
+  border-color:#1565C0!important;
+  background:#fff!important;
+  box-shadow:0 0 0 3.5px rgba(21,101,192,.13)!important;
+  outline:none!important;
+}
+
+/* ── Sidebar nav items ──────────────────────────────────────── */
+.nav-item {
+  position:relative;
+  transition:all .2s ease;
+  border-radius:10px;
+}
+.nav-item::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px; background:#1565C0; border-radius:0 2px 2px 0;
+  transform:scaleY(0); transition:transform .2s ease;
+}
+.nav-item.active::before, .nav-item:hover::before { transform:scaleY(1); }
+.nav-item:hover  { background:rgba(21,101,192,.06); transform:translateX(3px); }
+.nav-item.active { background:rgba(21,101,192,.1);  transform:translateX(3px); }
+
+/* ── Page transitions ───────────────────────────────────────── */
+@keyframes page-enter { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+.page-view.active, .page-view[style*="block"], .page-view[style*="flex"] {
+  animation:page-enter .35s cubic-bezier(.22,.61,.36,1) both;
+}
+
+/* ── Modals ─────────────────────────────────────────────────── */
+@keyframes modal-backdrop { from{opacity:0} to{opacity:1} }
+@keyframes modal-sheet    { from{opacity:0;transform:scale(.9) translateY(20px)} to{opacity:1;transform:none} }
+.modal-overlay { animation:modal-backdrop .25s ease; }
+.modal-overlay > div:first-child { animation:modal-sheet .32s cubic-bezier(.34,1.56,.64,1) both; }
+
+/* ── Toasts ─────────────────────────────────────────────────── */
+@keyframes toast-in  { from{opacity:0;transform:translateX(100%) scale(.92)} to{opacity:1;transform:none} }
+@keyframes toast-out { from{opacity:1;transform:none} to{opacity:0;transform:translateX(100%) scale(.92)} }
+.toast          { animation:toast-in  .4s cubic-bezier(.22,.61,.36,1) both; }
+.toast.leaving  { animation:toast-out .35s ease forwards; }
+
+/* ── Table rows ─────────────────────────────────────────────── */
+tbody tr {
+  transition:background .15s ease, transform .15s ease;
+}
+tbody tr:hover {
+  background:rgba(21,101,192,.04)!important;
+  transform:translateX(2px);
+}
+
+/* ── Skeleton loading shimmer ───────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0%   { background-position:-400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background:linear-gradient(90deg,#f0f4f8 25%,#e8eff8 50%,#f0f4f8 75%);
+  background-size:800px 100%;
+  animation:skeleton-shimmer 1.5s infinite linear;
+  border-radius:6px;
+}
+
+/* ── Progress bar animated fill ─────────────────────────────── */
+@keyframes progress-fill { from{width:0} }
+.progress-bar-fill { animation:progress-fill 1.2s cubic-bezier(.22,.61,.36,1) both; }
+
+/* ── Notification bell ring ─────────────────────────────────── */
+@keyframes bell-shake {
+  0%,100%{transform:rotate(0)}
+  15%{transform:rotate(12deg)} 30%{transform:rotate(-10deg)}
+  45%{transform:rotate(8deg)}  60%{transform:rotate(-6deg)}
+  75%{transform:rotate(4deg)}
+}
+.bell-ring { animation:bell-shake .6s ease; }
+
+/* ── Badge pop ──────────────────────────────────────────────── */
+@keyframes badge-pop { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.18);opacity:1} 100%{transform:scale(1)} }
+.badge-anim { animation:badge-pop .45s cubic-bezier(.34,1.56,.64,1) both; }
+
+/* ── Online pulse dot ───────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%,100% { box-shadow:0 0 0 0   rgba(34,197,94,.5); }
+  50%      { box-shadow:0 0 0 6px rgba(34,197,94,0); }
+}
+.pulse-green { background:#22C55E; border-radius:50%; animation:pulse-dot 1.8s ease-in-out infinite; }
+
+/* ── Card glow on hover ─────────────────────────────────────── */
+.glow-hover { transition:box-shadow .3s ease; }
+.glow-hover:hover { box-shadow:0 0 0 2px rgba(21,101,192,.22), 0 12px 40px rgba(21,101,192,.14)!important; }
+
+/* ── Section header accent bar ──────────────────────────────── */
+.section-header { position:relative; padding-left:14px; }
+.section-header::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px; background:linear-gradient(180deg,#1565C0,#42A5F5);
+  border-radius:2px;
+}
+
+/* ── Testimonial slide-in ───────────────────────────────────── */
+@keyframes slide-testimonial { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:none} }
+.testimonial-slide.active-slide { animation:slide-testimonial .5s ease; }
+
+/* ── Canvas shimmer (brand panel) ──────────────────────────── */
+@keyframes canvas-shimmer { 0%,100%{opacity:.12} 50%{opacity:.22} }
+#brand-canvas { animation:canvas-shimmer 4s ease-in-out infinite; }
+
+/* ── Reduced motion override ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}

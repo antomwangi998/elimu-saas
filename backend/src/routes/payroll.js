@@ -1,0 +1,17 @@
+const router = require('express').Router();
+const c = require('../controllers/payrollController');
+const { requireMinRole, requireRole } = require('../middleware/auth');
+const admin = requireRole('super_admin','school_admin','principal','bursar','accounts_clerk');
+const staff = requireMinRole('teacher');
+router.get('/grades', admin, c.getGrades);
+router.post('/grades', admin, c.createGrade);
+router.put('/grades/:id', admin, c.updateGrade);
+router.get('/staff', admin, c.getStaffPayroll);
+router.post('/staff', admin, c.upsertStaffPayroll);
+router.get('/runs', admin, c.getRuns);
+router.post('/runs/generate', admin, c.generateRun);
+router.put('/runs/:id/approve', requireRole('super_admin','school_admin','principal'), c.approveRun);
+router.get('/runs/:runId/slips', admin, c.getSlips);
+router.get('/my-slips', staff, c.getMySlip);
+router.get('/summary', admin, c.getSummary);
+module.exports = router;

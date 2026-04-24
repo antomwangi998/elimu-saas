@@ -1,0 +1,11 @@
+const router = require('express').Router();
+const c = require('../controllers/clubsController');
+const { requireMinRole } = require('../middleware/auth');
+const staff = requireMinRole('teacher');
+router.get('/', staff, c.getClubs);
+router.get('/:id', staff, c.getClub);
+router.post('/', staff, c.createClub);
+router.post('/:id/members', staff, c.addMember);
+router.delete('/:id/members/:memberId', staff, c.removeMember);
+router.post('/:id/events', staff, c.addEvent);
+module.exports = router;

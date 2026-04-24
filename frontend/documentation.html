@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentation — ElimuSaaS</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#F8FAFF;color:#1A1A2E;line-height:1.7}
+  nav{background:#1565C0;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  nav a{color:white;text-decoration:none;font-weight:700;font-size:15px}
+  .layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 52px)}
+  .sidebar{background:white;border-right:1px solid #E5E7EB;padding:20px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+  .sidebar a{display:block;padding:8px 12px;color:#444;text-decoration:none;font-size:13px;border-radius:6px;margin-bottom:2px}
+  .sidebar a:hover{background:#EBF4FF;color:#1565C0}
+  .sidebar .section{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;margin:16px 0 6px 12px}
+  main{padding:40px;max-width:800px}
+  h1{font-size:28px;font-weight:900;margin-bottom:8px;color:#1565C0}
+  h2{font-size:20px;font-weight:700;margin:32px 0 12px;padding-top:32px;border-top:1px solid #E5E7EB}
+  h3{font-size:16px;font-weight:700;margin:20px 0 8px;color:#444}
+  p{color:#444;margin-bottom:12px;font-size:14px}
+  code{background:#F0F0F0;padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace}
+  pre{background:#1A1A2E;color:#e2e8f0;padding:16px;border-radius:10px;font-size:12px;overflow-x:auto;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px}
+  th{background:#EBF4FF;padding:8px 12px;text-align:left;font-weight:700}
+  td{padding:8px 12px;border-bottom:1px solid #E5E7EB}
+  .badge{background:#1565C0;color:white;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+  @media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">🏫 ElimuSaaS</a>
+  <a href="index.html" style="color:rgba(255,255,255,0.8);font-size:13px">← Back to Home</a>
+</nav>
+<div class="layout">
+  <div class="sidebar">
+    <div class="section">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#roles">User Roles</a>
+    <a href="#login">Logging In</a>
+    <div class="section">Features</div>
+    <a href="#fees">Fee Management</a>
+    <a href="#exams">Exams &amp; Marks</a>
+    <a href="#cbc">CBC Curriculum</a>
+    <a href="#844">8-4-4 Curriculum</a>
+    <a href="#timetable">Timetable</a>
+    <a href="#attendance">Attendance</a>
+    <a href="#payroll">Payroll &amp; HR</a>
+    <a href="#communication">Communication</a>
+    <div class="section">Admin</div>
+    <a href="#subscription">Subscription</a>
+    <a href="#support">Support</a>
+  </div>
+  <main>
+    <h1>ElimuSaaS Documentation</h1>
+    <p>Welcome to the ElimuSaaS documentation. This guide covers all features of the platform.</p>
+
+    <h2 id="overview">Overview</h2>
+    <p>ElimuSaaS is a complete school management platform built for Kenyan schools. It supports both <strong>8-4-4</strong> (secondary) and <strong>CBC</strong> (primary) curricula, and integrates with M-Pesa for fee collection.</p>
+
+    <h2 id="roles">User Roles</h2>
+    <table>
+      <tr><th>Role</th><th>Access Level</th><th>Key Features</th></tr>
+      <tr><td><span class="badge">Super Admin</span></td><td>Platform-wide</td><td>Manage all schools, subscriptions, platform settings</td></tr>
+      <tr><td><span class="badge">School Admin</span></td><td>Full school access</td><td>Everything — students, staff, fees, exams, settings</td></tr>
+      <tr><td><span class="badge">Principal</span></td><td>Full school access</td><td>Academic oversight, staff, reports, TSC verification</td></tr>
+      <tr><td><span class="badge">Teacher</span></td><td>Limited</td><td>Only their assigned classes and subjects for marks</td></tr>
+      <tr><td><span class="badge">Bursar</span></td><td>Finance only</td><td>Fee collection, invoices, payments, fee clearance</td></tr>
+      <tr><td><span class="badge">Student</span></td><td>Personal only</td><td>Own grades, fees, timetable, attendance</td></tr>
+      <tr><td><span class="badge">Parent</span></td><td>Children only</td><td>Children's progress, fees, communications</td></tr>
+    </table>
+
+    <h2 id="login">Logging In</h2>
+    <p>Visit <code>elimu-saas-frontend.onrender.com</code>. Enter your email, password, and optional school code. The system will route you to the correct portal based on your role.</p>
+
+    <h2 id="fees">Fee Management</h2>
+    <p>ElimuSaaS supports M-Pesa STK Push, Paybill (400200), bank transfer, and manual cash entry. Fee structures can be set per class, with automatic invoice generation and parent SMS alerts.</p>
+    <h3>Setting Up M-Pesa</h3>
+    <p>Go to School Settings → Integrations → M-Pesa. Enter your Safaricom Paybill/Till number and Consumer Key/Secret from the Safaricom Developer Portal.</p>
+
+    <h2 id="exams">Exams &amp; Marks</h2>
+    <p>Create exam series (term exams, CATs, mocks). Teachers enter marks for only their assigned subjects. The system auto-calculates grades, mean marks, and positions using the configured grading scale.</p>
+
+    <h2 id="cbc">CBC Curriculum (Primary)</h2>
+    <p>CBC assessments use a 4-level scale: <strong>EE</strong> (Exceeding Expectation, 80-100%), <strong>ME</strong> (Meeting Expectation, 50-79%), <strong>AE</strong> (Approaching Expectation, 30-49%), <strong>BE</strong> (Below Expectation, 0-29%). Learning areas, strands, and sub-strands are configured per grade level.</p>
+
+    <h2 id="844">8-4-4 Curriculum (Secondary)</h2>
+    <p>Form 1 students take <strong>11 subjects</strong> (including additional electives). Forms 2–4 take <strong>8 subjects</strong>. Grades follow the standard KNEC scale: A (75-100, 12 pts) through E (0-24, 1 pt). Mean grade is calculated from the best subject scores per KCSE rules.</p>
+
+    <h2 id="timetable">Timetable</h2>
+    <p>The auto-generator creates conflict-free timetables ensuring no teacher is in two classes simultaneously. To seed sample data, go to Timetable → click "Seed Sample Data".</p>
+
+    <h2 id="attendance">Attendance</h2>
+    <p>Daily attendance is marked per class. Parents receive SMS if their child is absent. Monthly attendance reports are auto-generated.</p>
+
+    <h2 id="payroll">Payroll &amp; HR</h2>
+    <p>Staff payroll with automatic PAYE, NHIF, and NSSF deductions. Generate payslips and P9 forms. Supports TSC-registered and non-TSC staff.</p>
+
+    <h2 id="communication">Communication</h2>
+    <p>Broadcast SMS to parents, teachers, or all staff. WhatsApp integration for individual messages. Newsletter module for bulk email-style announcements.</p>
+
+    <h2 id="subscription">Subscription &amp; Billing</h2>
+    <p>Subscriptions are billed per term. Pay via M-Pesa Paybill (400200), STK Push, or bank transfer (Co-op Bank, A/C: 01102921238001). Contact us to renew or upgrade.</p>
+
+    <h2 id="support">Support</h2>
+    <p><strong>Email:</strong> <a href="mailto:elimusaas@gmail.com">elimusaas@gmail.com</a><br>
+    <strong>Alternative:</strong> <a href="mailto:elimusaas@gmail.com">elimusaas@gmail.com</a><br>
+    <strong>WhatsApp:</strong> <a href="https://wa.me/254729612106">0729 612 106</a><br>
+    <strong>Location:</strong> Nairobi, Kenya</p>
+  </main>
+</div>
+</body>
+</html>

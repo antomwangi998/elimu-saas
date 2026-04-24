@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#F0F4FF">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <ProgressBar android:id="@+id/progressDashboard"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" android:layout_marginTop="60dp"
+        android:indeterminateTint="#0D47A1" android:visibility="gone"/>
+
+    <LinearLayout android:id="@+id/layoutContent"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:visibility="gone">
+
+      <!-- Welcome card -->
+      <androidx.cardview.widget.CardView android:layout_width="match_parent"
+          android:layout_height="wrap_content" android:layout_margin="16dp"
+          app:cardCornerRadius="16dp" app:cardElevation="2dp"
+          app:cardBackgroundColor="#0D47A1">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:padding="20dp" android:gravity="center_vertical">
+          <TextView android:id="@+id/tvAvatar"
+              android:layout_width="48dp" android:layout_height="48dp"
+              android:gravity="center" android:text="E" android:textColor="#0D47A1"
+              android:textSize="18sp" android:textStyle="bold"
+              android:background="@drawable/avatar_circle_white_bg" android:layout_marginEnd="14dp"/>
+          <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Welcome, " android:textSize="15sp" android:textColor="#E3F2FD"/>
+              <TextView android:id="@+id/tvWelcomeName" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="Teacher"
+                  android:textSize="15sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+            </LinearLayout>
+            <TextView android:id="@+id/tvSchoolName"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="ElimuSaaS" android:textSize="13sp" android:textColor="#90CAF9"/>
+            <TextView android:id="@+id/tvUserRole"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="" android:textSize="11sp" android:textColor="#64B5F6"/>
+          </LinearLayout>
+        </LinearLayout>
+
+      <!-- Super Admin Quick Actions (hidden for non-super-admins) -->
+      <androidx.cardview.widget.CardView android:id="@+id/cardSuperAdmin"
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:layout_margin="16dp" android:visibility="gone"
+          app:cardCornerRadius="14dp" app:cardElevation="3dp" app:cardBackgroundColor="#FFF3E0">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="🔑 Super Admin Controls" android:textSize="14sp"
+              android:textStyle="bold" android:textColor="#E65100" android:layout_marginBottom="12dp"/>
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal">
+            <Button android:id="@+id/btnOnboardSchool"
+                android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1"
+                android:text="+ Onboard School" android:textSize="11sp" android:textStyle="bold"
+                android:textColor="#FFFFFF" android:background="#0D47A1"
+                android:layout_marginEnd="6dp"/>
+            <Button android:id="@+id/btnLoginAsSchool"
+                android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1"
+                android:text="Login As School" android:textSize="11sp" android:textStyle="bold"
+                android:textColor="#0D47A1" android:background="@drawable/btn_outline"
+                android:layout_marginEnd="6dp"/>
+            <Button android:id="@+id/btnManageSchools"
+                android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1"
+                android:text="All Schools" android:textSize="11sp" android:textStyle="bold"
+                android:textColor="#0D47A1" android:background="@drawable/btn_outline"/>
+          </LinearLayout>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+      </androidx.cardview.widget.CardView>
+
+      <!-- Stats grid -->
+      <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:columnCount="2" android:layout_marginStart="12dp" android:layout_marginEnd="12dp"
+          android:layout_marginBottom="8dp">
+
+        <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+            <TextView android:layout_width="44dp" android:layout_height="44dp" android:text="👨‍🎓"
+                android:textSize="22sp" android:gravity="center"
+                android:background="@drawable/stat_icon_bg_blue" android:layout_marginEnd="12dp"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+              <TextView android:id="@+id/tvStudentsCount" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="—" android:textSize="22sp"
+                  android:textStyle="bold" android:textColor="#0D1117"/>
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Students" android:textSize="12sp" android:textColor="#6B7280"/>
+            </LinearLayout>
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+            <TextView android:layout_width="44dp" android:layout_height="44dp" android:text="👩‍🏫"
+                android:textSize="22sp" android:gravity="center"
+                android:background="@drawable/stat_icon_bg_green" android:layout_marginEnd="12dp"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+              <TextView android:id="@+id/tvTeachersCount" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="—" android:textSize="22sp"
+                  android:textStyle="bold" android:textColor="#0D1117"/>
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Teachers" android:textSize="12sp" android:textColor="#6B7280"/>
+            </LinearLayout>
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+            <TextView android:layout_width="44dp" android:layout_height="44dp" android:text="🪪"
+                android:textSize="22sp" android:gravity="center"
+                android:background="@drawable/stat_icon_bg_orange" android:layout_marginEnd="12dp"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+              <TextView android:id="@+id/tvStaffCount" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="—" android:textSize="22sp"
+                  android:textStyle="bold" android:textColor="#0D1117"/>
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Staff" android:textSize="12sp" android:textColor="#6B7280"/>
+            </LinearLayout>
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_columnWeight="1" android:layout_margin="4dp"
+            app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+            <TextView android:layout_width="44dp" android:layout_height="44dp" android:text="🏫"
+                android:textSize="22sp" android:gravity="center"
+                android:background="@drawable/stat_icon_bg_purple" android:layout_marginEnd="12dp"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+              <TextView android:id="@+id/tvStreamsCount" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="—" android:textSize="22sp"
+                  android:textStyle="bold" android:textColor="#0D1117"/>
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Streams" android:textSize="12sp" android:textColor="#6B7280"/>
+            </LinearLayout>
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
+      </GridLayout>
+
+      <!-- Fee collection -->
+      <androidx.cardview.widget.CardView android:layout_width="match_parent"
+          android:layout_height="wrap_content" android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp" android:layout_marginBottom="8dp"
+          app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal" android:layout_marginBottom="8dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="💰  Fee Collection"
+                android:textSize="14sp" android:textStyle="bold" android:textColor="#0D1117"/>
+            <TextView android:id="@+id/tvFeeRate" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="—"
+                android:textSize="14sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+          </LinearLayout>
+          <ProgressBar android:id="@+id/progressFee" style="@android:style/Widget.ProgressBar.Horizontal"
+              android:layout_width="match_parent" android:layout_height="8dp"
+              android:progress="0" android:max="100"
+              android:progressTint="#0D47A1" android:progressBackgroundTint="#E3F2FD"
+              android:layout_marginBottom="10dp"/>
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical">
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Collected" android:textSize="11sp" android:textColor="#6B7280"/>
+              <TextView android:id="@+id/tvFeesCollected" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="—"
+                  android:textSize="13sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="end">
+              <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Pending" android:textSize="11sp" android:textColor="#6B7280"/>
+              <TextView android:id="@+id/tvFeesPending" android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:text="—"
+                  android:textSize="13sp" android:textStyle="bold" android:textColor="#B71C1C"/>
+            </LinearLayout>
+          </LinearLayout>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+
+      <!-- Attendance -->
+      <androidx.cardview.widget.CardView android:layout_width="match_parent"
+          android:layout_height="wrap_content" android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp" android:layout_marginBottom="8dp"
+          app:cardCornerRadius="12dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:orientation="horizontal" android:layout_marginBottom="8dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="📋  Attendance Rate"
+                android:textSize="14sp" android:textStyle="bold" android:textColor="#0D1117"/>
+            <TextView android:id="@+id/tvAttendanceRate" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="—"
+                android:textSize="14sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+          </LinearLayout>
+          <ProgressBar android:id="@+id/progressAttendance" style="@android:style/Widget.ProgressBar.Horizontal"
+              android:layout_width="match_parent" android:layout_height="8dp"
+              android:progress="0" android:max="100"
+              android:progressTint="#2E7D32" android:progressBackgroundTint="#E8F5E9"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+
+      <!-- Web portal button -->
+      <Button android:id="@+id/btnOpenWebPortal"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+          android:layout_marginBottom="20dp"
+          android:background="@drawable/btn_outline"
+          android:text="🌐  Open Full Web Portal"
+          android:textColor="#0D47A1" android:textStyle="bold" android:textSize="14sp"/>
+
+    </LinearLayout>
+  </LinearLayout>
+</ScrollView>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F0F4FF">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical" android:paddingBottom="24dp">
+
+    <!-- Header -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#0D47A1" android:orientation="vertical" android:padding="20dp">
+      <TextView android:id="@+id/tvSAName" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="Welcome, Super Admin 👋" android:textSize="20sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+      <TextView android:id="@+id/tvSAEmail" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="" android:textSize="13sp" android:textColor="#90CAF9" android:layout_marginTop="2dp"/>
+      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="🔑 Super Administrator" android:textSize="11sp" android:textColor="#64B5F6" android:layout_marginTop="2dp"/>
+    </LinearLayout>
+
+    <ProgressBar android:id="@+id/progressSA"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" android:layout_marginTop="20dp"
+        android:indeterminateTint="#0D47A1" android:visibility="gone"/>
+
+    <!-- Platform Stats -->
+    <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:columnCount="2" android:layout_margin="16dp">
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp"
+          app:cardCornerRadius="12dp" app:cardElevation="2dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp" android:gravity="center">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏫" android:textSize="28sp"/>
+          <TextView android:id="@+id/tvTotalSchools" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="28sp" android:textStyle="bold" android:textColor="#0D47A1"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Total Schools" android:textSize="12sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp"
+          app:cardCornerRadius="12dp" app:cardElevation="2dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp" android:gravity="center">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎓" android:textSize="28sp"/>
+          <TextView android:id="@+id/tvTotalStudents" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="28sp" android:textStyle="bold" android:textColor="#2E7D32"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Total Students" android:textSize="12sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp"
+          app:cardCornerRadius="12dp" app:cardElevation="2dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp" android:gravity="center">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✅" android:textSize="28sp"/>
+          <TextView android:id="@+id/tvActiveSchools" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="28sp" android:textStyle="bold" android:textColor="#00796B"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Active Schools" android:textSize="12sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+      <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_height="wrap_content"
+          android:layout_columnWeight="1" android:layout_margin="4dp"
+          app:cardCornerRadius="12dp" app:cardElevation="2dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp" android:gravity="center">
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💰" android:textSize="28sp"/>
+          <TextView android:id="@+id/tvMRR" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="—" android:textSize="18sp" android:textStyle="bold" android:textColor="#E65100"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Monthly Revenue" android:textSize="11sp" android:textColor="#6B7280"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </GridLayout>
+
+    <!-- Quick Actions -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="ADMIN ACTIONS" android:textSize="10sp" android:textStyle="bold"
+        android:textColor="#6B7280" android:letterSpacing="0.1"
+        android:layout_marginStart="16dp" android:layout_marginBottom="8dp"/>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="8dp">
+      <Button android:id="@+id/btnSAOnboard"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="+ Onboard School" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#FFFFFF" android:background="#0D47A1" android:layout_marginEnd="6dp"/>
+      <Button android:id="@+id/btnSALoginAs"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="🔑 Login As" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="8dp">
+      <Button android:id="@+id/btnSASchools"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="🏫 All Schools" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline" android:layout_marginEnd="6dp"/>
+      <Button android:id="@+id/btnSASubscriptions"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="💳 Subscriptions" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginStart="16dp" android:layout_marginEnd="16dp">
+      <Button android:id="@+id/btnSAAnalytics"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="📈 Analytics" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline" android:layout_marginEnd="6dp"/>
+      <Button android:id="@+id/btnSAUsers"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="👤 Users" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline" android:layout_marginEnd="6dp"/>
+      <Button android:id="@+id/btnSASettings"
+          android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1"
+          android:text="⚙️ Settings" android:textSize="11sp" android:textStyle="bold"
+          android:textColor="#0D47A1" android:background="@drawable/btn_outline"/>
+    </LinearLayout>
+  </LinearLayout>
+</ScrollView>

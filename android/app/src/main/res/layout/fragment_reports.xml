@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#F0F4FF">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical" android:padding="20dp" android:gravity="center_horizontal">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="📊" android:textSize="56sp" android:gravity="center"
+        android:layout_marginTop="40dp" android:layout_marginBottom="16dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Reports &amp; Analytics" android:textSize="22sp" android:textStyle="bold"
+        android:textColor="#0D1117" android:layout_marginBottom="8dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Access full reports, broadsheets, analytics, and AI insights from the web portal for the best experience."
+        android:textSize="14sp" android:textColor="#6B7280" android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+    <Button android:id="@+id/btnViewReports"
+        android:layout_width="match_parent" android:layout_height="52dp"
+        android:text="🌐  Open Reports in Browser" android:textColor="#0D47A1"
+        android:textStyle="bold" android:textSize="15sp"
+        android:background="@drawable/btn_outline"/>
+  </LinearLayout>
+</ScrollView>
