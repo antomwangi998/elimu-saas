@@ -492,7 +492,7 @@ exports.seedSampleTimetable = async (req, res) => {
           const tchr = teachers[p % Math.max(teachers.length, 1)];
           try {
             await query(
-              `INSERT INTO timetable_entries(school_id,class_id,subject_id,teacher_id,day_of_week,start_time,end_time,room)
+              `INSERT INTO timetable_slots(school_id,class_id,subject_id,teacher_id,day_of_week,start_time,end_time,room)
                VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING`,
               [schoolId, cls.id, sub.id, tchr?.id||null, day, periods[p][0], periods[p][1], 'Room '+(p+1)]
             );
