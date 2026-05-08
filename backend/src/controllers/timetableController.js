@@ -45,6 +45,39 @@ const seedDefaultPeriods = async (req, res) => {
   res.json({ message: 'Default periods seeded (9 teaching + 2 breaks)' });
 };
 
+exports.seedSampleTimetable = async (req, res) => {
+  try {
+    const schoolId = req.user.schoolId;
+    if (!schoolId) return res.status(400).json({ error: 'No school ID' });
+    const { rows: classes } = await query('SELECT id, name FROM classes WHERE school_id=$1 LIMIT 4', [schoolId]);
+    if (!classes.length) return res.json({ message: 'No classes found. Add classes first.', seeded: 0 });
+    const { rows: teachers } = await query(
+      "SELECT u.id FROM users u WHERE u.school_id=$1 AND u.role IN ('teacher','class_teacher','hod') LIMIT 10", [schoolId]);
+    const { rows: subjects } = await query('SELECT id, name FROM subjects WHERE school_id=$1 LIMIT 10', [schoolId]);
+    if (!subjects.length) return res.json({ message: 'No subjects found. Add subjects first.', seeded: 0 });
+    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+    const periods = [['08:00','09:00'],['09:00','10:00'],['10:20','11:20'],['11:20','12:20'],['14:00','15:00'],['15:00','16:00']];
+    let inserted = 0;
+    for (const cls of classes) {
+      for (const day of days) {
+        for (let p = 0; p < Math.min(periods.length, subjects.length); p++) {
+          const sub = subjects[p % subjects.length];
+          const tchr = teachers[p % Math.max(teachers.length, 1)];
+          try {
+            await query(
+              `INSERT INTO timetable_slots(school_id,class_id,subject_id,teacher_id,day_of_week,start_time,end_time,room)
+               VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING`,
+              [schoolId, cls.id, sub.id, tchr?.id||null, day, periods[p][0], periods[p][1], 'Room '+(p+1)]
+            );
+            inserted++;
+          } catch {}
+        }
+      }
+    }
+    res.json({ success: true, seeded: inserted, message: `Seeded ${inserted} timetable slots` });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+};
+
 // ── Create / update a period ──────────────────────────────────
 const upsertPeriod = async (req, res) => {
   const { id, name, startTime, endTime, isBreak, sortOrder } = req.body;
@@ -471,39 +504,6 @@ const getLessonAttendance = async (req, res) => {
   });
 };
 
-
-exports.seedSampleTimetable = async (req, res) => {
-  try {
-    const schoolId = req.user.schoolId;
-    if (!schoolId) return res.status(400).json({ error: 'No school ID' });
-    const { rows: classes } = await query('SELECT id, name FROM classes WHERE school_id=$1 LIMIT 4', [schoolId]);
-    if (!classes.length) return res.json({ message: 'No classes found. Add classes first.', seeded: 0 });
-    const { rows: teachers } = await query(
-      "SELECT u.id FROM users u WHERE u.school_id=$1 AND u.role IN ('teacher','class_teacher','hod') LIMIT 10", [schoolId]);
-    const { rows: subjects } = await query('SELECT id, name FROM subjects WHERE school_id=$1 LIMIT 10', [schoolId]);
-    if (!subjects.length) return res.json({ message: 'No subjects found. Add subjects first.', seeded: 0 });
-    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-    const periods = [['08:00','09:00'],['09:00','10:00'],['10:20','11:20'],['11:20','12:20'],['14:00','15:00'],['15:00','16:00']];
-    let inserted = 0;
-    for (const cls of classes) {
-      for (const day of days) {
-        for (let p = 0; p < Math.min(periods.length, subjects.length); p++) {
-          const sub = subjects[p % subjects.length];
-          const tchr = teachers[p % Math.max(teachers.length, 1)];
-          try {
-            await query(
-              `INSERT INTO timetable_slots(school_id,class_id,subject_id,teacher_id,day_of_week,start_time,end_time,room)
-               VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING`,
-              [schoolId, cls.id, sub.id, tchr?.id||null, day, periods[p][0], periods[p][1], 'Room '+(p+1)]
-            );
-            inserted++;
-          } catch {}
-        }
-      }
-    }
-    res.json({ success: true, seeded: inserted, message: `Seeded ${inserted} timetable slots` });
-  } catch (e) { res.status(500).json({ error: e.message }); }
-};
 
 module.exports = {
   seedSampleTimetable,
